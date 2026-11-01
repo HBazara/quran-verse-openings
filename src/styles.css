@@ -1,0 +1,217 @@
+/* Quran Verse Openings: reader styles. Paths are relative (the site lives under /quran-verse-openings/). */
+
+@font-face {
+  font-family: 'surah-header';
+  src: url('../assets/fonts/surah-header/QCF_SurahHeader_COLOR-Regular.woff2') format('woff2');
+  font-display: block;
+}
+@font-face {
+  font-family: 'bismillah';
+  src: url('../assets/fonts/bismillah/QCF2BSML.ttf') format('truetype');
+  font-display: block;
+}
+
+:root {
+  --bg: #eeede6;
+  --paper: #fffdf6;
+  --ink: #1b1b18;
+  --muted: #55554d;
+  --line: #c4c2b8;
+  --frame: #2f6b46;
+  --accent: #2f6b46;
+  --accent-ink: #ffffff;
+  --focus: #1f5fbf;
+  --page-w: 561px;
+  --page-h: 900px;
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--ink);
+  font:
+    16px/1.4 system-ui,
+    -apple-system,
+    'Segoe UI',
+    sans-serif;
+}
+
+/* Top bar */
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding: 8px 16px;
+}
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+}
+.icon:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.icon svg {
+  width: 22px;
+  height: 22px;
+}
+.indicator {
+  min-width: 8.5em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.views {
+  display: flex;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+}
+.views button {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+.views button[aria-pressed='true'] {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+button:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+.status {
+  margin: 0;
+  padding: 0 16px 8px;
+  text-align: center;
+  color: var(--muted);
+}
+.status:empty {
+  display: none;
+}
+
+/* The book: fixed-size pages scaled as one unit */
+.book {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 4px 16px 16px;
+  overflow: hidden;
+}
+.spread {
+  display: flex;
+  flex-direction: row;
+  direction: rtl; /* first page (odd) on the right */
+  gap: 16px;
+}
+.slot {
+  position: relative;
+  width: calc(var(--page-w) * var(--scale, 1));
+  height: calc(var(--page-h) * var(--scale, 1));
+}
+.page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--page-w);
+  height: var(--page-h);
+  transform: scale(var(--scale, 1));
+  transform-origin: top left;
+  background: var(--paper);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+}
+.frame {
+  position: absolute;
+  top: 30px;
+  left: 20px;
+  width: 521px;
+  height: 819px;
+  border: 4px double var(--frame);
+}
+.block {
+  position: absolute;
+  top: 40px;
+  left: 30px;
+  width: 501px;
+  height: 799px;
+  color: var(--ink);
+}
+.line {
+  position: absolute;
+  display: flex;
+  flex-direction: row; /* the page is right to left, so words start at the right edge */
+  justify-content: space-between;
+  white-space: nowrap;
+}
+.line.centered,
+.line.surah,
+.line.basmala {
+  justify-content: center;
+}
+.line.fit {
+  justify-content: space-between; /* pages 1 and 2: spread to the printed line ends */
+}
+.line.surah {
+  font-family: 'surah-header';
+}
+.line.basmala {
+  font-family: 'bismillah';
+}
+.line .w {
+  display: block;
+}
+.line .off {
+  visibility: hidden; /* hidden words keep their space, so visible words never move */
+}
+.page-number {
+  position: absolute;
+  top: 856px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 22px;
+  line-height: 1;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

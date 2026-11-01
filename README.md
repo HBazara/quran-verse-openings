@@ -6,24 +6,42 @@ It will be a static site with plain HTML, CSS and JavaScript. It has no backend 
 
 ## Status
 
-**Phase 3 of 8: core reader.** Phases 1 (setup and data check) and 2 (data pipeline) passed the audit. The site itself is not built yet.
+**Phase 4 of 8: navigation and settings.** Phases 1 (setup and data check), 2 (data pipeline) and 3 (core reader) passed the audit.
 
 Done so far:
 
 - Folder structure, `AGENTS.md`, `.gitignore`, `.editorconfig`, `.gitattributes` and Prettier config (ORG).
 - Edition check (BUILDER): the PDF is the King Fahd Complex (KFGQPC) Madinah mushaf, Hafs, 1421H print, 604 pages of 15 lines. The QUL V2 layout matched the print on every line checked across 42 sample pages.
-- Decisions: Hassan picked the QPC V2 page fonts and accepted that they have no published license. Hassan downloaded the official QUL files.
-- Data pipeline (BUILDER): `scripts/build-data.mjs` builds `data/quran.json` (604 pages, 9,046 lines, 114 surahs, 6,236 verses, 83,668 words). `scripts/validate.mjs` runs 14 checks, or 17 with `--full`. All pass.
+- Decisions: Hassan picked the QPC V2 page fonts, approved the surah banner and Bismillah fonts, and downloaded the official QUL files.
+- Data pipeline (BUILDER): `scripts/build-data.mjs` builds `data/quran.json` (604 pages, 9,046 lines, 114 surahs, 6,236 verses, 83,668 words). `scripts/validate.mjs` runs 16 checks, or 20 with `--full`. All pass.
+- Core reader (BUILDER): whole pages in the printed layout, with only the first words of each verse visible, surah banners, Bismillah lines, one page or two-page view, Next and Previous. See `docs/READER.md`.
 
-Not done yet: reader, navigation, languages, deploy.
+Not done yet: settings, jump to page, surah and juz, keyboard and swipe (phase 4), language picker (phase 5), themes and deploy (phase 6).
 
 See `docs/DEVLOG.md` for the full history.
 
 ## Run locally
 
-There is no site to open yet (no `index.html`). The reader comes in phase 3.
+Get the code:
 
-What you can run now is the data pipeline. You need Node 24 (tested with 24.18). There is nothing to install. From the project root:
+```sh
+git clone https://github.com/HBazara/quran-verse-openings.git
+cd quran-verse-openings
+```
+
+The repo is set up but not pushed yet, so the clone works once the first push is done.
+
+Open the reader. There is no build step, but the site must be served over HTTP, because browsers block loading the data from a `file://` page. Any static server works. With Python, from the project root:
+
+```sh
+python -m http.server 8765 --bind 127.0.0.1
+```
+
+Then open http://127.0.0.1:8765/ in a browser. Add `#page=50` to the address to open page 50; the other address settings are in `docs/USER-GUIDE.md`.
+
+To work on the data:
+
+The data scripts need Node 24 (tested with 24.18). There is nothing to install. From the project root:
 
 ```sh
 node scripts/validate.mjs          # check data/quran.json (works from a fresh clone)
@@ -35,12 +53,13 @@ node scripts/build-data.mjs        # rebuild data/quran.json (local only)
 
 ## Deploy
 
-Not set up yet (phase 6). The plan is to deploy to GitHub Pages through GitHub Actions. Before deploying, the workflow will run `cd data/sources && sha256sum -c --ignore-missing SHA256SUMS` and `node scripts/validate.mjs`, and any failure blocks the deploy. The repo name is `quran-verse-openings`.
+Not set up yet (phase 6). The plan is to deploy to GitHub Pages through GitHub Actions. Before deploying, the workflow will run `cd data/sources && sha256sum -c --ignore-missing SHA256SUMS` and `node scripts/validate.mjs`, and any failure blocks the deploy. The repo is https://github.com/HBazara/quran-verse-openings (public, not pushed yet).
 
 ## Folder layout
 
 | Folder               | Purpose                                    |
 | -------------------- | ------------------------------------------ |
+| `index.html`         | The page the site opens                    |
 | `src/`               | App code (JavaScript, CSS)                 |
 | `src/i18n/`          | Interface strings: `en.json` and `ar.json` |
 | `assets/fonts/`      | Self-hosted fonts                          |
@@ -51,7 +70,7 @@ Not set up yet (phase 6). The plan is to deploy to GitHub Pages through GitHub A
 | `docs/`              | All documentation                          |
 | `.github/workflows/` | Deploy workflow                            |
 
-`assets/fonts/` holds the 604 QPC V2 page fonts (`qcf2/`), the surah banner font (`surah-header/`) and the Bismillah font (`bismillah/`). `src/`, `src/i18n/` and `.github/workflows/` are still empty (each holds only a `.gitkeep`). The full tree with one line per folder is in `docs/STRUCTURE.md`.
+`assets/fonts/` holds the 604 QPC V2 page fonts (`qcf2/`), the surah banner font (`surah-header/`) and the Bismillah font (`bismillah/`). `.github/workflows/` is still empty (only a `.gitkeep`). The full tree with one line per folder is in `docs/STRUCTURE.md`.
 
 ## Reference PDF
 
@@ -72,6 +91,7 @@ Sources picked in phase 1, font confirmed by Hassan. Full details, licenses and 
 - `docs/DECISIONS.md`: decisions and the reasons for them
 - `docs/DATA-SOURCES.md`: sources, versions, licenses, checksums (full checksum lists in `docs/checksums/`)
 - `docs/DATA-FORMAT.md`: the `data/quran.json` format, the commands, and every check `validate` runs
+- `docs/READER.md`: how the reader draws a page, its files, geometry, views and limits
 - `docs/TEXT-CROSSCHECK.md`: the full comparison of our text with Tanzil and the print
 - `docs/USER-GUIDE.md`: how to use the site (English and Arabic)
 - `docs/HANDOFF.md`: running log of what each agent did and the messages between agents (older phases move to `docs/handoff-archive/`)

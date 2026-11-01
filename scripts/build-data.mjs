@@ -17,9 +17,13 @@ import {
   cp,
   QUL,
   TANZIL,
+  BANNER,
+  BANNER_FONT_DIR,
   checkSums,
+  findFile,
   findQul,
   findTanzil,
+  readBannerMap,
   readQul,
   readTanzilMeta,
   sha256,
@@ -46,11 +50,25 @@ if (!qulPaths)
 const tz = findTanzil(arg('--tanzil') ? [arg('--tanzil')] : undefined);
 if (!tz)
   fail(`Tanzil files not found (${Object.values(TANZIL).join(', ')}). Use --tanzil <folder>.`);
-const sumProblems = checkSums([...Object.values(qulPaths), tz.text, tz.meta]);
+// Surah banner (QUL 458): the font is committed in assets/fonts/surah-header/, its ligature map stays
+// local next to the QUL databases; build-data copies each surah's banner character into quran.json.
+const bannerMapPath = findFile(arg('--qul') || DEFAULT_QUL_DIR, BANNER.ligatures);
+const bannerFontPath = findFile(BANNER_FONT_DIR, BANNER.font);
+if (!bannerMapPath)
+  fail(`${BANNER.ligatures} (surah banner map, QUL 458) not found. Use --qul <folder>.`);
+if (!bannerFontPath) fail(`${BANNER.font} not found in assets/fonts/surah-header/`);
+const sumProblems = checkSums([
+  ...Object.values(qulPaths),
+  tz.text,
+  tz.meta,
+  bannerMapPath,
+  bannerFontPath,
+]);
 if (sumProblems.length) fail(`source check failed:\n  ${sumProblems.join('\n  ')}`);
 
 const q = await readQul(qulPaths);
 const meta = readTanzilMeta(tz.meta);
+const bannerChars = readBannerMap(bannerMapPath);
 
 // The glyph table (QUL 61) and the text table (QUL 312) must describe the same words.
 if (q.glyphs.length !== q.text.length) fail('glyph and text tables have different lengths');
@@ -134,6 +152,7 @@ const surahs = meta.surahs.map((s, i) => {
     page,
     line,
     headerPage: headerPage.get(i + 1),
+    banner: bannerChars[i],
   };
 });
 const starts = (keys, field) =>

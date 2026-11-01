@@ -55,6 +55,27 @@ export function findFile(dir, name) {
   return null;
 }
 
+// Surah banner font (QUL 458, KFGQPC QCF_SurahHeader_COLOR) and its map "surah-N" -> character.
+export const BANNER = {
+  font: 'QCF_SurahHeader_COLOR-Regular.woff2',
+  ligatures: 'ligatures.json',
+};
+export const BANNER_FONT_DIR = join(ROOT, 'assets', 'fonts', 'surah-header');
+export const BISMILLAH = { font: 'QCF2BSML.ttf', glyph: 0xfc21 }; // KFGQPC Bismillah font, whole Bismillah glyph
+export const BISMILLAH_FONT_DIR = join(ROOT, 'assets', 'fonts', 'bismillah');
+
+export function readBannerMap(path) {
+  const map = JSON.parse(readFileSync(path, 'utf8'));
+  const out = [];
+  for (let s = 1; s <= 114; s++) {
+    const v = map[`surah-${s}`];
+    if (typeof v !== 'string' || [...v.trim()].length !== 1)
+      throw new Error(`${path}: no single banner character for surah ${s}`);
+    out.push(v.trim());
+  }
+  return out;
+}
+
 export function findTanzil(dirs = DEFAULT_TANZIL_DIRS) {
   for (const d of dirs) {
     const text = findFile(d, TANZIL.text);

@@ -82,15 +82,15 @@ The site self-hosts these fonts from `assets/fonts/`. They are committed to git.
 
 ### Surah banner font: `assets/fonts/surah-header/`
 
-| Field      | Value                                                                                                                                                                                                                           |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| File       | `QCF_SurahHeader_COLOR-Regular.woff2` (118,424 bytes)                                                                                                                                                                           |
-| Source     | QUL font 458, "Surah header font", from qul.tarteel.ai                                                                                                                                                                          |
-| Downloaded | 2026-10-31, by Hassan, as `tmp/downloads/qul/QCF_SurahHeader_COLOR-Regular.woff2.zip`. The archive also has `ligatures.json` (the text that draws each surah name), which is not committed.                                     |
-| Version    | Version 1.000, October 9, 2024 (from the font's name records)                                                                                                                                                                   |
-| Made by    | King Fahad Complex (KFGQPC). It is a color font: each surah name is one glyph.                                                                                                                                                  |
-| SHA-256    | `46bd0a3672870743bbfef161d352731423e5e53e9b45eee6a4f0fdeba69ff6dd`                                                                                                                                                              |
-| License    | **Approved by Hassan (2026-10-31, relayed by BUILDER): use it, credit KFGQPC and QUL (D33).** QUL says "We don't have copyright information for this resource". The font itself says "King Fahad Complex, All rights reserved." |
+| Field      | Value                                                                                                                                                                                                                                                                               |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| File       | `QCF_SurahHeader_COLOR-Regular.woff2` (118,424 bytes)                                                                                                                                                                                                                               |
+| Source     | QUL font 458, "Surah header font", from qul.tarteel.ai                                                                                                                                                                                                                              |
+| Downloaded | 2026-10-31, by Hassan, as `tmp/downloads/qul/QCF_SurahHeader_COLOR-Regular.woff2.zip`. The archive also has `ligatures.json` (the character that draws each surah banner). It is not committed; `build-data` copies its 114 characters into `data/quran.json` as `surahs[].banner`. |
+| Version    | Version 1.000, October 9, 2024 (from the font's name records)                                                                                                                                                                                                                       |
+| Made by    | King Fahad Complex (KFGQPC). It is a color font: each surah name is one glyph.                                                                                                                                                                                                      |
+| SHA-256    | `46bd0a3672870743bbfef161d352731423e5e53e9b45eee6a4f0fdeba69ff6dd`                                                                                                                                                                                                                  |
+| License    | **Approved by Hassan (2026-10-31, relayed by BUILDER): use it, credit KFGQPC and QUL (D33).** QUL says "We don't have copyright information for this resource". The font itself says "King Fahad Complex, All rights reserved."                                                     |
 
 All checksums for this download are in `docs/checksums/qul-surah-header.sha256`.
 
@@ -108,16 +108,17 @@ All checksums for this download are in `docs/checksums/qul-surah-header.sha256`.
 
 ## What each source is used for in `data/quran.json`
 
-| Data                                                      | Source                                                                             |
-| --------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| Pages, lines, line type, centering, surah banners         | QUL layout 10 (V2)                                                                 |
-| How each word is drawn (glyph codes)                      | QUL quran-script 61 (V2 glyphs)                                                    |
-| Each word's Unicode text, used for openings and checks    | QUL quran-script 312 (KFGQPC Hafs)                                                 |
-| Arabic surah names                                        | Tanzil metadata 1.0 (`quran-data.js`)                                              |
-| First verse of each quarter, hizb and juz                 | The print: the hizb signs ۞ in QUL 312 and the V2 glyphs, plus surah starts (D26)  |
-| Cross-check of juz and quarter starts                     | Tanzil metadata 1.0 (one reviewed difference: 15:49 in the print, 15:50 in Tanzil) |
-| Page and line of every surah, juz, hizb and quarter start | QUL layout 10, never Tanzil (D26)                                                  |
-| Text cross-check                                          | Tanzil Uthmani 1.1 (`quran-uthmani.txt`)                                           |
+| Data                                                       | Source                                                                             |
+| ---------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Pages, lines, line type, centering, surah banners          | QUL layout 10 (V2)                                                                 |
+| How each word is drawn (glyph codes)                       | QUL quran-script 61 (V2 glyphs)                                                    |
+| Each word's Unicode text, used for openings and checks     | QUL quran-script 312 (KFGQPC Hafs)                                                 |
+| Arabic surah names                                         | Tanzil metadata 1.0 (`quran-data.js`)                                              |
+| Character that draws each surah banner (`surahs[].banner`) | QUL `ligatures.json` from the surah banner font download (QUL 458)                 |
+| First verse of each quarter, hizb and juz                  | The print: the hizb signs ۞ in QUL 312 and the V2 glyphs, plus surah starts (D26)  |
+| Cross-check of juz and quarter starts                      | Tanzil metadata 1.0 (one reviewed difference: 15:49 in the print, 15:50 in Tanzil) |
+| Page and line of every surah, juz, hizb and quarter start  | QUL layout 10, never Tanzil (D26)                                                  |
+| Text cross-check                                           | Tanzil Uthmani 1.1 (`quran-uthmani.txt`)                                           |
 
 ## Text cross-check: QUL 312 against Tanzil and the print (phase 2)
 

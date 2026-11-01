@@ -1,0 +1,12 @@
+{
+  "app.title": "Quran Verse Openings",
+  "nav.next": "Next page",
+  "nav.prev": "Previous page",
+  "page.label": "Page {n}",
+  "page.range": "Pages {a} and {b}",
+  "status.error": "The Quran data could not be loaded. Please reload the page.",
+  "status.loading": "Loading the mushaf...",
+  "view.label": "Page view",
+  "view.single": "One page",
+  "view.spread": "Two pages"
+}

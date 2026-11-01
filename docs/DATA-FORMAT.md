@@ -35,7 +35,7 @@ Options:
 - Default folders: QUL `tmp/downloads/qul/x` (searched one level deep). Tanzil: `data/sources`, then `tmp/downloads/tanzil`.
 - `validate.mjs --write-tanzil-differences` rewrites `data/tanzil-differences.json`. Use it only after a source change has been reviewed.
 
-`build-data` checks every source against `data/sources/SHA256SUMS` before it builds anything.
+`build-data` checks every source against `data/sources/SHA256SUMS` before it builds anything, including `ligatures.json` and the committed surah banner font.
 
 **Rule before committing new data:** run `build-data`, then `validate --full`. Both must pass. See "Limit" below for why.
 
@@ -59,7 +59,9 @@ Top-level fields:
 
 ### Surahs
 
-Each entry: `surah` (1 to 114), `name` (Arabic name, from Tanzil metadata), `verses` (number of verses), `page` and `line` where verse 1 starts, and `headerPage` (the page with the surah banner).
+Each entry: `surah` (1 to 114), `name` (Arabic name, from Tanzil metadata), `verses` (number of verses), `page` and `line` where verse 1 starts, and `headerPage` (the page with the surah banner), and `banner`.
+
+`banner` is one character, from U+FC45 for surah 1 to U+FBEB for surah 114. Drawn with the surah banner font (QUL 458), it draws that surah's whole banner. `build-data` copies these 114 characters from QUL's `ligatures.json`, because that file is a QUL source and stays out of git (`PROJECT.md` Rule 1 item 7).
 
 `headerPage` differs from `page` for 18 surahs whose banner is on the last line of the page before: 4, 10, 22, 23, 24, 26, 27, 32, 33, 37, 38, 45, 47, 53, 60, 64, 65, 80.
 
@@ -112,9 +114,11 @@ Uses only committed files.
 9. No Bismillah inside verse 1 of surahs 2 to 114. Verse 1 of Al-Fatiha is the 4-word Bismillah.
 10. Surah, juz, hizb and quarter starts: the right counts, in order, and each page and line points at its verse's first word. Hizb n is quarter 4n minus 3. Juz 1 is on page 1.
 11. Quarter starts follow the hizb signs of the print: every hizb sign ۞ is on the first word of a verse and starts a quarter; every quarter starts with the sign or with a new surah; juz and hizb are every 8th and 4th quarter.
-12. The Tanzil files match `data/sources/SHA256SUMS`.
-13. Tanzil cross-check of every verse, with the documented conventions (see `docs/DATA-SOURCES.md`).
-14. The differences found are exactly the reviewed list in `data/tanzil-differences.json`. A new difference, or one that disappears, fails the check.
+12. The committed surah banner font and Bismillah font match `data/sources/SHA256SUMS`.
+13. Every surah has its own banner character: 114 different characters, each in U+FB50 to U+FDFF.
+14. The Tanzil files match `data/sources/SHA256SUMS`.
+15. Tanzil cross-check of every verse, with the documented conventions (see `docs/DATA-SOURCES.md`).
+16. The differences found are exactly the reviewed list in `data/tanzil-differences.json`. A new difference, or one that disappears, fails the check.
 
 The checks against the QUL databases are skipped in this mode and print a SKIP line.
 
@@ -122,9 +126,10 @@ The checks against the QUL databases are skipped in this mode and print a SKIP l
 
 Adds:
 
-15. The 3 QUL databases match `data/sources/SHA256SUMS`.
-16. All 9,046 lines match the QUL layout: page, line, type, centering, surah, first and last word.
-17. All 83,668 words match QUL 312 (text) and QUL 61 (glyph codes), with verse and position.
+17. The 3 QUL databases match `data/sources/SHA256SUMS`.
+18. The surah banner characters match the QUL banner map (`ligatures.json`): its checksum and all 114 characters.
+19. All 9,046 lines match the QUL layout: page, line, type, centering, surah, first and last word.
+20. All 83,668 words match QUL 312 (text) and QUL 61 (glyph codes), with verse and position.
 
 ### Tested: validate catches errors
 
@@ -148,4 +153,4 @@ CI does not have the QUL databases. So if someone changes line breaks or glyph c
 
 ## Last run
 
-DOCU ran both modes on 2026-10-31 with Node 24.18.0, after the quarter fix: the default mode passed 14 checks with 1 skipped, and `--full` passed all 17. `sha256sum -c --ignore-missing SHA256SUMS` passed for both Tanzil files. The SHA-256 of `data/quran.json` was `67f83a4b45b425cb70a9b67c00bbe1082097d28774d347f852d6aef3fd51bde6`, matching `data/quran.json.sha256`.
+DOCU ran both modes on 2026-10-31 with Node 24.18.0, after the banner field was added: the default mode passed 16 checks with 1 skipped, and `--full` passed all 20. The SHA-256 of `data/quran.json` was `ffa4ddedd941f9c16cfad7ffcba31c29d91b857903af5e8c3e20d05747747ce6`, matching `data/quran.json.sha256`. This is newer than the first commit (`99a16e3`), which has the version without the `banner` field.

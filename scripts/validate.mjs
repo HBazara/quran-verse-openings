@@ -17,10 +17,16 @@ import { join } from 'node:path';
 import {
   ROOT,
   cp,
+  BANNER,
+  BANNER_FONT_DIR,
+  BISMILLAH,
+  BISMILLAH_FONT_DIR,
   checkSums,
   compareWithTanzil,
+  findFile,
   findQul,
   findTanzil,
+  readBannerMap,
   readQul,
   readTanzilWords,
   DEFAULT_QUL_DIR,
@@ -313,6 +319,28 @@ check('quarter starts follow the hizb signs of the print', (P) => {
   return 'every hizb sign starts a quarter; every quarter starts with the sign or a new surah; juz and hizb are every 8th and 4th quarter';
 });
 
+// ---------- 5b. fonts and surah banners ----------
+check('committed banner and Bismillah fonts match data/sources/SHA256SUMS', (P) => {
+  const banner = findFile(BANNER_FONT_DIR, BANNER.font);
+  const bism = findFile(BISMILLAH_FONT_DIR, BISMILLAH.font);
+  if (!banner) P.push(`assets/fonts/surah-header/${BANNER.font} is missing`);
+  if (!bism) P.push(`assets/fonts/bismillah/${BISMILLAH.font} is missing`);
+  if (banner && bism) P.push(...checkSums([banner, bism]));
+  return 'both match';
+});
+
+check('every surah has its own banner character', (P) => {
+  const GLYPH_RANGE = new RegExp(`^[${cp(0xfb50)}-${cp(0xfdff)}]$`, 'u');
+  const seen = new Set();
+  d.surahs.forEach((s) => {
+    if (typeof s.banner !== 'string' || !GLYPH_RANGE.test(s.banner))
+      P.push(`surah ${s.surah}: banner is not one character in U+FB50 to U+FDFF`);
+    else if (seen.has(s.banner)) P.push(`surah ${s.surah}: banner character used twice`);
+    seen.add(s.banner);
+  });
+  return '114 different banner characters';
+});
+
 // ---------- 6. Tanzil cross-check ----------
 const tz = findTanzil();
 if (!tz)
@@ -392,6 +420,19 @@ else {
   check('QUL databases match data/sources/SHA256SUMS', (P) => {
     P.push(...checkSums(Object.values(qulPaths)));
     return 'all 3 match';
+  });
+  const bannerMap = findFile(qulArg || DEFAULT_QUL_DIR, BANNER.ligatures);
+  check('surah banner characters match the QUL banner map (ligatures.json)', (P) => {
+    if (!bannerMap) {
+      P.push(`${BANNER.ligatures} not found next to the QUL databases`);
+      return '';
+    }
+    P.push(...checkSums([bannerMap]));
+    const want = readBannerMap(bannerMap);
+    d.surahs.forEach((s, i) => {
+      if (s.banner !== want[i]) P.push(`surah ${s.surah}`);
+    });
+    return 'checksum and all 114 characters match';
   });
   const q = await readQul(qulPaths);
   check('every line matches the QUL layout (type, centring, surah, first and last word)', (P) => {

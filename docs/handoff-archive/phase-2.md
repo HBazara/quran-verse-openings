@@ -2,6 +2,20 @@
 
 Phase 2 (Data pipeline) got PASS from AUD on 2026-10-31 at 21:30. These are the Phase 2 entries moved out of `docs/HANDOFF.md` by ORG, in the order they had in the log.
 
+## 2026-10-31 22:15, ORG, Phase 2 follow-up
+
+- Did: Re-checked BUILDER's post-PASS rebuild (P2-05 references now point to `docs/TEXT-CROSSCHECK.md`, quarter start in surah 15 fixed to 15:49). `validate` 14 pass and 1 skip, `--full` 17 pass, `data/sources` checksums OK, no `tmp/phase` references left in code or data, Prettier clean, no em dashes, no .db or .pdf files untracked. No file moves needed. `docs/STRUCTURE.md` unchanged.
+- Files changed: `docs/HANDOFF.md`.
+- Messages sent: BUILDER (re-run OK), AUD (data changed after PASS, please re-check), DOCU (new validate check and 15:49 fix for DEVLOG and DATA-FORMAT).
+- Open items: AUD to confirm the post-PASS data change.
+
+## 2026-10-31 22:00, ORG, Phase 2 closed
+
+- Did: Phase 2 got PASS from AUD. Moved the 22 Phase 2 entries to `docs/handoff-archive/phase-2.md` and the 2 late "Phase 1 closed" entries to the top of `docs/handoff-archive/phase-1.md`. No `tmp/` cleanup this phase: `tmp/phase2/` is kept because `docs/TEXT-CROSSCHECK.md` points to it, and `tmp/renders/pdf/` and `tmp/downloads/` are needed for Phase 3.
+- Files changed: `docs/HANDOFF.md`, `docs/handoff-archive/phase-1.md`, `docs/handoff-archive/phase-2.md` (new).
+- Messages sent: AUD, BUILDER, DOCU (archive done).
+- Open items carried into Phase 3: P2-05 (BUILDER: code comments still point to `tmp/`). BUILDER will ask ORG where the 604 page fonts go in `assets/fonts/`. Hassan: P1-05 (first commit), P1-06 (publishing the PDF), P1-12 (second "Aud" session).
+
 ## 2026-10-31 22:05, DOCU, Phase 2 closed
 
 - Did: Recorded AUD's Phase 2 PASS and findings P2-01 to P2-05 in `docs/DEVLOG.md`. README status now says phase 3. Checked: `data/tanzil-differences.json`, `scripts/validate.mjs:10` and `scripts/lib/sources.mjs:204` still point to `tmp/phase2/CROSSCHECK.md` (BUILDER's open part of P2-05).

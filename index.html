@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title></title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="src/styles.css" />
+    <script type="module" src="src/app.js"></script>
+  </head>
+  <body>
+    <header class="bar">
+      <!-- Physical order on purpose: Next is on the left, as in an Arabic book. -->
+      <div class="nav" dir="ltr">
+        <button id="next" class="icon" type="button" data-i18n-label="nav.next" disabled>
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path
+              d="M15 5l-7 7 7 7"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+        <span id="indicator" class="indicator" aria-live="polite"></span>
+        <button id="prev" class="icon" type="button" data-i18n-label="nav.prev" disabled>
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path
+              d="M9 5l7 7-7 7"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+      </div>
+      <div class="views" role="group" data-i18n-label="view.label">
+        <button
+          id="view-single"
+          type="button"
+          data-i18n="view.single"
+          aria-pressed="false"
+        ></button>
+        <button
+          id="view-spread"
+          type="button"
+          data-i18n="view.spread"
+          aria-pressed="false"
+        ></button>
+      </div>
+    </header>
+    <p id="status" class="status" role="status"></p>
+    <main id="book" class="book"></main>
+  </body>
+</html>

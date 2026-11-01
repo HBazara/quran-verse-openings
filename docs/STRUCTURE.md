@@ -4,8 +4,8 @@ The project file tree, one line per folder. ORG keeps this current after every p
 
 ```
 /
-├─ index.html              entry page (not created yet, Phase 3)
-├─ src/                    app code (js, css)
+├─ index.html              entry page (no interface text; loads src/styles.css and src/app.js)
+├─ src/                    app code: app.js (start, navigation), render.js (page layout), fonts.js (font loading), i18n.js (strings), styles.css
 │  └─ i18n/                interface strings: en.json and ar.json with the same keys
 ├─ assets/
 │  └─ fonts/               self-hosted Quran fonts, original file names kept so checksums still match
@@ -13,7 +13,7 @@ The project file tree, one line per folder. ORG keeps this current after every p
 │     ├─ surah-header/     KFGQPC surah banner colour font (QUL 458): QCF_SurahHeader_COLOR-Regular.woff2
 │     └─ bismillah/        KFGQPC Bismillah font (D34): QCF2BSML.ttf
 ├─ data/                   generated data: quran.json (minified) and quran.json.sha256 from scripts/build-data.mjs, tanzil-differences.json (reviewed list, no text). Never hand-edit or reformat
-│  └─ sources/             Tanzil quran-uthmani.txt and quran-data.js (byte-exact) plus SHA256SUMS for every source build-data reads (Tanzil files, QUL databases, banner font, ligatures.json). QUL files stay in tmp/downloads/qul/
+│  └─ sources/             Tanzil quran-uthmani.txt and quran-data.js (byte-exact) plus SHA256SUMS for every source build-data reads (Tanzil files, QUL databases, banner font, ligatures.json, Bismillah font). QUL files stay in tmp/downloads/qul/
 ├─ scripts/                build-data.mjs and validate.mjs (plain Node, no dependencies; validate --full adds the QUL checks)
 │  └─ lib/                 shared code for both scripts (sources.mjs: find, checksum and read the sources)
 ├─ docs/                   all documentation (owned by DOCU, except the files below)
@@ -24,7 +24,7 @@ The project file tree, one line per folder. ORG keeps this current after every p
 │  └─ handoff-archive/     HANDOFF entries moved here per phase after PASS (ORG)
 ├─ .github/
 │  └─ workflows/           deploy.yml: validate, then deploy to GitHub Pages
-├─ tmp/                    ignored by git: downloads/ (QUL and Tanzil sources), renders/pdf/, phase1/, phase2/, tools/
+├─ tmp/                    ignored by git: downloads/ (all sources), renders/pdf/, phase1/, phase2/, phase3/, tools/ (check and overlay scripts)
 ├─ AGENTS.md               roles and rules for every agent (ORG)
 ├─ PROJECT.md              the full project brief
 └─ README.md               what the site is, run, deploy, credits (DOCU)
