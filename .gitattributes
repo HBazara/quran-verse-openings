@@ -1,0 +1,19 @@
+# Keep LF line endings in the repo, also on Windows
+* text=auto eol=lf
+
+# Committed Tanzil source files: keep byte for byte (no line ending changes), so
+# SHA256SUMS and Tanzil's "verbatim copies" rule hold. QUL databases never go here.
+data/sources/** -text -diff
+
+# Binary files
+*.db binary
+*.sqlite binary
+*.zip binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+*.png binary
+*.jpg binary
+*.ico binary

@@ -1,0 +1,14 @@
+# Generated data: written by scripts/build-data, never hand-formatted
+data/
+
+# Binary and third-party assets
+assets/fonts/
+
+# Brief (kept exactly as written)
+PROJECT.md
+
+# Ignored by git anyway
+*.pdf
+tmp/
+.cache/
+node_modules/

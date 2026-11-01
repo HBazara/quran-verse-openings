@@ -1,0 +1,25 @@
+# Reference PDF: never commit. Hassan decides later if it can be published.
+*.pdf
+
+# Raw QUL databases: never commit (PROJECT.md Rule 1 item 7). Only data/quran.json is committed.
+*.db
+*.sqlite
+*.sqlite3
+*.db.zip
+
+# Temporary work: PDF page renders, screenshots, overlays, downloads before checks
+tmp/
+.cache/
+
+# Node
+node_modules/
+npm-debug.log*
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*~
