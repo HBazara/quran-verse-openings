@@ -9,50 +9,154 @@
     <script type="module" src="src/app.js"></script>
   </head>
   <body>
-    <header class="bar">
-      <!-- Physical order on purpose: Next is on the left, as in an Arabic book. -->
-      <div class="nav" dir="ltr">
-        <button id="next" class="icon" type="button" data-i18n-label="nav.next" disabled>
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path
-              d="M15 5l-7 7 7 7"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.4"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+    <div class="top">
+      <header class="bar">
+        <!-- Physical order on purpose: Next is on the left, as in an Arabic book. -->
+        <div class="nav" dir="ltr">
+          <button id="next" class="icon" type="button" data-i18n-label="nav.next" disabled>
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path
+                d="M15 5l-7 7 7 7"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+          <span id="indicator" class="indicator" aria-live="polite"></span>
+          <button id="prev" class="icon" type="button" data-i18n-label="nav.prev" disabled>
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path
+                d="M9 5l7 7-7 7"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+        <div class="tools">
+          <button
+            id="goto-toggle"
+            class="icon"
+            type="button"
+            aria-expanded="false"
+            aria-controls="goto-panel"
+            data-i18n-label="goto.title"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path
+                d="M9 6h11M9 12h11M9 18h11"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+              />
+              <circle cx="4.5" cy="6" r="1.5" fill="currentColor" />
+              <circle cx="4.5" cy="12" r="1.5" fill="currentColor" />
+              <circle cx="4.5" cy="18" r="1.5" fill="currentColor" />
+            </svg>
+          </button>
+          <button
+            id="settings-toggle"
+            class="icon"
+            type="button"
+            aria-expanded="false"
+            aria-controls="settings-panel"
+            data-i18n-label="settings.title"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path
+                d="M4 7h8M18 7h2M4 17h2M12 17h8"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+              />
+              <circle cx="15" cy="7" r="2.6" fill="none" stroke="currentColor" stroke-width="2.2" />
+              <circle cx="9" cy="17" r="2.6" fill="none" stroke="currentColor" stroke-width="2.2" />
+            </svg>
+          </button>
+          <div class="views" role="group" data-i18n-label="view.label">
+            <button
+              id="view-single"
+              type="button"
+              data-i18n="view.single"
+              aria-pressed="false"
+            ></button>
+            <button
+              id="view-spread"
+              type="button"
+              data-i18n="view.spread"
+              aria-pressed="false"
+            ></button>
+          </div>
+        </div>
+      </header>
+
+      <section id="goto-panel" class="panel" data-i18n-label="goto.title" hidden>
+        <form id="page-form" class="field" novalidate>
+          <label for="page-input" data-i18n="goto.page"></label>
+          <div class="row">
+            <input
+              id="page-input"
+              type="text"
+              inputmode="numeric"
+              autocomplete="off"
+              spellcheck="false"
+              enterkeyhint="go"
+              aria-describedby="page-error"
             />
-          </svg>
-        </button>
-        <span id="indicator" class="indicator" aria-live="polite"></span>
-        <button id="prev" class="icon" type="button" data-i18n-label="nav.prev" disabled>
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path
-              d="M9 5l7 7-7 7"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.4"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </button>
-      </div>
-      <div class="views" role="group" data-i18n-label="view.label">
-        <button
-          id="view-single"
-          type="button"
-          data-i18n="view.single"
-          aria-pressed="false"
-        ></button>
-        <button
-          id="view-spread"
-          type="button"
-          data-i18n="view.spread"
-          aria-pressed="false"
-        ></button>
-      </div>
-    </header>
+            <button class="go" type="submit" data-i18n="goto.go"></button>
+          </div>
+          <p id="page-error" class="error" aria-live="polite"></p>
+        </form>
+        <div class="field">
+          <label for="surah-select" data-i18n="goto.surah"></label>
+          <select id="surah-select"></select>
+        </div>
+        <div class="field">
+          <label for="juz-select" data-i18n="goto.juz"></label>
+          <select id="juz-select"></select>
+        </div>
+      </section>
+
+      <section id="settings-panel" class="panel" data-i18n-label="settings.title" hidden>
+        <fieldset class="field">
+          <legend data-i18n="settings.words"></legend>
+          <div id="words-choices" class="choices"></div>
+        </fieldset>
+        <div class="check">
+          <input id="markers-toggle" type="checkbox" />
+          <label for="markers-toggle" data-i18n="settings.markers"></label>
+        </div>
+        <div class="field">
+          <label for="zoom-select" data-i18n="settings.zoom"></label>
+          <select id="zoom-select"></select>
+        </div>
+        <fieldset class="field">
+          <legend data-i18n="settings.theme"></legend>
+          <div id="theme-choices" class="choices">
+            <label class="choice">
+              <input type="radio" name="theme" value="light" />
+              <span data-i18n="theme.light"></span>
+            </label>
+            <label class="choice">
+              <input type="radio" name="theme" value="dark" />
+              <span data-i18n="theme.dark"></span>
+            </label>
+            <label class="choice">
+              <input type="radio" name="theme" value="sepia" />
+              <span data-i18n="theme.sepia"></span>
+            </label>
+          </div>
+        </fieldset>
+      </section>
+    </div>
     <p id="status" class="status" role="status"></p>
     <main id="book" class="book"></main>
   </body>

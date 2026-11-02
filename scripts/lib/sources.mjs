@@ -210,12 +210,15 @@ export function readTanzilMeta(path) {
   };
   const pairs = (name) =>
     [...block(name).matchAll(/\[(\d+),\s*(\d+)\]/g)].map((m) => `${m[1]}:${m[2]}`);
-  const names = [...block('Sura').matchAll(/\[(\d+),\s*(\d+),\s*(\d+),\s*(\d+),\s*'([^']+)'/g)].map(
-    (m) => ({
-      verses: Number(m[2]),
-      name: m[5],
-    }),
-  );
+  // [start, ayas, order, rukus, name, tname, ...]: tname is the Latin transliteration (in double
+  // quotes, because some contain an apostrophe)
+  const names = [
+    ...block('Sura').matchAll(/\[(\d+),\s*(\d+),\s*(\d+),\s*(\d+),\s*'([^']+)',\s*"([^"]+)"/g),
+  ].map((m) => ({
+    verses: Number(m[2]),
+    name: m[5],
+    transliteration: m[6],
+  }));
   return {
     surahs: names,
     juz: pairs('Juz').slice(0, 30),

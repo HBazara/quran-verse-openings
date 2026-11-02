@@ -90,3 +90,17 @@ Still open after phase 1:
 ### Phase 4: navigation and settings
 
 - **AUD:** Started phase 4 with BUILDER.
+- **Hassan (relayed by AUD):** The PDF is never published and stays ignored by git (P1-06 closed). The repo becomes private and is pushed as a backup by ORG. (Recorded as D10 and D46.)
+- **Hassan (relayed by BUILDER):** Kept the current banner and Bismillah fonts after seeing BUILDER's comparison of four options in `tmp/compare/fonts.html` (D44). Chose the common Quran.com spellings for English surah names instead of Tanzil's (D45, phase 4).
+- **DOCU:** Recorded D44 and D45, and updated D43 and the font license rows in `docs/DATA-SOURCES.md`.
+- **ORG:** Made the repo private. Committed phase 3 as `80d62f6` "Phase 3: core reader with openings in printed positions" (27 files) with Hassan's approval. The push was blocked in ORG's session, so Hassan will run it himself.
+- **DOCU:** Checked the commit (no PDF, `.db` or `tmp/` files tracked). Recorded D10 (never publish the PDF) and D46 (private repo), and updated the README.
+- **BUILDER:** Built phase 4. New header buttons Go to and Settings, each opening a small panel (Escape or a click outside closes it). Go to: page number box (Western, Arabic-Indic and Persian digits, 1 to 604, with an error message), surah list and juz list, all showing where the page on screen is. Settings: opening words 1 to 5, verse-end markers on or off, zoom 100 to 200%, theme light, dark or sepia. Keyboard arrows and swipe. Settings and the last page saved in `localStorage`. New files `src/controls.js`, `src/panels.js`, `src/input.js`, `src/storage.js`. English surah names (`surahs[].transliteration`) from `scripts/lib/surah-names.mjs`, with two new validate checks (18 by default, 22 with `--full`). 26 string keys. Results: 65 of 65 phase 4 tests, 132 of 132 movement tests, overlay identical to phase 3. Why: phase 4 of `PROJECT.md`.
+- **DOCU:** Read the new modules and the changes in `src/app.js`, checked the 26 string keys (same in both files, none empty), ran validate (18 pass, 1 skip) and `--full` (22 pass). Updated `docs/READER.md`, `docs/USER-GUIDE.md` (English and Arabic), `docs/DATA-FORMAT.md`, `docs/DATA-SOURCES.md`, `docs/TEXT-CROSSCHECK.md` (check numbers), `README.md`, and added D47 to D49.
+- **ORG:** Phase 4 tidy: nothing moved, renamed or removed. Updated `docs/STRUCTURE.md` (the 4 new `src/` files, `scripts/lib/surah-names.mjs`, `tmp/phase4/`, `tmp/compare/`). Checked validate (18 pass, 1 skip; `--full` 22), that all 26 string keys are used, and that every file loads under `/quran-verse-openings/`.
+- **AUD:** **Phase 4 PASS.** Open: P4-01, which page the surah list opens for the 18 surahs whose banner is on the page before (BUILDER to choose).
+- **DOCU:** Recorded the PASS. README status now says phase 5. `docs/READER.md` notes the current behavior for those 18 surahs and that P4-01 is open.
+
+### Phase 5: languages
+
+- **AUD:** Started phase 5 with BUILDER.

@@ -11,7 +11,9 @@
   font-display: block;
 }
 
+/* Themes: light (default), dark and sepia. Every colour comes from these tokens. */
 :root {
+  color-scheme: light;
   --bg: #eeede6;
   --paper: #fffdf6;
   --ink: #1b1b18;
@@ -21,8 +23,37 @@
   --accent: #2f6b46;
   --accent-ink: #ffffff;
   --focus: #1f5fbf;
+  --error: #a3221a;
+  --shadow: rgba(0, 0, 0, 0.18);
   --page-w: 561px;
   --page-h: 900px;
+}
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #121412;
+  --paper: #1d201c;
+  --ink: #e8e5da;
+  --muted: #b3afa2;
+  --line: #4b4f48;
+  --frame: #74b08b;
+  --accent: #74b08b;
+  --accent-ink: #0c130e;
+  --focus: #8ab4ff;
+  --error: #ffb4a9;
+  --shadow: rgba(0, 0, 0, 0.55);
+}
+:root[data-theme='sepia'] {
+  --bg: #e8dcc2;
+  --paper: #f7efdc;
+  --ink: #2f2416;
+  --muted: #5c4d37;
+  --line: #c6b48f;
+  --frame: #7a5a2e;
+  --accent: #7a5a2e;
+  --accent-ink: #ffffff;
+  --focus: #1f5fbf;
+  --error: #9b2617;
+  --shadow: rgba(60, 40, 10, 0.22);
 }
 
 * {
@@ -45,7 +76,11 @@ body {
     sans-serif;
 }
 
-/* Top bar */
+/* Top bar and its panels */
+.top {
+  position: relative;
+  z-index: 5;
+}
 .bar {
   display: flex;
   flex-wrap: wrap;
@@ -54,12 +89,15 @@ body {
   gap: 8px 16px;
   padding: 8px 16px;
 }
-.nav {
+.nav,
+.tools {
   display: flex;
+  flex-wrap: wrap; /* on the narrowest phones the view switch moves to its own row */
   align-items: center;
   gap: 8px;
 }
 .icon {
+  flex: none; /* never smaller than 44 px */
   display: grid;
   place-items: center;
   width: 44px;
@@ -74,6 +112,11 @@ body {
   opacity: 0.35;
   cursor: default;
 }
+.icon[aria-expanded='true'] {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+}
 .icon svg {
   width: 22px;
   height: 22px;
@@ -84,6 +127,7 @@ body {
   font-variant-numeric: tabular-nums;
 }
 .views {
+  flex: none;
   display: flex;
   overflow: hidden;
   border: 1px solid var(--line);
@@ -91,21 +135,146 @@ body {
 }
 .views button {
   min-height: 44px;
-  padding: 0 14px;
+  padding: 0 12px;
   border: 0;
   background: var(--paper);
   color: var(--ink);
   font: inherit;
+  white-space: nowrap;
   cursor: pointer;
 }
 .views button[aria-pressed='true'] {
   background: var(--accent);
   color: var(--accent-ink);
 }
-button:focus-visible {
+button:focus-visible,
+select:focus-visible,
+input:focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 2px;
 }
+
+.panel {
+  position: absolute;
+  top: 100%;
+  inset-inline-end: 16px;
+  display: grid;
+  gap: 16px;
+  width: min(22rem, calc(100vw - 32px));
+  max-height: calc(100vh - 96px);
+  overflow: auto;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 0 8px 28px var(--shadow);
+}
+.panel[hidden] {
+  display: none;
+}
+.field {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.field > label,
+.field > legend,
+.check > label {
+  padding: 0;
+  font-weight: 600;
+}
+.field > legend {
+  margin-bottom: 6px;
+}
+.row {
+  display: flex;
+  gap: 8px;
+}
+.panel input[type='text'],
+.panel select {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+}
+.panel input[aria-invalid='true'] {
+  border-color: var(--error);
+  box-shadow: 0 0 0 1px var(--error);
+}
+.go {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.error {
+  margin: 0;
+  color: var(--error);
+  font-size: 0.9rem;
+}
+.choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.choice {
+  position: relative;
+  display: inline-flex;
+}
+.choice input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.choice span {
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--bg);
+}
+.choice input:checked + span {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+.choice input:focus-visible + span {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+.check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.check input {
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
 .status {
   margin: 0;
   padding: 0 16px 8px;
@@ -116,21 +285,26 @@ button:focus-visible {
   display: none;
 }
 
-/* The book: fixed-size pages scaled as one unit */
+/* The book: fixed-size pages scaled as one unit. Above 100% zoom it scrolls instead. */
 .book {
   flex: 1;
   min-height: 0;
   display: flex;
   align-items: flex-start;
-  justify-content: center;
   padding: 4px 16px 16px;
   overflow: hidden;
+  touch-action: pan-y pinch-zoom; /* sideways swipes are page turns */
+}
+.book.zoomed {
+  overflow: auto;
+  touch-action: auto;
 }
 .spread {
   display: flex;
   flex-direction: row;
   direction: rtl; /* first page (odd) on the right */
   gap: 16px;
+  margin-inline: auto; /* centred, and still fully scrollable when zoomed */
 }
 .slot {
   position: relative;
@@ -146,7 +320,7 @@ button:focus-visible {
   transform: scale(var(--scale, 1));
   transform-origin: top left;
   background: var(--paper);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 1px 4px var(--shadow);
 }
 .frame {
   position: absolute;

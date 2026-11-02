@@ -6,17 +6,18 @@ It will be a static site with plain HTML, CSS and JavaScript. It has no backend 
 
 ## Status
 
-**Phase 4 of 8: navigation and settings.** Phases 1 (setup and data check), 2 (data pipeline) and 3 (core reader) passed the audit.
+**Phase 5 of 8: languages.** Phases 1 (setup and data check), 2 (data pipeline), 3 (core reader) and 4 (navigation and settings) passed the audit.
 
 Done so far:
 
 - Folder structure, `AGENTS.md`, `.gitignore`, `.editorconfig`, `.gitattributes` and Prettier config (ORG).
 - Edition check (BUILDER): the PDF is the King Fahd Complex (KFGQPC) Madinah mushaf, Hafs, 1421H print, 604 pages of 15 lines. The QUL V2 layout matched the print on every line checked across 42 sample pages.
 - Decisions: Hassan picked the QPC V2 page fonts, approved the surah banner and Bismillah fonts, and downloaded the official QUL files.
-- Data pipeline (BUILDER): `scripts/build-data.mjs` builds `data/quran.json` (604 pages, 9,046 lines, 114 surahs, 6,236 verses, 83,668 words). `scripts/validate.mjs` runs 16 checks, or 20 with `--full`. All pass.
+- Data pipeline (BUILDER): `scripts/build-data.mjs` builds `data/quran.json` (604 pages, 9,046 lines, 114 surahs, 6,236 verses, 83,668 words). `scripts/validate.mjs` runs 18 checks, or 22 with `--full`. All pass.
 - Core reader (BUILDER): whole pages in the printed layout, with only the first words of each verse visible, surah banners, Bismillah lines, one page or two-page view, Next and Previous. See `docs/READER.md`.
+- Navigation and settings (BUILDER): go to a page, surah or juz; settings for opening words, verse-end markers, zoom and theme, saved in the browser; keyboard arrows and swipe; the last page is remembered.
 
-Not done yet: settings, jump to page, surah and juz, keyboard and swipe (phase 4), language picker (phase 5), themes and deploy (phase 6).
+Not done yet: language picker (phase 5), polish and deploy (phase 6), version 2 features (phases 7 and 8).
 
 See `docs/DEVLOG.md` for the full history.
 
@@ -29,7 +30,7 @@ git clone https://github.com/HBazara/quran-verse-openings.git
 cd quran-verse-openings
 ```
 
-The repo is set up but not pushed yet, so the clone works once the first push is done.
+The repo is private for now (D46), so cloning needs access, and it works once the first push is done.
 
 Open the reader. There is no build step, but the site must be served over HTTP, because browsers block loading the data from a `file://` page. Any static server works. With Python, from the project root:
 
@@ -37,7 +38,7 @@ Open the reader. There is no build step, but the site must be served over HTTP, 
 python -m http.server 8765 --bind 127.0.0.1
 ```
 
-Then open http://127.0.0.1:8765/ in a browser. Add `#page=50` to the address to open page 50; the other address settings are in `docs/USER-GUIDE.md`.
+Then open http://127.0.0.1:8765/ in a browser. Add `#page=50` to the address to open page 50. How to use the reader is in `docs/USER-GUIDE.md`.
 
 To work on the data:
 
@@ -53,7 +54,7 @@ node scripts/build-data.mjs        # rebuild data/quran.json (local only)
 
 ## Deploy
 
-Not set up yet (phase 6). The plan is to deploy to GitHub Pages through GitHub Actions. Before deploying, the workflow will run `cd data/sources && sha256sum -c --ignore-missing SHA256SUMS` and `node scripts/validate.mjs`, and any failure blocks the deploy. The repo is https://github.com/HBazara/quran-verse-openings (public, not pushed yet).
+Not set up yet (phase 6). The plan is to deploy to GitHub Pages through GitHub Actions. Before deploying, the workflow will run `cd data/sources && sha256sum -c --ignore-missing SHA256SUMS` and `node scripts/validate.mjs`, and any failure blocks the deploy. The repo is https://github.com/HBazara/quran-verse-openings. It is private for now, as a backup; free GitHub Pages needs it to be public, which Hassan will decide before phase 6.
 
 ## Folder layout
 
@@ -74,7 +75,7 @@ Not set up yet (phase 6). The plan is to deploy to GitHub Pages through GitHub A
 
 ## Reference PDF
 
-`standard1-quran.pdf` sits in the project root. We use it only to confirm the edition and page layout, never as a source for the Arabic text. It is ignored by git (`*.pdf` in `.gitignore`) and must never be committed.
+`standard1-quran.pdf` sits in the project root. We use it only to confirm the edition and page layout, never as a source for the Arabic text. It is ignored by git (`*.pdf` in `.gitignore`), must never be committed, and will never be published (D10).
 
 ## Credits
 

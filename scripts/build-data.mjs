@@ -29,6 +29,7 @@ import {
   sha256,
   DEFAULT_QUL_DIR,
 } from './lib/sources.mjs';
+import { SURAH_NAMES_EN } from './lib/surah-names.mjs';
 
 const OUT = join(ROOT, 'data', 'quran.json');
 const OUT_SUM = join(ROOT, 'data', 'quran.json.sha256');
@@ -143,11 +144,13 @@ const locate = (verse) => {
 const headerPage = new Map();
 pages.forEach((p) => p.lines.forEach((l) => l.type === 'surah' && headerPage.set(l.surah, p.page)));
 if (meta.surahs.length !== 114) fail('Tanzil metadata does not list 114 surahs');
+if (SURAH_NAMES_EN.length !== 114) fail('scripts/lib/surah-names.mjs does not list 114 names');
 const surahs = meta.surahs.map((s, i) => {
   const [page, line] = locate(`${i + 1}:1`);
   return {
     surah: i + 1,
     name: s.name,
+    transliteration: SURAH_NAMES_EN[i], // English spelling for the interface (Quran.com style)
     verses: s.verses,
     page,
     line,

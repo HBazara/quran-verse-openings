@@ -9,6 +9,7 @@ How `data/quran.json` is built, what is in it, and what `scripts/validate.mjs` c
 | `scripts/build-data.mjs`         | yes    | Builds `data/quran.json` from the sources. Local only, because it needs the QUL databases.                                                                                   |
 | `scripts/validate.mjs`           | yes    | All checks. Default mode runs in CI; `--full` runs locally.                                                                                                                  |
 | `scripts/lib/sources.mjs`        | yes    | Shared code: finds and checksums the sources, reads QUL and Tanzil, and holds the documented rules for comparing with Tanzil.                                                |
+| `scripts/lib/surah-names.mjs`    | yes    | The English surah names, typed for this project in the Quran.com spelling (D45). `build-data` copies them into `data/quran.json`.                                            |
 | `data/quran.json`                | yes    | The generated data the site reads. About 4.15 MB, minified. No timestamps, so the same sources always give the same bytes.                                                   |
 | `data/quran.json.sha256`         | yes    | SHA-256 of `data/quran.json`, written by `build-data`.                                                                                                                       |
 | `data/tanzil-differences.json`   | yes    | The reviewed list of differences from Tanzil. Verse and word locations and categories only, no text.                                                                         |
@@ -59,7 +60,7 @@ Top-level fields:
 
 ### Surahs
 
-Each entry: `surah` (1 to 114), `name` (Arabic name, from Tanzil metadata), `verses` (number of verses), `page` and `line` where verse 1 starts, and `headerPage` (the page with the surah banner), and `banner`.
+Each entry: `surah` (1 to 114), `name` (Arabic name, from Tanzil metadata), `transliteration` (English name in the Quran.com spelling, from `scripts/lib/surah-names.mjs`), `verses` (number of verses), `page` and `line` where verse 1 starts, and `headerPage` (the page with the surah banner), and `banner`.
 
 `banner` is one character, from U+FC45 for surah 1 to U+FBEB for surah 114. Drawn with the surah banner font (QUL 458), it draws that surah's whole banner. `build-data` copies these 114 characters from QUL's `ligatures.json`, because that file is a QUL source and stays out of git (`PROJECT.md` Rule 1 item 7).
 
@@ -116,9 +117,11 @@ Uses only committed files.
 11. Quarter starts follow the hizb signs of the print: every hizb sign ۞ is on the first word of a verse and starts a quarter; every quarter starts with the sign or with a new surah; juz and hizb are every 8th and 4th quarter.
 12. The committed surah banner font and Bismillah font match `data/sources/SHA256SUMS`.
 13. Every surah has its own banner character: 114 different characters, each in U+FB50 to U+FDFF.
-14. The Tanzil files match `data/sources/SHA256SUMS`.
-15. Tanzil cross-check of every verse, with the documented conventions (see `docs/DATA-SOURCES.md`).
-16. The differences found are exactly the reviewed list in `data/tanzil-differences.json`. A new difference, or one that disappears, fails the check.
+14. Every surah has an Arabic name and an English name: 114 of each, none empty, none repeated, and the English names equal the list in `scripts/lib/surah-names.mjs`.
+15. The Tanzil files match `data/sources/SHA256SUMS`.
+16. Surah names agree with the Tanzil metadata: the 114 Arabic names are equal, and each English name is closer to Tanzil's spelling of its own surah (by consonant outline) than to any other surah's.
+17. Tanzil cross-check of every verse, with the documented conventions (see `docs/DATA-SOURCES.md`).
+18. The differences found are exactly the reviewed list in `data/tanzil-differences.json`. A new difference, or one that disappears, fails the check.
 
 The checks against the QUL databases are skipped in this mode and print a SKIP line.
 
@@ -126,10 +129,10 @@ The checks against the QUL databases are skipped in this mode and print a SKIP l
 
 Adds:
 
-17. The 3 QUL databases match `data/sources/SHA256SUMS`.
-18. The surah banner characters match the QUL banner map (`ligatures.json`): its checksum and all 114 characters.
-19. All 9,046 lines match the QUL layout: page, line, type, centering, surah, first and last word.
-20. All 83,668 words match QUL 312 (text) and QUL 61 (glyph codes), with verse and position.
+19. The 3 QUL databases match `data/sources/SHA256SUMS`.
+20. The surah banner characters match the QUL banner map (`ligatures.json`): its checksum and all 114 characters.
+21. All 9,046 lines match the QUL layout: page, line, type, centering, surah, first and last word.
+22. All 83,668 words match QUL 312 (text) and QUL 61 (glyph codes), with verse and position.
 
 ### Tested: validate catches errors
 
@@ -153,4 +156,4 @@ CI does not have the QUL databases. So if someone changes line breaks or glyph c
 
 ## Last run
 
-DOCU ran both modes on 2026-10-31 with Node 24.18.0, after the banner field was added: the default mode passed 16 checks with 1 skipped, and `--full` passed all 20. The SHA-256 of `data/quran.json` was `ffa4ddedd941f9c16cfad7ffcba31c29d91b857903af5e8c3e20d05747747ce6`, matching `data/quran.json.sha256`. This is newer than the first commit (`99a16e3`), which has the version without the `banner` field.
+DOCU ran both modes on 2026-11-01 with Node 24.18.0, after phase 4: the default mode passed 18 checks with 1 skipped, and `--full` passed all 22. The SHA-256 of `data/quran.json` was `71329d89e7849b02eff99ce5d0d54d94fed696d2deadafc163a7a56e3e1d394e`, matching `data/quran.json.sha256`.

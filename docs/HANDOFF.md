@@ -16,9 +16,9 @@ Template:
 
 ---
 
-## 2026-11-01 11:40, ORG, Phase 3 closed
+## 2026-11-01 15:00, ORG, Phase 4 closed
 
-- Did: Phase 3 got PASS from AUD (re-check 2). Moved the 28 Phase 3 entries to `docs/handoff-archive/phase-3.md` and the 2 late Phase 2 entries to the top of `docs/handoff-archive/phase-2.md`. No `tmp/` cleanup: `tmp/renders/pdf/`, `tmp/downloads/`, `tmp/phase3/` and `tmp/tools/` are kept as evidence for later overlay checks.
-- Files changed: `docs/HANDOFF.md`, `docs/handoff-archive/phase-2.md`, `docs/handoff-archive/phase-3.md` (new).
-- Messages sent: AUD, BUILDER, DOCU (archive done).
-- Open items carried into Phase 4: Hassan decides the banner and Bismillah fonts (options: keep them and email KFGQPC, the Uthmanic Hafs font, or a page-font Bismillah plus a drawn frame). AUD carries P3-03 (Bismillah shape) and P3-04 (banner ornament) to Phase 6. Push gate: the go-ahead from Hassan and the font decision. Phase 3 work is not committed yet: commit only with approval from Hassan. Also with Hassan: P1-06 (PDF), P1-12 (second "Aud" session).
+- Did: Phase 4 got PASS from AUD. Moved the 11 Phase 4 entries to `docs/handoff-archive/phase-4.md` and 1 late Phase 3 entry to the top of `docs/handoff-archive/phase-3.md`. No `tmp/` cleanup: `tmp/renders/pdf/`, `tmp/downloads/`, `tmp/phase3/` are kept for later overlay checks, and `tmp/phase4/` and `tmp/compare/` are kept because `docs/AUDIT.md`, `docs/DECISIONS.md` and `docs/DEVLOG.md` point to them. Saved the audited Phase 4 state as tree snapshot `refs/snapshots/phase-4` (validated), so BUILDER can start Phase 5.
+- Files changed: `docs/HANDOFF.md`, `docs/handoff-archive/phase-3.md`, `docs/handoff-archive/phase-4.md` (new), git index and refs.
+- Messages sent: AUD, BUILDER, DOCU (archive done, snapshot saved).
+- Open items carried into Phase 5: Hassan pushes `80d62f6` (`git push -u origin main`; the remote is still empty). Commit of Phase 4 (from `refs/snapshots/phase-4`) waits on approval from Hassan. Repo stays private until Hassan says public (Phase 6 gate). Second "Aud" session (P1-12).

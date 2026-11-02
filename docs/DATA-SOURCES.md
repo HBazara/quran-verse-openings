@@ -90,7 +90,7 @@ The site self-hosts these fonts from `assets/fonts/`. They are committed to git.
 | Version    | Version 1.000, October 9, 2024 (from the font's name records)                                                                                                                                                                                                                       |
 | Made by    | King Fahad Complex (KFGQPC). It is a color font: each surah name is one glyph.                                                                                                                                                                                                      |
 | SHA-256    | `46bd0a3672870743bbfef161d352731423e5e53e9b45eee6a4f0fdeba69ff6dd`                                                                                                                                                                                                                  |
-| License    | **Approved by Hassan (2026-10-31, relayed by BUILDER): use it, credit KFGQPC and QUL (D33).** QUL says "We don't have copyright information for this resource". The font itself says "King Fahad Complex, All rights reserved."                                                     |
+| License    | **Approved by Hassan (2026-10-31, relayed by BUILDER): use it, credit KFGQPC and QUL (D33). Kept after comparing other options (D44).** QUL says "We don't have copyright information for this resource". The font itself says "King Fahad Complex, All rights reserved."           |
 
 All checksums for this download are in `docs/checksums/qul-surah-header.sha256`.
 
@@ -104,21 +104,22 @@ All checksums for this download are in `docs/checksums/qul-surah-header.sha256`.
 | Downloaded   | 2026-10-31, by BUILDER, as `tmp/downloads/bismillah/QCF2BSML.ttf`                                                                                                                                                                                                                                                                                                                          |
 | Name records | Copyright "King Fahad Complex, All rights reserved."; name "QCF2BSML"; version "version 5.10"; trademark "All rights researved" (their spelling); designer "Harf Information Technology". No license text.                                                                                                                                                                                 |
 | SHA-256      | `457cd1bf2174e9c10b31eab25bc5eda20c12abbafe5f47bdea473c64036f411e` (also in `data/sources/SHA256SUMS` and `docs/checksums/bismillah.sha256`)                                                                                                                                                                                                                                               |
-| License      | None published. The mirror repo declares none; its README "License" link points to dm.qurancomplex.gov.sa/copyright-2/, which returned 404. Used under Hassan's D34 (option 1: KFGQPC's Bismillah font, from KFGQPC or this mirror).                                                                                                                                                       |
+| License      | None published. The mirror repo declares none; its README "License" link points to dm.qurancomplex.gov.sa/copyright-2/, which returned 404. Kept by Hassan after comparing other options (D44). Used under Hassan's D34 (option 1: KFGQPC's Bismillah font, from KFGQPC or this mirror).                                                                                                   |
 
 ## What each source is used for in `data/quran.json`
 
-| Data                                                       | Source                                                                             |
-| ---------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| Pages, lines, line type, centering, surah banners          | QUL layout 10 (V2)                                                                 |
-| How each word is drawn (glyph codes)                       | QUL quran-script 61 (V2 glyphs)                                                    |
-| Each word's Unicode text, used for openings and checks     | QUL quran-script 312 (KFGQPC Hafs)                                                 |
-| Arabic surah names                                         | Tanzil metadata 1.0 (`quran-data.js`)                                              |
-| Character that draws each surah banner (`surahs[].banner`) | QUL `ligatures.json` from the surah banner font download (QUL 458)                 |
-| First verse of each quarter, hizb and juz                  | The print: the hizb signs ۞ in QUL 312 and the V2 glyphs, plus surah starts (D26)  |
-| Cross-check of juz and quarter starts                      | Tanzil metadata 1.0 (one reviewed difference: 15:49 in the print, 15:50 in Tanzil) |
-| Page and line of every surah, juz, hizb and quarter start  | QUL layout 10, never Tanzil (D26)                                                  |
-| Text cross-check                                           | Tanzil Uthmani 1.1 (`quran-uthmani.txt`)                                           |
+| Data                                                       | Source                                                                                                                   |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Pages, lines, line type, centering, surah banners          | QUL layout 10 (V2)                                                                                                       |
+| How each word is drawn (glyph codes)                       | QUL quran-script 61 (V2 glyphs)                                                                                          |
+| Each word's Unicode text, used for openings and checks     | QUL quran-script 312 (KFGQPC Hafs)                                                                                       |
+| Arabic surah names                                         | Tanzil metadata 1.0 (`quran-data.js`)                                                                                    |
+| English surah names (`surahs[].transliteration`)           | Typed for this project by BUILDER in the Quran.com spelling, `scripts/lib/surah-names.mjs`. No third-party source (D45). |
+| Character that draws each surah banner (`surahs[].banner`) | QUL `ligatures.json` from the surah banner font download (QUL 458)                                                       |
+| First verse of each quarter, hizb and juz                  | The print: the hizb signs ۞ in QUL 312 and the V2 glyphs, plus surah starts (D26)                                        |
+| Cross-check of juz and quarter starts                      | Tanzil metadata 1.0 (one reviewed difference: 15:49 in the print, 15:50 in Tanzil)                                       |
+| Page and line of every surah, juz, hizb and quarter start  | QUL layout 10, never Tanzil (D26)                                                                                        |
+| Text cross-check                                           | Tanzil Uthmani 1.1 (`quran-uthmani.txt`)                                                                                 |
 
 ## Text cross-check: QUL 312 against Tanzil and the print (phase 2)
 

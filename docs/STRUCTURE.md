@@ -5,7 +5,7 @@ The project file tree, one line per folder. ORG keeps this current after every p
 ```
 /
 ├─ index.html              entry page (no interface text; loads src/styles.css and src/app.js)
-├─ src/                    app code: app.js (start, navigation), render.js (page layout), fonts.js (font loading), i18n.js (strings), styles.css
+├─ src/                    app code: app.js (start), render.js (page layout), fonts.js (font loading), i18n.js (strings), controls.js (Go to and Settings panel contents), panels.js (opening and closing the panels), input.js (keyboard and swipe), storage.js (only place that uses localStorage), styles.css
 │  └─ i18n/                interface strings: en.json and ar.json with the same keys
 ├─ assets/
 │  └─ fonts/               self-hosted Quran fonts, original file names kept so checksums still match
@@ -15,7 +15,7 @@ The project file tree, one line per folder. ORG keeps this current after every p
 ├─ data/                   generated data: quran.json (minified) and quran.json.sha256 from scripts/build-data.mjs, tanzil-differences.json (reviewed list, no text). Never hand-edit or reformat
 │  └─ sources/             Tanzil quran-uthmani.txt and quran-data.js (byte-exact) plus SHA256SUMS for every source build-data reads (Tanzil files, QUL databases, banner font, ligatures.json, Bismillah font). QUL files stay in tmp/downloads/qul/
 ├─ scripts/                build-data.mjs and validate.mjs (plain Node, no dependencies; validate --full adds the QUL checks)
-│  └─ lib/                 shared code for both scripts (sources.mjs: find, checksum and read the sources)
+│  └─ lib/                 shared code for both scripts: sources.mjs (find, checksum and read the sources), surah-names.mjs (English surah names)
 ├─ docs/                   all documentation (owned by DOCU, except the files below)
 │  ├─ AUDIT.md             AUD's findings table
 │  ├─ HANDOFF.md           shared log, every agent writes to it
@@ -24,7 +24,7 @@ The project file tree, one line per folder. ORG keeps this current after every p
 │  └─ handoff-archive/     HANDOFF entries moved here per phase after PASS (ORG)
 ├─ .github/
 │  └─ workflows/           deploy.yml: validate, then deploy to GitHub Pages
-├─ tmp/                    ignored by git: downloads/ (all sources), renders/pdf/, phase1/, phase2/, phase3/, tools/ (check and overlay scripts)
+├─ tmp/                    ignored by git: downloads/ (all sources), renders/pdf/, phase1/ to phase4/, compare/ (font comparison), tools/ (check and overlay scripts)
 ├─ AGENTS.md               roles and rules for every agent (ORG)
 ├─ PROJECT.md              the full project brief
 └─ README.md               what the site is, run, deploy, credits (DOCU)

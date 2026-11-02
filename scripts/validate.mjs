@@ -28,9 +28,11 @@ import {
   findTanzil,
   readBannerMap,
   readQul,
+  readTanzilMeta,
   readTanzilWords,
   DEFAULT_QUL_DIR,
 } from './lib/sources.mjs';
+import { SURAH_NAMES_EN } from './lib/surah-names.mjs';
 
 const DATA = join(ROOT, 'data', 'quran.json');
 const DATA_SUM = join(ROOT, 'data', 'quran.json.sha256');
@@ -341,6 +343,23 @@ check('every surah has its own banner character', (P) => {
   return '114 different banner characters';
 });
 
+check('every surah has an Arabic name and an English name, all different', (P) => {
+  const ARABIC_NAME = new RegExp(`^[${cp(0x0621)}-${cp(0x064a)}${cp(0x0671)} ]+$`, 'u');
+  d.surahs.forEach((s, i) => {
+    if (typeof s.name !== 'string' || !ARABIC_NAME.test(s.name))
+      P.push(`surah ${s.surah}: Arabic name missing or has other characters`);
+    if (typeof s.transliteration !== 'string' || !/^[A-Za-z' -]+$/.test(s.transliteration))
+      P.push(`surah ${s.surah}: English name missing or has other characters`);
+    else if (s.transliteration !== SURAH_NAMES_EN[i])
+      P.push(`surah ${s.surah}: English name differs from scripts/lib/surah-names.mjs`);
+  });
+  for (const key of ['name', 'transliteration']) {
+    const seen = new Set(d.surahs.map((s) => s[key]));
+    if (seen.size !== d.surahs.length) P.push(`${key}: some surahs share the same name`);
+  }
+  return '114 Arabic names and 114 English names, none empty, none repeated';
+});
+
 // ---------- 6. Tanzil cross-check ----------
 const tz = findTanzil();
 if (!tz)
@@ -357,6 +376,38 @@ else {
   check('Tanzil files match data/sources/SHA256SUMS', (P) => {
     P.push(...checkSums([tz.text, tz.meta]));
     return 'both files match';
+  });
+  check('surah names agree with the Tanzil metadata (Arabic equal, English in place)', (P) => {
+    const meta = readTanzilMeta(tz.meta).surahs;
+    // The English names are our own spelling. Each one must be closer to Tanzil's spelling of its own
+    // surah than to Tanzil's spelling of any other surah, so a name in the wrong place is caught.
+    const norm = (s) =>
+      s
+        .toLowerCase()
+        .replace(/^a[a-z]{0,2}-/, '')
+        .replace(/[^a-z]/g, '')
+        .replace(/e/g, 'i')
+        .replace(/o/g, 'u')
+        .replace(/(.)\1+/g, '$1')
+        .replace(/h$/, '');
+    const agree = (a, b) => {
+      const t = Array.from({ length: a.length + 1 }, () => Array(b.length + 1).fill(0));
+      for (let i = 1; i <= a.length; i++)
+        for (let j = 1; j <= b.length; j++)
+          t[i][j] =
+            a[i - 1] === b[j - 1] ? t[i - 1][j - 1] + 1 : Math.max(t[i - 1][j], t[i][j - 1]);
+      return (2 * t[a.length][b.length]) / (a.length + b.length || 1);
+    };
+    const theirs = meta.map((m) => norm(m.transliteration || ''));
+    d.surahs.forEach((s, i) => {
+      if (s.name !== meta[i]?.name) P.push(`surah ${s.surah}: Arabic name differs`);
+      const ours = norm(s.transliteration);
+      const own = agree(ours, theirs[i]);
+      const other = theirs.findIndex((m, j) => j !== i && agree(ours, m) >= own);
+      if (other >= 0)
+        P.push(`surah ${s.surah}: "${s.transliteration}" is as close to surah ${other + 1}`);
+    });
+    return '114 Arabic names equal; each English name is closest to its own surah';
   });
   check('Tanzil cross-check: compare every verse', () => {
     res = compareWithTanzil(qpc, readTanzilWords(tz.text));
