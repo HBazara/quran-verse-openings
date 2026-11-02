@@ -2,11 +2,11 @@
 
 A memorization mushaf for the web. It shows the Quran page by page like a printed mushaf, but each verse shows only its opening words (رؤوس الآيات). The opening words sit in the same spot they have on the printed page, and the rest of the verse is left as empty space. The reader sees the start of each verse and recites the rest from memory.
 
-It is a static site with plain HTML, CSS and JavaScript, with no backend and no runtime API calls. From phase 8 (waiting for its audit) it can be installed as an app and works offline after the first visit.
+It is a static site with plain HTML, CSS and JavaScript, with no backend and no runtime API calls. From phase 8 it can be installed as an app and works offline after the first visit.
 
 ## Status
 
-**Phase 8 of 8: version 2, part B (extras).** Phases 1 to 7 passed the audit and are live. Phase 8 is built and waiting for its audit; it goes live only after it passes and is pushed. The site is live at https://hbazara.github.io/quran-verse-openings/ (see Deploy).
+**All 8 phases are built, audited and live** (version 2, commit `44452fb`, 2026-11-02). The site is live at https://hbazara.github.io/quran-verse-openings/ (see Deploy).
 
 Done so far:
 
@@ -20,9 +20,9 @@ Done so far:
 - Polish (BUILDER): banner colors that suit each theme, a two-row header on phones, interface typography, and a GitHub workflow that checks everything and then publishes the site.
 - Memorization tools (BUILDER): peek (tap a verse, or press P, to see all of it for 4 seconds; off until switched on in Settings), test mode (hide the openings and show them one by one), a memorization tracker (mark pages memorized or needs review, a grid of all 604 pages by juz), and bookmarks.
 
-- Extras (BUILDER, waiting for audit): juz, hizb and quarter markers in the page margin, surah search by name or number, printing a booklet on A5 sheets, and an installable app that works offline.
+- Extras (BUILDER): juz, hizb and quarter markers in the page margin, surah search by name or number, printing a booklet on A5 sheets, and an installable app that works offline.
 
-Not done yet: nothing planned beyond phase 8.
+After phase 8 (see `docs/AUDIT.md`): BUILDER fixed P8-01 (the search spelling "aal imran"), P8-03 (a new deploy could take up to 10 minutes to show) and P8-04 (peek did not hide at once when switched off); AUD verified the fixes, and they go live with the next push. Hassan kept the margin markers on by default on phones too (P8-02).
 
 See `docs/DEVLOG.md` for the full history.
 

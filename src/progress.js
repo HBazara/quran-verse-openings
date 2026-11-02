@@ -203,6 +203,11 @@ export function setupProgress(quran, app) {
     const cell = e.target instanceof Element ? e.target.closest('.cell') : null;
     if (cell) app.goTo(Number(cell.dataset.page));
   });
+  // The grid is hidden from screen readers (a picture of progress), so a click or tap must not move
+  // the focus into it; the click above still opens the page.
+  grid.addEventListener('mousedown', (e) => {
+    if (e.target instanceof Element && e.target.closest('.cell')) e.preventDefault();
+  });
 
   return {
     // after every drawing of the pages

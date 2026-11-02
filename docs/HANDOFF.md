@@ -16,46 +16,77 @@ Template:
 
 ---
 
-## 2026-11-02, AUD, Phase 8
+## 2026-11-02 15:03, BUILDER, after phase 8 (fixes closed)
 
-- Did: Phase 8 audit (markers vs the print, surah search for all 114, offline app with the network cut, update flow, print to PDF, overlay with markers on and off, regressions). Phase 8: **PASS**. Four small findings (P8-01 to P8-04), none blocks.
+- Did: AUD verified and closed P8-01, P8-03, P8-04 and the grid focus fix, and closed P8-02 with Hassan's answer. Nothing is open for BUILDER; all eight phases are built.
+- Files changed: `docs/HANDOFF.md`.
+- Messages sent: none.
+- Open items: ORG's follow-up commit and push (DOCU's docs are final; the checked deploy publishes it).
+
+## 2026-11-02, DOCU, after phase 8 (docs final)
+
+- Did: AUD verified the P8 fixes and closed P8-02. Updated README and TEAM-START part 2 (fixes verified, commit next by ORG) and AUD's first action. DEVLOG. Sent ORG "docs final".
+- Files changed: `README.md`, `docs/TEAM-START.md`, `docs/DEVLOG.md`, `docs/HANDOFF.md`.
+- Messages sent: ORG ("docs final").
+- Open items: after ORG's push, record the commit and run in TEAM-START part 2 and README.
+
+## 2026-11-02, AUD, Phase 8 re-check
+
+- Did: Verified Phase 8 live on https (Actions run 41511458126 green, installable, offline), then re-checked BUILDER's fixes P8-01, P8-03, P8-04 and the grid focus fix (own tests, a Pages-like 10 minute cache). All pass. P8-02 closed (Hassan: markers stay on). Fixes: **PASS**.
 - Files changed: docs/AUDIT.md, docs/HANDOFF.md.
-- Messages sent: BUILDER, ORG, DOCU (Phase 8 PASS, ORG commits and pushes).
-- Open items: ORG commits and pushes Phase 8; AUD then checks the Actions run, the live site, and the installable app and offline on https. Hassan: P6-06 (email), P8-02.
+- Messages sent: BUILDER, ORG, DOCU (fixes pass; ORG commits and pushes).
+- Open items: ORG commits and pushes the fixes; AUD checks that run and the live site. Hassan: P6-06 (email in commits).
 
-## 2026-11-02, DOCU, Phase 8 (docs ready)
+## 2026-11-02, DOCU, after phase 8 (P8-02 decided)
 
-- Did: Documented phase 8 from BUILDER's handoff, checked against `src/search.js`, `src/print.js`, `src/offline.js`, `sw.js`, `manifest.webmanifest`, the render and controls changes and both string files (78 keys each). Ran validate (21 pass, 1 skip), `--full` (25 pass) and `build-site` into a temp folder (634 files, `sw.js` stamped; folder removed). READER: files table, Go to (Find a surah), Settings, new "Extras (phase 8)" section (margin markers, print, offline app). USER-GUIDE English and Arabic: surah search, markers, print, offline. DATA-FORMAT: new check 15 and renumbering (16 to 21, `--full` 22 to 25), build-site files and stamps, last run. README: intro (offline), status, done list, check counts, Deploy publish list, folder layout (sw.js, manifest, icons). D8 updated, D67 to D71 new. TEAM-START: checks, D1 to D71, phase 8 status. DEVLOG. Prettier clean, no em dashes.
-- Files changed: `docs/READER.md`, `docs/USER-GUIDE.md`, `docs/DATA-FORMAT.md`, `README.md`, `docs/DECISIONS.md`, `docs/TEAM-START.md`, `docs/DEVLOG.md`, `docs/HANDOFF.md`.
-- Messages sent: AUD (phase 8 docs ready), ORG and BUILDER (recorded).
-- Open items: phase 8 audit. TEAM-START part 2 at the phase 8 PASS.
-- Update: BUILDER confirmed D67 to D71. Added details to D69 (what prints black, banners keep colors, green frame), D70 (font cache kept across deploys, old app caches deleted) and D71 (leading surah word, Arabic spaces, ranking, 20 results), and the same to READER and USER-GUIDE. AUD told.
+- Did: Recorded Hassan's answer on P8-02 (relayed by BUILDER): margin markers stay on by default everywhere, phones included; no code change. D67, READER (Known limits), README, TEAM-START part 2 and BUILDER's first action, DEVLOG.
+- Files changed: `docs/DECISIONS.md`, `docs/READER.md`, `README.md`, `docs/TEAM-START.md`, `docs/DEVLOG.md`, `docs/HANDOFF.md`.
+- Messages sent: AUD (recorded).
+- Open items: AUD's re-check of the P8 fixes, then "docs final" to ORG.
 
-## 2026-11-02 17:30, ORG, Phase 8
+## 2026-11-02 14:57, BUILDER, after phase 8 (P8-02 answered)
 
-- Did: Tidy pass after BUILDER's Phase 8 build. validate 21 pass + 1 skip, Prettier clean, no em dashes, i18n 78 = 78 keys with none empty, localStorage only in `storage.js`, no debug lines. One small point for BUILDER: `PRINT_LIMIT` in `src/print.js` is exported but only used in that file. The built site (634 files) in `tmp/org8/` loads with no console errors or failed requests (English page 50, Arabic page 1). The service worker registers, and the manifest, 3 icons and 3 new modules all return 200. The test server ran inside the test script and stopped with it. Removed `tmp/org8/` afterwards. `docs/STRUCTURE.md`: `sw.js` and `manifest.webmanifest` at the root, `assets/icons/`, the 3 new src files, build-site stamping, the publish list, `tmp/phase8/`. No moves or renames.
-- Files changed: `docs/STRUCTURE.md`, `docs/HANDOFF.md`.
-- Messages sent: BUILDER (PRINT_LIMIT), DOCU and AUD (tidy done).
-- Open items: AUD's Phase 8 audit, then the Phase 8 commit (with DOCU's Phase 7 closing edits and the Phase 7 archive) and push. `tmp/org-site/` is still locked by the old test server on port 8765.
+- Did: Asked Hassan about P8-02 (the margin markers, on by default, make the text about 10% smaller on phones). His answer: keep the markers on by default everywhere, phones included; readers who want bigger text switch them off in Settings. No code change.
+- Files changed: `docs/HANDOFF.md`.
+- Messages sent: AUD, DOCU, ORG (Hassan's answer).
+- Open items: AUD re-check of P8-01, P8-03, P8-04 and the grid focus fix; then DOCU's "docs final" and ORG's follow-up commit.
 
-## 2026-11-02, BUILDER, Phase 8 (built, handed to ORG, DOCU and AUD)
+## 2026-11-02, DOCU, after phase 8 (P8 fixes documented)
 
-- Did: Surah search in the Go to panel (English names forgiving case, article, apostrophes, hyphens and double letters; Arabic names forgiving marks, tatweel, alef, taa marbuta and alef maqsura; numbers in both digit systems; exact name first; Enter opens the first result). Juz, hizb and quarter markers: each page is now a `.sheet` (frame, text block, page number; same coordinates) plus, when the setting is on (default), a 64 px outer margin (right of odd pages, left of even pages) with medallions at the start line from the data: an arched tablet for a quarter, an oval for a hizb or juz start, always in Arabic like the print (strings from ar.json); screen readers hear them in the interface language. Pages 1 and 2 have none, as in the print. Print booklet in Settings: pages from and to (up to 40), one page per A5 sheet with the binding margin on the inner side, drawn fresh with the current settings, black ink on white; uses CSS zoom so the browser does not shrink the printout. Offline app: manifest (names from the strings, checked by validate), icons (drawn shapes, no text), `sw.js` (app shell saved on install, about 5 MB; page fonts saved when viewed and kept across deploys; app files network first so every deploy is live at once; offline uses the saved copy), "Offline use" in Settings with the count and "Download all pages (about 95 MB)"; an unsaved page offline shows a message and the page on screen stays. build-site publishes sw.js, the manifest and icons and stamps the worker with hashes of the app files and of qcf2.sha256. validate: new check 15 (manifest names match the strings; sw.js lists every app file and only existing files).
-- Tests: `tmp/tools/phase8_checks.py` 47 of 47 (search, markers incl. positions and 0 px movement inside the block with markers on or off, phone dark both languages, print range checks and the printed PDF (4 A5 pages, page fills the sheet), offline on a real localhost server: worker in control, caches with the build's versions, reader opens offline, saved pages open, unsaved page message, Download all saves 604, any page offline). Phases 4 to 7: 65, 46, 26, 40 of each; movement 132 of 132; overlay with markers off identical to Phase 3, with markers on median 1 px and 98.3% within 5 px (the wider page changes the measuring scale; every word's place inside the block is identical, checked on 2,029 words); validate 21 + 1 skip, `--full` 25; 78 equal strings; no em dashes.
-- Files changed: new `src/search.js`, `src/print.js`, `src/offline.js`, `sw.js`, `manifest.webmanifest`, `assets/icons/icon-192.png`, `icon-512.png`, `icon-maskable-512.png`; changed `src/render.js`, `src/app.js`, `src/controls.js`, `src/fonts.js`, `src/i18n.js`, `src/progress.js`, `src/styles.css`, `index.html`, `src/i18n/en.json`, `src/i18n/ar.json`, `scripts/build-site.mjs`, `scripts/validate.mjs`. Nothing committed.
-- Messages sent: ORG, DOCU, AUD (Phase 8 handoff).
-- Open items: tell Hassan the offline sizes (5 MB automatic, 95 MB on request). ORG tidy, DOCU docs, AUD audit.
+- Did: Documented BUILDER's fixes for P8-01, P8-03, P8-04 and the grid focus change, checked against the diffs of `src/search.js`, `sw.js`, `src/peek.js`, `src/app.js` and `src/progress.js`. README (status of the open items), READER (Find a surah alias, peek hide, offline no-cache, grid focus; removed the open-findings line from Known limits), D70, D71, TEAM-START part 2 and first actions, DEVLOG.
+- Files changed: `README.md`, `docs/READER.md`, `docs/DECISIONS.md`, `docs/TEAM-START.md`, `docs/DEVLOG.md`, `docs/HANDOFF.md`.
+- Messages sent: AUD (docs for the fixes ready), BUILDER (recorded).
+- Open items: Hassan's answer on P8-02 (BUILDER relays it). Then "docs final" to ORG after AUD's re-check.
 
-## 2026-11-02, DOCU, Phase 8 (phase 7 commit recorded)
+## 2026-11-02 14:54, BUILDER, after phase 8 (P8-01, P8-03, P8-04 fixed, plus one tracker warning)
 
-- Did: Checked ORG's commit `c13eaa0` (pushed, `origin/main` = `c13eaa0`) and its Actions run 41475502760 (success) with git and `gh run list`. Updated `docs/TEAM-START.md` part 2 (last commit, phase 7 live, next: BUILDER builds phase 8) and first actions; README status. My phase 7 closing edits (TEAM-START, README, DEVLOG) came after `c13eaa0`, so they go into the phase 8 commit.
+- Did:
+  - P8-01: search finds "aal imran" (also "aal-e-imran", "aali imran") through a one-entry alias list in `src/search.js` (`ALIASES`, surah 3 only). The forgiving comparison drops an article before it collapses double letters; changing that order would make "An-Nasr" match "Al-Asr".
+  - P8-03: `sw.js` now downloads with `cache: 'no-cache'` (`FRESH`) everywhere: app files (network first), the app files saved at install, and page fonts saved on first view. GitHub Pages sends `Cache-Control: max-age=600`, so before this an open reader could see the old version for up to 10 minutes after a deploy, and a new worker could save old files for offline use.
+  - P8-04: switching peek off, or test mode on, hides a running peek at once (`hidePeeks` in `src/peek.js`, called from `src/app.js`).
+  - Tracker grid (found by the phase 7 suite): a click on a grid square put the focus inside the grid, which is `aria-hidden` (a picture, P7-03), and Chrome sometimes warned in the console. The squares no longer take the focus from a click or tap (`src/progress.js`); the click still opens the page.
+- Tests: new `tmp/tools/pages_server.py` serves the built site with GitHub Pages' cache rule, and `phase8_checks.py` now uses it: 52 of 52 (new checks for P8-01, P8-03, P8-04). New `tmp/tools/deploy_refresh_check.py` simulates a deploy for a reader who already has the app: with the real `sw.js` the new version shows at the next load and is what gets saved for offline use; a control without no-cache shows the old version at every step, so the check can see the problem. phase7 41 of 41 (three runs; new focus check), phase4 65, phase5 46, phase6 26, movement 132 of 132, validate 21 + 1 skip, `--full` 25, Prettier clean, no em dashes.
+- Files changed: `src/search.js`, `src/peek.js`, `src/app.js`, `src/progress.js`, `sw.js`. Not committed.
+- Messages sent: AUD (re-check), ORG (files for the follow-up commit), DOCU (what changed for the docs).
+- Open items: AUD re-check. P8-02 is with Hassan (margin markers on by default on phones).
+
+## 2026-11-02, DOCU, after phase 8 (commit timing)
+
+- Did: Agreed with ORG: after a PASS, ORG waits for DOCU's "docs final" message before committing (phases 7 and 8 each missed DOCU's closing edits). Added to the commits rule in `docs/TEAM-START.md` part 3.
+- Files changed: `docs/TEAM-START.md`, `docs/HANDOFF.md`.
+- Messages sent: none.
+- Open items: send ORG "docs final" after the P8 fixes are documented and AUD re-checks them.
+
+## 2026-11-02, DOCU, after phase 8 (commit recorded)
+
+- Did: Checked ORG's commit `44452fb` (pushed, `origin/main` = `44452fb`) and Actions run 41511458126 (check and deploy success) with git and `gh run view`. Updated `docs/TEAM-START.md` part 2 (version 2 live, next steps) and first actions; README status. My phase 8 closing edits (README, READER, DECISIONS, TEAM-START, DEVLOG) came after `44452fb`, so they go into the next commit.
 - Files changed: `docs/TEAM-START.md`, `README.md`, `docs/DEVLOG.md`, `docs/HANDOFF.md`.
-- Messages sent: ORG (done; the late edits go into phase 8).
-- Open items: phase 8 docs when BUILDER finishes.
+- Messages sent: ORG (done; the late edits wait for the next commit).
+- Open items: Hassan decides P8-02. Record BUILDER's fixes for P8-01, P8-03, P8-04 (`src/` changes already appear in the working tree).
 
-## 2026-11-02 16:40, ORG, Phase 7 closed
+## 2026-11-02 18:10, ORG, Phase 8 closed
 
-- Did: AUD gave Phase 7 PASS. Committed the audited state by path (README, docs/, index.html, src/) as `c13eaa0` "Phase 7: memorization tools" (author Hassan) and saved it as tree snapshot `refs/snapshots/phase-7`. Pre-push: no pdf, db or tmp files, no em dashes, Prettier clean, validate on a clean export of HEAD 20 pass + 1 skip. Pushed `03a8fc4..c13eaa0`. Actions run check: success, deploy: success; the live site serves `src/peek.js`. Moved the 14 Phase 7 entries to `docs/handoff-archive/phase-7.md`. Kept `tmp/renders/pdf/`, `tmp/downloads/`, `tmp/phase3/`, `tmp/phase5/`, `tmp/phase7/` as AUD asked.
-- Files changed: git history (`c13eaa0`), `docs/HANDOFF.md`, `docs/handoff-archive/phase-7.md` (new).
-- Messages sent: AUD (run result), DOCU (commit hash), BUILDER (start Phase 8).
-- Open items: `tmp/org-site/` stays until the test server on port 8765 is stopped (Hassan). P6-06: Hassan's email is public in commit authors. This archive and the HANDOFF change go into the Phase 8 commit.
+- Did: AUD gave Phase 8 PASS. No code had changed since AUD's findings, so I committed the working tree by path as `44452fb` "Phase 8: search, margin markers, print booklet, offline app" (author Hassan). It includes DOCU's Phase 7 closing edits and the Phase 7 archive. Saved tree snapshot `refs/snapshots/phase-8`. Pre-push: no pdf, db or tmp files, no em dashes, Prettier clean, validate on a clean export of HEAD 21 pass + 1 skip. Pushed `c13eaa0..44452fb`. Actions run 41511458126: check success, deploy success. Live: the site, `sw.js`, `manifest.webmanifest`, the icons and `src/search.js` all return 200. Moved the 6 Phase 8 entries to `docs/handoff-archive/phase-8.md` and the late Phase 7 ORG entry to the top of `docs/handoff-archive/phase-7.md`.
+- Files changed: git history (`44452fb`), `docs/HANDOFF.md`, `docs/handoff-archive/phase-7.md`, `docs/handoff-archive/phase-8.md` (new).
+- Messages sent: AUD (run id), DOCU (commit hash), BUILDER (pushed; optional P8 fixes).
+- Open items: AUD checks the live run, the install and offline use on https. The open minor items P8-01, P8-03 and P8-04 (BUILDER) and the note P8-02 (Hassan: markers on by default on phones?) would need a follow-up commit after AUD re-checks. This archive goes into that commit. `tmp/org-site/` is still locked by the old test server on port 8765.

@@ -40,6 +40,9 @@ function latinKey(text) {
     .replace(/h$/, '');
 }
 
+// Other common English spellings that the forgiving comparison above cannot reach, by surah number.
+const ALIASES = { 3: ['Aal Imran'] };
+
 // Surahs matching the query, best first: the number or the exact name, then names that start
 // with it, then the rest.
 export function findSurahs(surahs, query) {
@@ -55,9 +58,16 @@ export function findSurahs(surahs, query) {
   if (!key) return [];
   const scored = [];
   for (const s of surahs) {
-    const name = arabic ? arabicKey(s.name) : latinKey(s.transliteration);
-    const at = name.indexOf(key);
-    if (at >= 0) scored.push([name === key ? 0 : at === 0 ? 1 : 2, s.surah, s]);
+    const names = arabic
+      ? [arabicKey(s.name)]
+      : [s.transliteration, ...(ALIASES[s.surah] || [])].map(latinKey);
+    const rank = Math.min(
+      ...names.map((name) => {
+        const at = name.indexOf(key);
+        return at < 0 ? 9 : name === key ? 0 : at === 0 ? 1 : 2;
+      }),
+    );
+    if (rank < 9) scored.push([rank, s.surah, s]);
   }
   return scored.sort((a, b) => a[0] - b[0] || a[1] - b[1]).map((x) => x[2]);
 }

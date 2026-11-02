@@ -75,6 +75,11 @@ export function setupPeek(book, enabled) {
   });
 }
 
+// Hide every verse shown by peek now (peek switched off, or test mode switched on).
+export function hidePeeks(book) {
+  for (const verse of [...timers.keys()]) hide(book, verse);
+}
+
 // The pages were drawn again: the old words are gone, so their timers are dropped.
 export function resetPeek() {
   for (const timer of timers.values()) clearTimeout(timer);

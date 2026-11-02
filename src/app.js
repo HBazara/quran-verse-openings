@@ -22,7 +22,7 @@ import { setupPanels } from './panels.js';
 import { setupKeys, setupSwipe } from './input.js';
 import { setupControls } from './controls.js';
 import { askLanguage, languageScreenOpen } from './language.js';
-import { resetPeek, setupPeek } from './peek.js';
+import { hidePeeks, resetPeek, setupPeek } from './peek.js';
 import { setupTestMode } from './test-mode.js';
 import { setupProgress } from './progress.js';
 import { setupPrint } from './print.js';
@@ -265,9 +265,11 @@ function setMargin(on) {
 function setPeek(on) {
   saved.peek = on;
   store();
+  if (!on) hidePeeks(book);
 }
 
 function setTest(on) {
+  if (on) hidePeeks(book);
   test.setActive(on, state.shown);
   syncControls();
 }

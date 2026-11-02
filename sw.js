@@ -5,6 +5,10 @@
 //   saves all 604 (about 95 MB). Page fonts stay saved across new versions of the site.
 // - App files come from the network whenever it is there, so every deploy is live at once; the
 //   saved copy is used only when offline.
+// - Every download here asks the server whether the file changed ("no-cache"; a short "not changed"
+//   answer when it did not) instead of using the browser's own copy, which GitHub Pages lets it keep
+//   for 10 minutes. So a deploy shows at the next load, and what is saved for offline use is always
+//   the server's current file.
 // scripts/build-site.mjs replaces the two version words below with hashes of the files.
 
 const VERSION = 'dev';
@@ -42,12 +46,13 @@ const SHELL = [
   'assets/icons/icon-maskable-512.png',
 ];
 const PAGE_FONT = /\/assets\/fonts\/qcf2\/p\d+\.woff2$/;
+const FRESH = { cache: 'no-cache' };
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches
       .open(SHELL_CACHE)
-      .then((cache) => cache.addAll(SHELL))
+      .then((cache) => cache.addAll(SHELL.map((url) => new Request(url, FRESH))))
       .then(() => self.skipWaiting()),
   );
 });
@@ -81,7 +86,7 @@ async function savedFirst(request) {
   const cache = await caches.open(PAGES_CACHE);
   const saved = await cache.match(request);
   if (saved) return saved;
-  const response = await fetch(request);
+  const response = await fetch(request, FRESH);
   if (response.ok) await cache.put(request, response.clone());
   return response;
 }
@@ -90,7 +95,7 @@ async function savedFirst(request) {
 async function networkFirst(request) {
   const cache = await caches.open(SHELL_CACHE);
   try {
-    const response = await fetch(request);
+    const response = await fetch(request, FRESH);
     if (response.ok) await cache.put(request, response.clone());
     return response;
   } catch (error) {

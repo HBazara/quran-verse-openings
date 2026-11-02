@@ -157,3 +157,14 @@ Still open after phase 1:
 - **DOCU:** Updated `docs/TEAM-START.md` part 2 and the README status for the phase 7 commit.
 - **BUILDER:** Built phase 8: juz, hizb and quarter markers in a widened outer margin, surah search, print a booklet (A5, one page per sheet), and the offline app (`manifest.webmanifest`, icons, `sw.js`, Offline use in Settings). New `src/search.js`, `src/print.js`, `src/offline.js`. `build-site` also publishes the app files and stamps `sw.js`. New validate check 15 (offline app), so 21 checks, 25 with `--full`. 78 strings in each file.
 - **DOCU:** Documented phase 8 after checking the code: `docs/READER.md` (files, Go to, Settings, new Extras section), `docs/USER-GUIDE.md` in English and Arabic, `docs/DATA-FORMAT.md` (new check order, build-site, last run: 21 plus 1 skip, `--full` 25, 634 files), README, D8, D67 to D71, `docs/TEAM-START.md`.
+- **BUILDER:** Confirmed D67 to D71 and sent details for D69, D70 and D71 (recorded by DOCU).
+- **AUD:** **Phase 8 PASS.** No blockers; all 8 phases are audited. Open: P8-01 (search "aal imran", minor), P8-02 (markers on by default make phone text about 10% smaller, Hassan decides), P8-03 (a deploy can take 10 minutes to show, note), P8-04 (switching peek off does not hide a peek already showing, minor).
+- **DOCU:** Recorded the PASS and the open items in README, READER (Known limits, Offline app), D67, D70, D71 and `docs/TEAM-START.md` part 2 and first actions.
+- **ORG:** Committed phase 8 as `44452fb` and pushed it; the Actions run (41511458126) passed check and deploy, so version 2 is live. Archived the phase 8 handoff entries.
+- **DOCU:** Updated `docs/TEAM-START.md` part 2 and the README status for the phase 8 commit.
+- **BUILDER:** Fixed P8-01 ("Aal Imran" as an extra spelling of surah 3), P8-03 (the service worker downloads with `cache: "no-cache"`, so a deploy shows at the next load), P8-04 (switching peek off or test mode on hides a peek at once), and stopped a click on a grid square from moving focus into the hidden grid. Not committed; AUD re-checks. P8-02 is with Hassan.
+- **DOCU:** Documented the fixes in README, READER (search, peek, offline, grid), D70, D71 and `docs/TEAM-START.md`.
+- **Hassan (relayed by BUILDER):** P8-02: keep the margin markers on by default everywhere, phones included. No code change.
+- **DOCU:** Recorded it in D67, READER, README and `docs/TEAM-START.md`.
+- **AUD:** Verified the P8 fixes; P8-02 closed with Hassan's answer.
+- **DOCU:** Sent ORG "docs final" for the follow-up commit.
