@@ -8,6 +8,8 @@ The exact source, version or download date, license and checksum of every source
 
 **Phase 2 (in progress):** Hassan made the official QUL downloads on 2026-10-31 into `tmp/downloads/qul/`, with a free QUL account and BUILDER's instructions (D25). These are the files the site is built from. See "Official QUL downloads (phase 2)" below.
 
+**Fonts are public (2026-11-02):** Hassan made the repo public and the site is published on GitHub Pages (D46, D57). The QCF2 page fonts, the surah banner font and the Bismillah font are in the public repo and served by the site, so anyone can download them. None of them has a published license, and the banner and Bismillah fonts say "All rights reserved". This project does not license them; they are used with credit to KFGQPC and QUL as Hassan accepted (D24, D33, D34).
+
 Checksums are SHA-256. The full checksum lists are kept in `docs/checksums/` (copied from BUILDER's lists in `tmp/`, which git ignores). Run `sha256sum -c docs/checksums/<file>` from the project root to check the files. DOCU re-ran all three lists on 2026-10-31 and all 1,263 entries matched.
 
 | List                                  | Covers                                                      | Entries |

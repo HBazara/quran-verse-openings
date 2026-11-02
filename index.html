@@ -188,6 +188,21 @@
           <label for="juz-select" data-i18n="goto.juz"></label>
           <select id="juz-select"></select>
         </div>
+        <section class="field" aria-labelledby="marks-title">
+          <h2 id="marks-title" class="panel-title" data-i18n="marks.title"></h2>
+          <div id="marks-list" class="marks"></div>
+        </section>
+        <section class="field" aria-labelledby="bookmarks-title">
+          <h2 id="bookmarks-title" class="panel-title" data-i18n="bookmarks.title"></h2>
+          <div id="bookmarks-list"></div>
+        </section>
+        <section class="field" aria-labelledby="progress-title">
+          <h2 id="progress-title" class="panel-title" data-i18n="progress.title"></h2>
+          <p id="progress-summary" class="muted"></p>
+          <p class="muted" data-i18n="progress.hint"></p>
+          <!-- A picture of all pages; the page box above does the same job for the keyboard. -->
+          <div id="progress-grid" class="grid" aria-hidden="true"></div>
+        </section>
       </section>
 
       <section id="settings-panel" class="panel" data-i18n-label="settings.title" hidden>
@@ -198,6 +213,14 @@
         <div class="check">
           <input id="markers-toggle" type="checkbox" />
           <label for="markers-toggle" data-i18n="settings.markers"></label>
+        </div>
+        <div class="check">
+          <input id="peek-toggle" type="checkbox" />
+          <label for="peek-toggle" data-i18n="settings.peek"></label>
+        </div>
+        <div class="check">
+          <input id="test-toggle" type="checkbox" />
+          <label for="test-toggle" data-i18n="settings.test"></label>
         </div>
         <div class="field">
           <label for="zoom-select" data-i18n="settings.zoom"></label>
@@ -224,5 +247,13 @@
     </div>
     <p id="status" class="status" role="status"></p>
     <main id="book" class="book"></main>
+    <!-- Test mode: shows the hidden openings one at a time. -->
+    <div id="test-bar" class="test-bar" role="region" data-i18n-label="test.label" hidden>
+      <button id="test-next" class="go" type="button" data-i18n="test.next"></button>
+      <span id="test-count" class="test-count" aria-live="polite"></span>
+      <button id="test-all" class="pill" type="button" data-i18n="test.all"></button>
+      <button id="test-hide" class="pill" type="button" data-i18n="test.hide"></button>
+      <button id="test-end" class="pill" type="button" data-i18n="test.end"></button>
+    </div>
   </body>
 </html>

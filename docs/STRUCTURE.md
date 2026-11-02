@@ -5,7 +5,7 @@ The project file tree, one line per folder. ORG keeps this current after every p
 ```
 /
 ├─ index.html              entry page (no interface text; loads src/styles.css and src/app.js)
-├─ src/                    app code: app.js (start), render.js (page layout), fonts.js (font loading), i18n.js (strings), controls.js (Go to and Settings panel contents), panels.js (opening and closing the panels), input.js (keyboard and swipe), language.js (language screen on entry), storage.js (only place that uses localStorage), styles.css
+├─ src/                    app code: app.js (start), render.js (page layout), fonts.js (font loading), i18n.js (strings), controls.js (Go to and Settings panel contents), panels.js (opening and closing the panels), input.js (keyboard and swipe), language.js (language screen on entry), storage.js (only place that uses localStorage), places.js (surah and juz of each page), peek.js (peek mode), test-mode.js (test mode), progress.js (memorization tracker and bookmarks), styles.css
 │  └─ i18n/                interface strings: en.json and ar.json with the same keys
 ├─ assets/
 │  └─ fonts/               self-hosted Quran fonts, original file names kept so checksums still match
@@ -23,8 +23,8 @@ The project file tree, one line per folder. ORG keeps this current after every p
 │  ├─ checksums/           SHA-256 lists for the source files in tmp/ (DOCU), check with `sha256sum -c` from the root
 │  └─ handoff-archive/     HANDOFF entries moved here per phase after PASS (ORG)
 ├─ .github/
-│  └─ workflows/           deploy.yml: checksums and validate on every push, deploy to GitHub Pages only when started by hand on main. Publishes index.html, src/, assets/fonts/, data/quran.json
-├─ tmp/                    ignored by git: downloads/ (all sources), renders/pdf/, phase1/ to phase6/, compare/ (font comparison), tools/ (check and overlay scripts)
+│  └─ workflows/           deploy.yml: checksums and validate on every push, then deploy to GitHub Pages on main (every push or a manual run, never pull requests). Publishes index.html, src/, assets/fonts/, data/quran.json
+├─ tmp/                    ignored by git: downloads/ (all sources), renders/pdf/, phase1/ to phase7/, compare/ (font comparison), tools/ (check and overlay scripts)
 ├─ AGENTS.md               roles and rules for every agent (ORG)
 ├─ start-quran-verse-openings.ps1  opens the 4 agent sessions as Windows Terminal tabs; fresh sessions read docs/TEAM-START.md (ORG)
 ├─ PROJECT.md              the full project brief

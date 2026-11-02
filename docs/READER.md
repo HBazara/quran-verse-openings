@@ -1,23 +1,27 @@
 # The reader
 
-How the site draws a mushaf page, and how the reader moves around it. Built by BUILDER: the page drawing in phase 3, navigation and settings in phase 4, the two interface languages in phase 5.
+How the site draws a mushaf page, and how the reader moves around it. Built by BUILDER: the page drawing in phase 3, navigation and settings in phase 4, the two interface languages in phase 5, the memorization tools in phase 7.
 
 ## Files
 
-| File                                   | What it does                                                                                                                                                                                                               |
-| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `index.html`                           | The page: the language screen, the top bar (Next, page indicator, Previous, view buttons, Go to, Settings, language switch), the Go to and Settings panels, status line, and the book area. No interface text in the HTML. |
-| `src/app.js`                           | Loads the strings, `data/quran.json` and the fonts. Holds the state (page, view, words, markers, zoom, theme). Turns pages, switches views, reads and writes the address, saves settings, and scales the pages to fit.     |
-| `src/render.js`                        | Draws one page from `data/quran.json`. Holds the page geometry, and `fontPagesFor`, which says which page fonts a page needs (page 2 also needs page 1's).                                                                 |
-| `src/fonts.js`                         | Loads the QCF2 page font for each page when it is needed, and waits for the banner and Bismillah fonts.                                                                                                                    |
-| `src/i18n.js`                          | Loads `src/i18n/en.json` or `src/i18n/ar.json`, fills every element marked `data-i18n` or `data-i18n-label`, formats numbers and percentages, and turns Arabic-Indic and Persian digits into Western ones.                 |
-| `src/i18n/en.json`, `src/i18n/ar.json` | All interface text. 29 keys, the same in both files.                                                                                                                                                                       |
-| `src/controls.js`                      | The contents of the Go to panel (page box, surah list, juz list) and the Settings panel (words, markers, zoom, theme).                                                                                                     |
-| `src/panels.js`                        | Opens and closes the two panels: one at a time; Escape or a click outside closes; Escape puts focus back on the button.                                                                                                    |
-| `src/input.js`                         | Keyboard arrows and swipe.                                                                                                                                                                                                 |
-| `src/storage.js`                       | The only file that uses `localStorage`. Every read and write is in try/catch.                                                                                                                                              |
-| `src/language.js`                      | The language screen: shows it, highlights and focuses one choice, makes the reader behind it inert, and returns the choice.                                                                                                |
-| `src/styles.css`                       | Layout, the banner and Bismillah `@font-face` rules, and hiding words.                                                                                                                                                     |
+| File                                   | What it does                                                                                                                                                                                                                                            |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `index.html`                           | The page: the language screen, the top bar (Next, page indicator, Previous, view buttons, Go to, Settings, language switch), the Go to and Settings panels, status line, the book area and the test bar. No interface text in the HTML.                 |
+| `src/app.js`                           | Loads the strings, `data/quran.json` and the fonts. Holds the state (page, view, words, markers, zoom, theme). Turns pages, switches views, reads and writes the address, saves settings, and scales the pages to fit.                                  |
+| `src/render.js`                        | Draws one page from `data/quran.json`. Gives each word its verse key (`data-verse`, used by peek and test mode, not by the layout). Holds the page geometry, and `fontPagesFor`, which says which page fonts a page needs (page 2 also needs page 1's). |
+| `src/fonts.js`                         | Loads the QCF2 page font for each page when it is needed, and waits for the banner and Bismillah fonts.                                                                                                                                                 |
+| `src/i18n.js`                          | Loads `src/i18n/en.json` or `src/i18n/ar.json`, fills every element marked `data-i18n` or `data-i18n-label`, formats numbers and percentages, and turns Arabic-Indic and Persian digits into Western ones.                                              |
+| `src/i18n/en.json`, `src/i18n/ar.json` | All interface text. 48 keys, the same in both files.                                                                                                                                                                                                    |
+| `src/controls.js`                      | The contents of the Go to panel (page box, surah list, juz list) and the Settings panel (words, markers, peek, test mode, zoom, theme).                                                                                                                 |
+| `src/panels.js`                        | Opens and closes the two panels: one at a time; Escape or a click outside closes; Escape puts focus back on the button.                                                                                                                                 |
+| `src/input.js`                         | Keyboard arrows and swipe.                                                                                                                                                                                                                              |
+| `src/storage.js`                       | The only file that uses `localStorage`. Every read and write is in try/catch.                                                                                                                                                                           |
+| `src/language.js`                      | The language screen: shows it, highlights and focuses one choice, makes the reader behind it inert, and returns the choice.                                                                                                                             |
+| `src/places.js`                        | The surah and the juz at the top of a page, and the pages of each juz (for the memorization grid). Used by `controls.js` and `progress.js`.                                                                                                             |
+| `src/peek.js`                          | Peek: a tap on a verse shows its hidden words for 4 seconds.                                                                                                                                                                                            |
+| `src/test-mode.js`                     | Test mode: hides the openings on screen and shows them one at a time.                                                                                                                                                                                   |
+| `src/progress.js`                      | The memorization tracker and bookmarks in the Go to panel, and the bookmark ribbon on the page.                                                                                                                                                         |
+| `src/styles.css`                       | Layout, the banner and Bismillah `@font-face` rules, and hiding words.                                                                                                                                                                                  |
 
 There is no build step. All paths are relative, because GitHub Pages will serve the site under `/quran-verse-openings/`.
 
@@ -66,6 +70,7 @@ The Go to button (list icon) opens a small panel:
 - **Surah:** a list of the 114 surahs, shown as "18. Al-Kahf الكهف" in English and "١٨. الكهف" in Arabic. Picking one goes to the page where its verse 1 starts. For the 18 surahs whose banner is on the last line of the page before (see `headerPage` in `docs/DATA-FORMAT.md`), that is the page after the banner. This follows the print's own surah index (D50). The list keeps the surah you picked while its first page is on screen (for example An-Nas, which starts on page 604 with other surahs); otherwise it shows the surah at the top of the page.
 - **Juz:** a list "Juz 1" to "Juz 30". Picking one goes to the juz's first page.
 - Both lists show the surah and juz at the top of the page on screen.
+- Below the lists come the memorization tracker and the bookmarks (see Memorization tools).
 
 ## Interface languages
 
@@ -92,6 +97,8 @@ The Settings button (sliders icon) opens a small panel:
 | Setting                 | Values                                                                                                                              | Default                                                       |
 | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
 | Opening words per verse | 1 to 5                                                                                                                              | 2                                                             |
+| Peek                    | on or off (see Memorization tools)                                                                                                  | off                                                           |
+| Test mode               | on or off (see Memorization tools). Not saved: it is an activity, not a preference, so it is off every time the site opens.         | off                                                           |
 | Show verse-end markers  | on or off                                                                                                                           | on                                                            |
 | Zoom                    | 100, 125, 150, 175 or 200% of the size that fits the screen. The page grows as one unit and the book area scrolls; nothing reflows. | 100%                                                          |
 | Theme                   | light, dark or sepia                                                                                                                | follows the device (light or dark) until the reader picks one |
@@ -104,14 +111,37 @@ Only one panel is open at a time. Escape or a click outside closes it, and Escap
 - **Phones:** below 640 px wide, the One page and Two pages buttons show icons only; their names stay for screen readers. The top bar takes 2 rows on phones (320 to 414 px) and 1 row from about 1000 px.
 - **Interface text:** the font list is system-ui, Segoe UI, Noto Sans, Noto Sans Arabic, Tahoma. Arabic interface text is 17 px with a line height of 1.6. This is only the interface; the Quran pages use their own fonts.
 
+## Memorization tools (phase 7)
+
+All four tools only change which words are visible. Hidden words always keep their space, so no word on the page moves.
+
+**Peek.** Off by default (Hassan's choice, D58); the reader switches it on in Settings. With peek on, a tap (or click) on a verse's opening, or on the blank stretch of a line where its hidden words are, shows all the hidden words of that verse in place. On a blank stretch, the verse of the hidden word nearest the tap along the line is picked. The words show in their own color (`--peek`, set for each theme), for 4 seconds. A second tap on the same verse hides them at once. With the keyboard, the **P** key (the same key on an Arabic keyboard, ح) peeks the next verse on screen that has hidden words, in reading order, one at a time: each press hides the one before, and after the last verse it starts again at the first. P does nothing while typing in a field, in test mode, or while the language screen is open. If verse-end markers are off, that verse's marker shows too. Peek does nothing while test mode is on. Turning a page ends any peek.
+
+**Test mode.** Switched on in Settings. It hides every opening on the pages on screen, and a bar appears under the pages:
+
+- **Show next opening** (or a tap anywhere on the pages) shows the next opening in reading order, the right page first in a spread.
+- A counter, for example "2 of 13" ("٢ من ١٣" in Arabic), counts the openings shown out of the openings on screen.
+- **Show all**, **Hide all**, and **End test** (switches test mode off).
+
+The test starts again, with all openings hidden, only when the pages on screen change: a page turn, a jump, or switching between one page and two pages. Drawing the same pages again keeps the progress: a language change, the words setting or the markers setting. After a words change, the openings already shown show their new number of words. Verse-end markers follow their own setting. Because the bar takes room, the pages are drawn a little smaller while test mode is on; inside the page no word moves.
+
+**Memorization tracker.** In the Go to panel:
+
+- **Pages on screen:** each page on screen has three buttons: **Bookmark**, **Memorized** and **Needs review**. Memorized and Needs review exclude each other; pressing the active one again clears it. A bookmark is separate from the marks, so a page can be both bookmarked and memorized.
+- **Memorization:** a summary ("Memorized pages: 1. Needs review: 1.") and a grid of all 604 pages, one row per juz, with the juz number at the start of the row. A page belongs to the juz at its top (the same rule as the juz list). A memorized page is a filled green square, a page that needs review an amber ring, and the pages on screen are outlined. A tap on a square opens that page.
+- The grid is for mouse and touch only: its squares are not in the tab order and are hidden from screen readers, because the page box above does the same job from the keyboard.
+
+**Bookmarks.** A page is bookmarked with the Bookmark button under Pages on screen. The **Bookmarks** list in the Go to panel shows each one as "Page 50, Ali 'Imran" ("صفحة ٥٠، آل عمران" in Arabic), using the surah at the top of the page, in page order. A tap opens the page, and the X button next to it removes the bookmark. A bookmarked page shows a small ribbon in its top margin, outside the text block.
+
 ## Keyboard and touch
 
 - Left arrow: next page. Right arrow: previous page. Not while typing in the page box or using a list.
+- P: peek the next verse (see Memorization tools). Not while typing in a field, in test mode, or while the language screen is open.
 - On a touch screen: swipe right for the next page, swipe left for the previous page. Not while a zoomed page can be moved sideways.
 
 ## What the browser remembers
 
-Saved in `localStorage` under `qvo.settings` and `qvo.lastPage`: opening words, verse-end markers, zoom, theme, the view the reader picked with the view buttons, and the last page. Opening the site with no page in the address goes to the last page. If storage is blocked, the reader works the same and just forgets (D47).
+Saved in `localStorage` under `qvo.settings` and `qvo.lastPage`: opening words, verse-end markers, peek, zoom, theme, the view the reader picked with the view buttons, and the last page. The memorization marks are saved under `qvo.marks` (page number to `memorized` or `review`) and the bookmarks under `qvo.bookmarks` (a list of page numbers). Test mode is not saved. Opening the site with no page in the address goes to the last page. If storage is blocked, the reader works the same and just forgets (D47).
 
 ## The address
 

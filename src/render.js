@@ -158,6 +158,7 @@ export function renderPage(quran, number, opts) {
           const span = document.createElement('span');
           span.textContent = part;
           span.className = `w${end ? ' end' : ''}${visible ? '' : ' off'}`;
+          span.dataset.verse = w[3]; // for peek and test mode; layout does not use it
           row.append(span);
         }
         if (visible && !end) text += (text ? ' ' : '') + w[2];

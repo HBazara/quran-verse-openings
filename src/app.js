@@ -22,6 +22,9 @@ import { setupPanels } from './panels.js';
 import { setupKeys, setupSwipe } from './input.js';
 import { setupControls } from './controls.js';
 import { askLanguage, languageScreenOpen } from './language.js';
+import { resetPeek, setupPeek } from './peek.js';
+import { setupTestMode } from './test-mode.js';
+import { setupProgress } from './progress.js';
 
 const LAST_PAGE = 604;
 const NARROW = 900; // below this window width, one page is the default view
@@ -49,6 +52,7 @@ function readSaved() {
   return {
     words: Number.isInteger(s.words) && s.words >= 1 && s.words <= 5 ? s.words : 2,
     markers: typeof s.markers === 'boolean' ? s.markers : true,
+    peek: typeof s.peek === 'boolean' ? s.peek : false, // off until the reader turns it on (Hassan)
     zoom: ZOOMS.includes(s.zoom) ? s.zoom : 100,
     theme: THEMES.includes(s.theme) ? s.theme : null,
     view: VIEWS.includes(s.view) ? s.view : null,
@@ -68,6 +72,8 @@ const state = {
 };
 let controls = null;
 let panels = null;
+let test = null; // test mode (not saved: it is an activity, not a preference)
+let progress = null; // memorization tracker and bookmarks
 
 const theme = () => saved.theme || (darkDevice.matches ? 'dark' : 'light');
 function applyTheme() {
@@ -135,6 +141,8 @@ function syncControls() {
     pages: state.shown.length ? state.shown : [state.page],
     words: state.words,
     markers: saved.markers,
+    peek: saved.peek,
+    test: test?.isActive() || false,
     zoom: saved.zoom,
     theme: theme(),
   });
@@ -159,6 +167,9 @@ async function show(direction = 0, push = false) {
   state.shown = nums;
   fit();
   book.replaceChildren(spread);
+  resetPeek();
+  test?.apply(nums);
+  progress?.update(nums);
   if (newPages) {
     // A new page starts at its top right, where the text starts (also when zoomed in).
     book.scrollTop = 0;
@@ -226,6 +237,16 @@ function setMarkers(on) {
   saved.markers = on;
   store();
   show(0);
+}
+
+function setPeek(on) {
+  saved.peek = on;
+  store();
+}
+
+function setTest(on) {
+  test.setActive(on, state.shown);
+  syncControls();
 }
 
 function setZoom(zoom) {
@@ -310,11 +331,16 @@ async function start() {
       goTo,
       setWords,
       setMarkers,
+      setPeek,
+      setTest,
       setZoom,
       setTheme,
       closePanels: () => panels.close(true),
     });
     controls.fillTexts();
+    test = setupTestMode(book, () => setTest(false));
+    progress = setupProgress(state.quran, { lastPage: LAST_PAGE, goTo });
+    setupPeek(book, () => saved.peek && !test.isActive() && !languageScreenOpen());
     await loadFrameFonts(state.quran.surahs[0].banner, BISMILLAH_GLYPH);
     await show(0);
     setStatus(null);

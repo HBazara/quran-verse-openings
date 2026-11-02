@@ -128,3 +128,22 @@ Still open after phase 1:
 - **DOCU:** Added how to run the launcher to `docs/TEAM-START.md`.
 - **ORG:** Renamed the launcher to `start-quran-verse-openings.ps1` at Hassan's request; its Windows Terminal window is now named "quran-verse-openings". The first message to each session is unchanged. ORG also saved the launcher plus `docs/TEAM-START.md` setup to Hassan's global Claude instructions (outside the repo), for future projects.
 - **DOCU:** Updated `docs/TEAM-START.md` to the new launcher name.
+- **AUD:** **Phase 6 PASS.** Minor findings: P6-01 (old launcher name in history lines, fine), P6-02 (the workflow has never run on GitHub; the first run after the push must pass), P6-03 (the site is not fully offline yet; comes in phase 8). Gate P6-04: publishing waits for Hassan.
+- **DOCU:** Recorded the PASS. Fixed the README intro, which said the site works offline (P6-03), and noted P6-02 in Deploy and D8. Updated `docs/TEAM-START.md` part 2 and the first actions for phase 7.
+
+### Phase 7: version 2, part A (memorization tools)
+
+- **AUD:** Started phase 7.
+- **ORG:** Found phase 6 committed as `9dec020` but not pushed, the repo public and Pages publishing straight from the branch. Held the push and asked Hassan. Archived the phase 6 handoff entries.
+- **Hassan (relayed by BUILDER, checked by AUD):** the repo stays public; Pages switched from "Deploy from a branch" to "GitHub Actions", so only the checked site files go live (D46, D57). Options offered: keep the branch deploy, switch to the checked workflow, or unpublish.
+- **BUILDER:** Changed `deploy.yml` to publish on `main` after the checks pass (every push or a run started by hand; pull requests only checked).
+- **DOCU:** Recorded D46 (public), D53 (replaced), new D57; README Status, Deploy and Credits (the site is live, the fonts are downloadable and not licensed by this project); DATA-SOURCES font note; `docs/TEAM-START.md` part 2 and standing rules.
+- **BUILDER:** Built phase 7: peek, test mode, memorization tracker and bookmarks (new `src/places.js`, `src/peek.js`, `src/test-mode.js`, `src/progress.js`; `render.js` only adds `data-verse` to word spans). 19 new strings, 48 in each file. Phase 7 tests 36 of 36, earlier suites, movement and overlay unchanged.
+- **DOCU:** Documented phase 7: `docs/READER.md` (files, settings, new Memorization tools section, what the browser remembers), `docs/USER-GUIDE.md` in English and Arabic (peek, test, tracker, bookmarks), README status, D58 to D65 (refined with BUILDER).
+- **BUILDER:** After AUD's minor items: peek also works on the blank stretch of a line, the P key peeks the next verse, and the grid squares have a screen-reader name.
+- **DOCU:** Documented the peek changes in `docs/READER.md` and `docs/USER-GUIDE.md` (English and Arabic), new D66 (the P key), and the test-mode reset rule in D60.
+- **ORG:** Committed the `deploy.yml` change on its own as `03a8fc4` and pushed it with `9dec020`. The first Actions run (41474933287) passed: check and deploy both succeeded, and the site is now served from Actions.
+- **DOCU:** Updated `docs/TEAM-START.md` part 2 and first actions, README Deploy (P6-02 passed) and D56.
+- **BUILDER:** Checked the live site after the first Actions run: only the site files are served (docs/, scripts/, data/sources/ and README.md return 404), it is the phase 6 version, and it works in desktop English dark and phone Arabic light with no console errors.
+- **Hassan (relayed by BUILDER):** peek starts switched off. A saved choice is kept. BUILDER changed the default in `src/app.js`; phase 7 tests 40 of 40.
+- **DOCU:** Updated D58, READER, USER-GUIDE (English and Arabic) and README for peek off by default, and the README Deploy note for the live check.

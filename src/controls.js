@@ -1,8 +1,9 @@
 // The Go to panel (page number, surah, juz) and the Settings panel (opening words per verse,
-// verse-end markers, zoom, theme). Option texts come from the strings files and the data, and
-// fillTexts() can be run again when the interface language changes.
+// verse-end markers, peek, test mode, zoom, theme). Option texts come from the strings files and the
+// data, and fillTexts() can be run again when the interface language changes.
 
 import { formatNumber, formatPercent, t, toWesternDigits } from './i18n.js';
+import { juzAt, surahAt } from './places.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -17,8 +18,8 @@ function choice(name, value) {
   return label;
 }
 
-// app: { lastPage, zooms, goTo(page), setWords(n), setMarkers(on), setZoom(z), setTheme(name),
-// closePanels() }
+// app: { lastPage, zooms, goTo(page), setWords(n), setMarkers(on), setPeek(on), setTest(on),
+// setZoom(z), setTheme(name), closePanels() }
 export function setupControls(quran, app) {
   const pageForm = $('page-form');
   const pageInput = $('page-input');
@@ -27,6 +28,8 @@ export function setupControls(quran, app) {
   const juzSelect = $('juz-select');
   const words = $('words-choices');
   const markers = $('markers-toggle');
+  const peek = $('peek-toggle');
+  const test = $('test-toggle');
   const zoom = $('zoom-select');
   const themes = $('theme-choices');
 
@@ -77,26 +80,12 @@ export function setupControls(quran, app) {
   juzSelect.addEventListener('change', () => app.goTo(quran.juz[juzSelect.value - 1].page));
   words.addEventListener('change', (e) => app.setWords(Number(e.target.value)));
   markers.addEventListener('change', () => app.setMarkers(markers.checked));
+  peek.addEventListener('change', () => app.setPeek(peek.checked));
+  test.addEventListener('change', () => app.setTest(test.checked));
   zoom.addEventListener('change', () => app.setZoom(Number(zoom.value)));
   themes.addEventListener('change', (e) => app.setTheme(e.target.value));
 
-  // The surah and juz at the top of a page: the first banner or verse line decides.
-  function surahAt(page) {
-    for (const line of quran.pages[page - 1].lines) {
-      if (line.type === 'surah') return line.surah;
-      if (line.type === 'ayah') return Number(line.words[0][3].split(':')[0]);
-    }
-    return 1;
-  }
-  function juzAt(page) {
-    const lines = quran.pages[page - 1].lines;
-    const top = lines.findIndex((l) => l.type === 'ayah') + 1;
-    let juz = 1;
-    for (const j of quran.juz) if (j.page < page || (j.page === page && j.line <= top)) juz = j.juz;
-    return juz;
-  }
-
-  // view: { page, pages (on screen), words, markers, zoom, theme }
+  // view: { page, pages (on screen), words, markers, peek, test, zoom, theme }
   function sync(view) {
     if (document.activeElement !== pageInput) {
       pageInput.value = formatNumber(view.page);
@@ -106,10 +95,12 @@ export function setupControls(quran, app) {
     // can start on one page, as on page 604); otherwise the list shows the surah at the top.
     const chosen = quran.surahs[Number(surahSelect.value) - 1];
     if (!chosen || !view.pages.includes(chosen.page))
-      surahSelect.value = String(surahAt(view.pages[0]));
-    juzSelect.value = String(juzAt(view.pages[0]));
+      surahSelect.value = String(surahAt(quran, view.pages[0]));
+    juzSelect.value = String(juzAt(quran, view.pages[0]));
     for (const r of words.querySelectorAll('input')) r.checked = Number(r.value) === view.words;
     markers.checked = view.markers;
+    peek.checked = view.peek;
+    test.checked = view.test;
     zoom.value = String(view.zoom);
     for (const r of themes.querySelectorAll('input')) r.checked = r.value === view.theme;
   }

@@ -2,11 +2,11 @@
 
 A memorization mushaf for the web. It shows the Quran page by page like a printed mushaf, but each verse shows only its opening words (رؤوس الآيات). The opening words sit in the same spot they have on the printed page, and the rest of the verse is left as empty space. The reader sees the start of each verse and recites the rest from memory.
 
-It will be a static site with plain HTML, CSS and JavaScript. It has no backend and no runtime API calls, and it works offline once loaded.
+It is a static site with plain HTML, CSS and JavaScript, with no backend and no runtime API calls. It does not work fully offline yet: each new page needs its page font from the network. Offline use comes with the installable app in phase 8.
 
 ## Status
 
-**Phase 6 of 8: polish and deploy.** Phases 1 (setup and data check), 2 (data pipeline), 3 (core reader), 4 (navigation and settings) and 5 (languages) passed the audit. The phase 6 work that does not publish anything is built and waiting for its audit. The site is not live.
+**Phase 7 of 8: version 2, part A (memorization tools).** Phases 1 to 6 passed the audit. Phase 7 is built and waiting for its audit; it goes live only after it passes and is pushed. The site is live at https://hbazara.github.io/quran-verse-openings/ (see Deploy).
 
 Done so far:
 
@@ -17,9 +17,10 @@ Done so far:
 - Core reader (BUILDER): whole pages in the printed layout, with only the first words of each verse visible, surah banners, Bismillah lines, one page or two-page view, Next and Previous. See `docs/READER.md`.
 - Navigation and settings (BUILDER): go to a page, surah or juz; settings for opening words, verse-end markers, zoom and theme, saved in the browser; keyboard arrows and swipe; the last page is remembered.
 - Languages (BUILDER): a language screen every time the site opens (English or العربية), a language switch in the header, and a full right-to-left Arabic interface with Arabic-Indic numbers.
-- Polish (BUILDER): banner colors that suit each theme, a two-row header on phones, interface typography, and a GitHub workflow that checks everything and can publish the site (not used yet).
+- Polish (BUILDER): banner colors that suit each theme, a two-row header on phones, interface typography, and a GitHub workflow that checks everything and then publishes the site.
+- Memorization tools (BUILDER, waiting for audit): peek (tap a verse, or press P, to see all of it for 4 seconds; off until switched on in Settings), test mode (hide the openings and show them one by one), a memorization tracker (mark pages memorized or needs review, a grid of all 604 pages by juz), and bookmarks.
 
-Not done yet: publishing the site (waits for Hassan, see Deploy), version 2 features (phases 7 and 8).
+Not done yet: phase 8 (juz, hizb and quarter markers, print booklet, installable offline app, surah search).
 
 See `docs/DEVLOG.md` for the full history.
 
@@ -32,7 +33,7 @@ git clone https://github.com/HBazara/quran-verse-openings.git
 cd quran-verse-openings
 ```
 
-The repo is private for now (D46), so cloning needs access. It has one commit per audited phase (D56).
+The repo is public (D46): https://github.com/HBazara/quran-verse-openings. It has one commit per audited phase (D56).
 
 Open the reader. There is no build step, but the site must be served over HTTP, because browsers block loading the data from a `file://` page. Any static server works. With Python, from the project root:
 
@@ -56,21 +57,18 @@ node scripts/build-data.mjs        # rebuild data/quran.json (local only)
 
 ## Deploy
 
-**The site is not published.** The workflow is ready, but nothing has been deployed.
+**The site is live at https://hbazara.github.io/quran-verse-openings/.** Hassan made the repo public and set Settings > Pages > Source to "GitHub Actions" (2026-11-02, D46, D57). The first run of the workflow on GitHub (2026-11-02, after commit `03a8fc4`) passed: the checks and the deploy both succeeded (AUD finding P6-02). The live site serves only the site files: `docs/`, `scripts/`, `data/sources/` and `README.md` are not on it.
 
-`.github/workflows/deploy.yml` ("Check and deploy") runs on every push to `main` and every pull request:
+`.github/workflows/deploy.yml` ("Check and deploy") runs on every push to `main`, every pull request, and when started by hand (Actions > Check and deploy > Run workflow):
 
 1. Checks the checksums of the Tanzil sources (`data/sources/SHA256SUMS`), `data/quran.json`, the 604 page fonts (`data/sources/qcf2.sha256`), and the banner and Bismillah fonts.
 2. Runs `node scripts/validate.mjs`.
 3. Builds the site folder with `node scripts/build-site.mjs _site` and uploads it.
+4. On `main` only (a push or a run started by hand), publishes that folder to GitHub Pages. Pull requests are only checked, never published.
 
-Any failure stops everything after it, so a broken site is never published.
+Any failure stops everything after it, so a broken site is never published. Only `index.html`, `src/`, `assets/fonts/` and `data/quran.json` go live; docs, scripts and checksum files do not.
 
-Publishing is a separate step that only runs when started by hand: Actions > Check and deploy > Run workflow, on `main`. Before that works:
-
-- Settings > Pages > Source must be set to "GitHub Actions".
-- The repo, https://github.com/HBazara/quran-verse-openings, must be public. It is private now (D46), and free GitHub Pages needs a public repo. Hassan decides this.
-- Once the site is published, anyone can download the fonts it uses, whatever the repo's visibility.
+**About the fonts:** the published site serves its fonts, so anyone can download them. They are not ours to license: the page fonts, the banner font and the Bismillah font have no published license, and the banner and Bismillah fonts say "All rights reserved" (see Credits and `docs/DATA-SOURCES.md`). Hassan accepted using them with credit to KFGQPC and QUL (D24, D33, D34). This project gives no license for them.
 
 ## Folder layout
 
@@ -100,6 +98,7 @@ Sources picked in phase 1, font confirmed by Hassan. Full details, licenses and 
 - **Quran text, page layout and word data:** [QUL, the Quranic Universal Library](https://qul.tarteel.ai) by Tarteel. KFGQPC V2 layout (1421H print), V2 glyph script and KFGQPC Hafs Unicode script. The raw QUL databases are not stored in this repo; the site uses data generated from them.
 - **Mushaf, script and fonts:** King Fahd Glorious Quran Printing Complex (KFGQPC), Madinah. The QPC V2 page fonts (QCF2) are by KFGQPC and served through QUL. No license has been published for them. Hassan accepted using them with credit to KFGQPC and QUL. The surah banner font (QCF_SurahHeader_COLOR, QUL font 458) is also by KFGQPC, served through QUL; Hassan approved using it with credit to KFGQPC and QUL (D33).
 - **Bismillah font:** QCF2BSML by the King Fahd Glorious Quran Printing Complex (KFGQPC), obtained from the [nuqayah/qpc-fonts](https://github.com/nuqayah/qpc-fonts) mirror on GitHub (D34). No license has been published for it.
+- **Fonts on the live site:** since 2026-11-02 the repo and the site are public, so all these fonts can be downloaded by anyone. They stay the property of KFGQPC and are not licensed by this project (see Deploy, About the fonts).
 - **Text cross-check and surah names:** [Tanzil Quran Text](https://tanzil.net) (Uthmani 1.1 and metadata 1.0), used under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/). The Arabic surah names in `data/quran.json` come from Tanzil metadata, which is also used to cross-check the text and the juz and quarter starts. The two Tanzil files in `data/sources/` are verbatim copies.
 
 ## Documentation

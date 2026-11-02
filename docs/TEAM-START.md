@@ -20,26 +20,26 @@ If PowerShell blocks the script, run it once with `powershell -ExecutionPolicy B
 2. `PROJECT.md`: the full brief. It wins if anything is unclear.
 3. `docs/HANDOFF.md`: the shared log, newest entry at the top. Read at least the entries of the current phase.
 4. `docs/STRUCTURE.md`: the file tree.
-5. `docs/DECISIONS.md`: every decision so far (D1 to D56). Many of them change what the brief alone would suggest.
+5. `docs/DECISIONS.md`: every decision so far (D1 to D66). Many of them change what the brief alone would suggest.
 
 Use `docs/handoff-archive/phase-N.md` only when you need the history of an earlier phase. `docs/DEVLOG.md` has the full story in one place.
 
 ## 2. Where the project stands
 
-_Updated by DOCU at the end of every phase. Last update: 2026-11-01._
+_Updated by DOCU at the end of every phase. Last update: 2026-11-02, after the push and the first Actions run._
 
-- **Phase:** 6 of 8, polish and deploy. Phases 1 to 5 passed AUD's audit.
-- **Phase 6 status:** built by BUILDER (everything except publishing), tidied by ORG, documented by DOCU. **Waiting for AUD's audit.**
-- **Last commit:** `f8d2876` "Phase 5: English and Arabic interface", pushed to the private repo https://github.com/HBazara/quran-verse-openings (4 commits). The phase 6 work is not committed yet.
-- **The site is not published.** The workflow `.github/workflows/deploy.yml` is ready (see `README.md`, Deploy).
-- **Waiting for Hassan:** whether the repo goes public (D46). Free GitHub Pages needs a public repo, so there is no live site until he decides.
+- **Phase:** 7 of 8, version 2 part A: peek mode, test mode, memorization tracker, bookmarks. Phases 1 to 6 passed AUD's audit. Phase 7 is built by BUILDER (including fixes for AUD's minor items P7-01 to P7-03) and documented by DOCU; it waits for ORG's tidy and AUD's PASS. It is not committed.
+- **Repo:** https://github.com/HBazara/quran-verse-openings is **public** (Hassan, 2026-11-02, D46).
+- **Last commit:** `03a8fc4` "Deploy after the checks pass on main (Hassan's decision)", on top of `9dec020` "Phase 6: polish and deploy workflow". Both are pushed: `origin/main` is `03a8fc4`.
+- **The site is live** at https://hbazara.github.io/quran-verse-openings/. Pages source is "GitHub Actions": `deploy.yml` publishes on `main` only after the checks pass (D57). The first run on GitHub (run 41474933287) passed: check and deploy both succeeded, and the site is served from Actions (P6-02). The fonts are now public without a published license (P6-04, `docs/DATA-SOURCES.md`).
+- **Offline:** the site does not work fully offline yet; each new page loads its font. That comes with the installable app in phase 8 (P6-03).
 - **Checks:** `node scripts/validate.mjs` gives 20 PASS and 1 SKIP; `--full` gives 24 PASS (it needs the QUL databases in `tmp/downloads/qul/x/`).
-- **Next:** AUD audits phase 6. After PASS, ORG commits and pushes phase 6. Then phase 7 (version 2, part A: peek mode, test mode, memorization tracker, bookmarks).
+- **Next:** ORG tidies phase 7, AUD audits it. After PASS, ORG commits phase 7 and pushes; the push publishes it.
 
 ## 3. Standing rules from Hassan
 
 - **Commits:** one commit per phase, made only by ORG, only after AUD's PASS, from the audited state (D56). Pushes go through ORG too.
-- **The repo stays private** until Hassan says it may go public (D46).
+- **The repo is public** since 2026-11-02 (D46). Every push to `main` that passes the checks goes live (D57), so push only audited work.
 - **Never commit** the PDF (`*.pdf`, D10) or the QUL databases (`PROJECT.md` Rule 1 item 7). Both are ignored by git.
 - **The Quran text must be exact** (`PROJECT.md` Rule 1). Never take Arabic text from the PDF, never type or edit it by hand.
 - **No em dashes** anywhere. Plain, simple English. Format with Prettier.
@@ -58,7 +58,7 @@ _Updated by DOCU at the end of every phase. Last update: 2026-11-01._
 
 1. Add a `docs/HANDOFF.md` entry: date and time, your role, the phase, "started after restart", and what you think your next step is.
 2. Then, by role, for the current state in part 2:
-   - **AUD:** audit phase 6, then message the owners of any findings, or give PASS and message the other three.
-   - **ORG:** wait for AUD's PASS, then commit and push phase 6 (with Hassan's approval) and archive the phase 6 handoff entries.
-   - **BUILDER:** wait for AUD's PASS, or fix AUD's findings for your files. Start phase 7 only after "Phase 6 PASS".
+   - **ORG:** tidy phase 7. After AUD's PASS, commit and push it and archive the phase 7 handoff entries.
+   - **AUD:** audit phase 7 after ORG's tidy. After the phase 7 push, check that its Actions run passed and the live site loads.
+   - **BUILDER:** fix any phase 7 findings. Start phase 8 only after "Phase 7 PASS".
    - **DOCU:** wait for findings on the docs, or for the next phase to document. Update part 2 of this file at the end of every phase.

@@ -2,6 +2,13 @@
 
 Phase 5 (Languages) got PASS from AUD on 2026-11-01. These are the Phase 5 entries moved out of `docs/HANDOFF.md` by ORG, in the order they had in the log.
 
+## 2026-11-01 17:30, ORG, Phase 5 closed
+
+- Did: Phase 5 got PASS from AUD. Moved the 6 Phase 5 entries to `docs/handoff-archive/phase-5.md` and 1 late Phase 4 entry to the top of `docs/handoff-archive/phase-4.md`. No `tmp/` cleanup: `tmp/renders/pdf/`, `tmp/downloads/`, `tmp/phase3/`, `tmp/phase5/` kept as AUD asked, and `tmp/phase4/` and `tmp/compare/` kept because docs point to them. Saved the audited Phase 5 state as tree snapshot `refs/snapshots/phase-5` (validated), so BUILDER can start Phase 6.
+- Files changed: `docs/HANDOFF.md`, `docs/handoff-archive/phase-4.md`, `docs/handoff-archive/phase-5.md` (new), git index and refs.
+- Messages sent: AUD, BUILDER, DOCU (archive done, snapshot saved).
+- Open items carried into Phase 6: Hassan pushes `80d62f6` (remote still empty). Commits from `refs/snapshots/phase-4` and `refs/snapshots/phase-5` wait on approval from Hassan. Repo stays private until Hassan says public, which free GitHub Pages needs in Phase 6. Second "Aud" session (P1-12).
+
 ## 2026-11-01 17:30, DOCU, Phase 5 closed
 
 - Did: Recorded AUD's Phase 5 PASS. README status: phase 6. DEVLOG: PASS and a phase 6 section, with the open public or private question (D46).
