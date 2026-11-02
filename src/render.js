@@ -4,9 +4,13 @@
 // is placed on its own, and its words are spread (justified) or centred as the layout says.
 
 import { pageFontFamily } from './fonts.js';
+import { formatNumber, t, tIn } from './i18n.js';
 
 // Geometry in print pixels: the 1421H print scanned at 750 px page width. The page scales as one unit.
 export const PAGE = { width: 561, height: 900 };
+// Outer margin added for the juz, hizb and quarter markers (right of odd pages, left of even pages,
+// as in a bound book). The page keeps its size and layout inside; only the box around it grows.
+export const MARGIN = 64;
 const BLOCK = { x: 30, y: 40, width: 501, height: 799 }; // the inside of the printed frame
 // The print's 15 lines are not spread evenly over the block: measured on 32 pages (423 text
 // lines), line i (0 to 14) starts at GRID.top + i * GRID.pitch.
@@ -87,8 +91,56 @@ function box(row, top, left, width, height, fontSize) {
   });
 }
 
+// Juz, hizb and quarter starts by page and line, from the data (the quarters follow the print's
+// hizb signs; every hizb start is a quarter start, every juz start a hizb start).
+function marksFor(quran, number) {
+  if (!quran.marks) {
+    quran.marks = new Map();
+    const put = (e, data) => {
+      if (!quran.marks.has(e.page)) quran.marks.set(e.page, new Map());
+      const lines = quran.marks.get(e.page);
+      lines.set(e.line - 1, { ...lines.get(e.line - 1), ...data });
+    };
+    for (const e of quran.quarters) put(e, { quarter: e.quarter });
+    for (const e of quran.hizb) put(e, { hizb: e.hizb });
+    for (const e of quran.juz) put(e, { juz: e.juz });
+  }
+  return quran.marks.get(number) || new Map();
+}
+
+// The medallion drawn in the margin (always Arabic, like the print) and the sentence spoken by
+// screen readers (in the interface language).
+function medallion(mark, top) {
+  const hizb = Math.ceil(mark.quarter / 4);
+  const part = (mark.quarter - 1) % 4; // 0: the hizb starts; 1, 2, 3: a quarter, a half, three quarters
+  const ar = (key) => tIn('ar', key);
+  const lines = mark.juz
+    ? [
+        `${ar('mark.juz')} ${arabicDigits.format(mark.juz)}`,
+        `${ar('mark.hizb')} ${arabicDigits.format(hizb)}`,
+      ]
+    : part === 0
+      ? [ar('mark.hizb'), arabicDigits.format(hizb)]
+      : [ar(`mark.q${part}`), ar('mark.hizb'), arabicDigits.format(hizb)];
+  const el = document.createElement('div');
+  el.className = `medallion${part === 0 ? ' start' : ''}`;
+  el.style.top = `${top}px`;
+  el.setAttribute('aria-hidden', 'true');
+  lines.forEach((text, i) => {
+    const span = document.createElement('span');
+    span.className = part !== 0 && i === 0 ? 'part' : 'name';
+    span.textContent = text;
+    el.append(span);
+  });
+  const said = mark.juz
+    ? t('margin.juz', { j: formatNumber(mark.juz), h: formatNumber(hizb) })
+    : t(part === 0 ? 'margin.hizb' : `margin.q${part}`, { h: formatNumber(hizb) });
+  return { el, said };
+}
+
 // opts: { words: opening words per verse (Infinity shows every word), markers: show verse-end
-// markers, label: the page's accessible name }
+// markers, margin: show the juz, hizb and quarter markers in an outer margin, label: the page's
+// accessible name }
 export function renderPage(quran, number, opts) {
   const page = quran.pages[number - 1];
   const el = document.createElement('article');
@@ -98,6 +150,10 @@ export function renderPage(quran, number, opts) {
   el.dataset.page = String(number);
   el.setAttribute('aria-label', opts.label);
 
+  // The sheet holds the printed page (frame, text block, page number) at fixed coordinates; with
+  // markers on, an outer margin box sits next to it.
+  const sheet = document.createElement('div');
+  sheet.className = 'sheet';
   const frame = document.createElement('div');
   frame.className = 'frame';
   const block = document.createElement('div');
@@ -106,9 +162,17 @@ export function renderPage(quran, number, opts) {
   block.style.fontFamily = `'${pageFontFamily(number)}'`;
   const spoken = document.createElement('div');
   spoken.className = 'sr-only';
-  el.append(frame, block, spoken);
+  sheet.append(frame, block);
+  el.append(sheet, spoken);
+  const margin = document.createElement('div');
+  margin.className = 'margin';
+  if (opts.margin) {
+    el.classList.add(number % 2 === 1 ? 'margin-right' : 'margin-left');
+    el.append(margin);
+  }
 
   const opening = number <= 2;
+  const marks = opening ? new Map() : marksFor(quran, number);
   let k = 0; // position among the non-banner lines of pages 1 and 2
   page.lines.forEach((line, i) => {
     const row = document.createElement('div');
@@ -167,6 +231,14 @@ export function renderPage(quran, number, opts) {
       else box(row, top, LINE.left, LINE.width, GRID.pitch, LINE.fontSize);
     }
     block.append(row);
+    if (marks.has(i)) {
+      const top = BLOCK.y + GRID.top + i * GRID.pitch + GRID.pitch / 2; // centre of the line
+      const { el: medal, said } = medallion(marks.get(i), top);
+      if (opts.margin) margin.append(medal);
+      const p = document.createElement('p');
+      p.textContent = said;
+      spoken.append(p);
+    }
     if (text) {
       const p = document.createElement('p');
       p.textContent = text;
@@ -178,6 +250,6 @@ export function renderPage(quran, number, opts) {
   num.className = 'page-number';
   num.setAttribute('aria-hidden', 'true');
   num.textContent = arabicDigits.format(number);
-  el.append(num);
+  sheet.append(num);
   return el;
 }

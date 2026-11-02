@@ -16,7 +16,7 @@ import {
   tIn,
 } from './i18n.js';
 import { loadFrameFonts, loadPageFont } from './fonts.js';
-import { BISMILLAH_GLYPH, PAGE, fontPagesFor, renderPage } from './render.js';
+import { BISMILLAH_GLYPH, MARGIN, PAGE, fontPagesFor, renderPage } from './render.js';
 import { load, save } from './storage.js';
 import { setupPanels } from './panels.js';
 import { setupKeys, setupSwipe } from './input.js';
@@ -25,6 +25,8 @@ import { askLanguage, languageScreenOpen } from './language.js';
 import { resetPeek, setupPeek } from './peek.js';
 import { setupTestMode } from './test-mode.js';
 import { setupProgress } from './progress.js';
+import { setupPrint } from './print.js';
+import { setupOffline } from './offline.js';
 
 const LAST_PAGE = 604;
 const NARROW = 900; // below this window width, one page is the default view
@@ -53,6 +55,7 @@ function readSaved() {
     words: Number.isInteger(s.words) && s.words >= 1 && s.words <= 5 ? s.words : 2,
     markers: typeof s.markers === 'boolean' ? s.markers : true,
     peek: typeof s.peek === 'boolean' ? s.peek : false, // off until the reader turns it on (Hassan)
+    margin: typeof s.margin === 'boolean' ? s.margin : true, // juz, hizb and quarter markers
     zoom: ZOOMS.includes(s.zoom) ? s.zoom : 100,
     theme: THEMES.includes(s.theme) ? s.theme : null,
     view: VIEWS.includes(s.view) ? s.view : null,
@@ -74,6 +77,8 @@ let controls = null;
 let panels = null;
 let test = null; // test mode (not saved: it is an activity, not a preference)
 let progress = null; // memorization tracker and bookmarks
+let printer = null; // print a booklet
+let offline = null; // offline use (service worker)
 
 const theme = () => saved.theme || (darkDevice.matches ? 'dark' : 'light');
 function applyTheme() {
@@ -130,7 +135,9 @@ function fit() {
   const cs = getComputedStyle(book);
   const w = book.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
   const h = book.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
-  const whole = Math.min((w - GAP * (count - 1)) / (PAGE.width * count), h / PAGE.height);
+  const pageWidth = PAGE.width + (saved.margin ? MARGIN : 0);
+  book.style.setProperty('--page-w', `${pageWidth}px`);
+  const whole = Math.min((w - GAP * (count - 1)) / (pageWidth * count), h / PAGE.height);
   book.style.setProperty('--scale', String(Math.max(0.1, whole) * (saved.zoom / 100)));
   book.classList.toggle('zoomed', saved.zoom > 100);
 }
@@ -142,6 +149,7 @@ function syncControls() {
     words: state.words,
     markers: saved.markers,
     peek: saved.peek,
+    margin: saved.margin,
     test: test?.isActive() || false,
     zoom: saved.zoom,
     theme: theme(),
@@ -152,15 +160,23 @@ let ticket = 0;
 async function show(direction = 0, push = false) {
   const mine = ++ticket;
   const nums = pagesFor(state.page, state.view);
-  await Promise.all(nums.flatMap(fontPagesFor).map(loadPageFont));
+  try {
+    await Promise.all(nums.flatMap(fontPagesFor).map(loadPageFont));
+  } catch {
+    // Offline, and this page's font is not saved yet: say so and keep the pages on screen.
+    if (mine === ticket) setStatus('status.offlinePage');
+    return;
+  }
   if (mine !== ticket) return; // a newer page turn started meanwhile
+  if (status.dataset.key === 'status.offlinePage') setStatus(null);
   const spread = document.createElement('div');
   spread.className = 'spread';
   for (const n of nums) {
     const slot = document.createElement('div');
     slot.className = 'slot';
     const label = t('page.label', { n: formatNumber(n) });
-    slot.append(renderPage(state.quran, n, { words: state.words, markers: saved.markers, label }));
+    const opts = { words: state.words, markers: saved.markers, margin: saved.margin, label };
+    slot.append(renderPage(state.quran, n, opts));
     spread.append(slot);
   }
   const newPages = nums.join() !== state.shown.join();
@@ -170,6 +186,7 @@ async function show(direction = 0, push = false) {
   resetPeek();
   test?.apply(nums);
   progress?.update(nums);
+  printer?.sync(nums);
   if (newPages) {
     // A new page starts at its top right, where the text starts (also when zoomed in).
     book.scrollTop = 0;
@@ -239,6 +256,12 @@ function setMarkers(on) {
   show(0);
 }
 
+function setMargin(on) {
+  saved.margin = on;
+  store();
+  show(0);
+}
+
 function setPeek(on) {
   saved.peek = on;
   store();
@@ -275,6 +298,7 @@ function switchLanguage(code) {
   indicator.dir = code === 'ar' ? 'rtl' : 'ltr';
   if (status.dataset.key) setStatus(status.dataset.key);
   controls?.fillTexts();
+  offline?.fillTexts();
   if (state.quran && state.shown.length) show(0);
 }
 
@@ -311,6 +335,8 @@ async function start() {
     else writeHash(false);
   });
   setStatus('status.loading');
+  offline = setupOffline();
+  $('settings-toggle').addEventListener('click', () => offline.refresh());
   panels = setupPanels([
     { button: $('goto-toggle'), panel: $('goto-panel') },
     { button: $('settings-toggle'), panel: $('settings-panel') },
@@ -331,6 +357,7 @@ async function start() {
       goTo,
       setWords,
       setMarkers,
+      setMargin,
       setPeek,
       setTest,
       setZoom,
@@ -340,6 +367,10 @@ async function start() {
     controls.fillTexts();
     test = setupTestMode(book, () => setTest(false));
     progress = setupProgress(state.quran, { lastPage: LAST_PAGE, goTo });
+    printer = setupPrint(state.quran, {
+      lastPage: LAST_PAGE,
+      opts: () => ({ words: state.words, markers: saved.markers, margin: saved.margin }),
+    });
     setupPeek(book, () => saved.peek && !test.isActive() && !languageScreenOpen());
     await loadFrameFonts(state.quran.surahs[0].banner, BISMILLAH_GLYPH);
     await show(0);

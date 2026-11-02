@@ -2,25 +2,27 @@
 
 A memorization mushaf for the web. It shows the Quran page by page like a printed mushaf, but each verse shows only its opening words (رؤوس الآيات). The opening words sit in the same spot they have on the printed page, and the rest of the verse is left as empty space. The reader sees the start of each verse and recites the rest from memory.
 
-It is a static site with plain HTML, CSS and JavaScript, with no backend and no runtime API calls. It does not work fully offline yet: each new page needs its page font from the network. Offline use comes with the installable app in phase 8.
+It is a static site with plain HTML, CSS and JavaScript, with no backend and no runtime API calls. From phase 8 (waiting for its audit) it can be installed as an app and works offline after the first visit.
 
 ## Status
 
-**Phase 7 of 8: version 2, part A (memorization tools).** Phases 1 to 6 passed the audit. Phase 7 is built and waiting for its audit; it goes live only after it passes and is pushed. The site is live at https://hbazara.github.io/quran-verse-openings/ (see Deploy).
+**Phase 8 of 8: version 2, part B (extras).** Phases 1 to 7 passed the audit and are live. Phase 8 is built and waiting for its audit; it goes live only after it passes and is pushed. The site is live at https://hbazara.github.io/quran-verse-openings/ (see Deploy).
 
 Done so far:
 
 - Folder structure, `AGENTS.md`, `.gitignore`, `.editorconfig`, `.gitattributes` and Prettier config (ORG).
 - Edition check (BUILDER): the PDF is the King Fahd Complex (KFGQPC) Madinah mushaf, Hafs, 1421H print, 604 pages of 15 lines. The QUL V2 layout matched the print on every line checked across 42 sample pages.
 - Decisions: Hassan picked the QPC V2 page fonts, approved the surah banner and Bismillah fonts, and downloaded the official QUL files.
-- Data pipeline (BUILDER): `scripts/build-data.mjs` builds `data/quran.json` (604 pages, 9,046 lines, 114 surahs, 6,236 verses, 83,668 words). `scripts/validate.mjs` runs 20 checks, or 24 with `--full`. All pass.
+- Data pipeline (BUILDER): `scripts/build-data.mjs` builds `data/quran.json` (604 pages, 9,046 lines, 114 surahs, 6,236 verses, 83,668 words). `scripts/validate.mjs` runs 21 checks, or 25 with `--full`. All pass.
 - Core reader (BUILDER): whole pages in the printed layout, with only the first words of each verse visible, surah banners, Bismillah lines, one page or two-page view, Next and Previous. See `docs/READER.md`.
 - Navigation and settings (BUILDER): go to a page, surah or juz; settings for opening words, verse-end markers, zoom and theme, saved in the browser; keyboard arrows and swipe; the last page is remembered.
 - Languages (BUILDER): a language screen every time the site opens (English or العربية), a language switch in the header, and a full right-to-left Arabic interface with Arabic-Indic numbers.
 - Polish (BUILDER): banner colors that suit each theme, a two-row header on phones, interface typography, and a GitHub workflow that checks everything and then publishes the site.
-- Memorization tools (BUILDER, waiting for audit): peek (tap a verse, or press P, to see all of it for 4 seconds; off until switched on in Settings), test mode (hide the openings and show them one by one), a memorization tracker (mark pages memorized or needs review, a grid of all 604 pages by juz), and bookmarks.
+- Memorization tools (BUILDER): peek (tap a verse, or press P, to see all of it for 4 seconds; off until switched on in Settings), test mode (hide the openings and show them one by one), a memorization tracker (mark pages memorized or needs review, a grid of all 604 pages by juz), and bookmarks.
 
-Not done yet: phase 8 (juz, hizb and quarter markers, print booklet, installable offline app, surah search).
+- Extras (BUILDER, waiting for audit): juz, hizb and quarter markers in the page margin, surah search by name or number, printing a booklet on A5 sheets, and an installable app that works offline.
+
+Not done yet: nothing planned beyond phase 8.
 
 See `docs/DEVLOG.md` for the full history.
 
@@ -63,27 +65,29 @@ node scripts/build-data.mjs        # rebuild data/quran.json (local only)
 
 1. Checks the checksums of the Tanzil sources (`data/sources/SHA256SUMS`), `data/quran.json`, the 604 page fonts (`data/sources/qcf2.sha256`), and the banner and Bismillah fonts.
 2. Runs `node scripts/validate.mjs`.
-3. Builds the site folder with `node scripts/build-site.mjs _site` and uploads it.
+3. Builds the site folder with `node scripts/build-site.mjs _site` (and stamps the service worker with version hashes) and uploads it.
 4. On `main` only (a push or a run started by hand), publishes that folder to GitHub Pages. Pull requests are only checked, never published.
 
-Any failure stops everything after it, so a broken site is never published. Only `index.html`, `src/`, `assets/fonts/` and `data/quran.json` go live; docs, scripts and checksum files do not.
+Any failure stops everything after it, so a broken site is never published. Only `index.html`, `manifest.webmanifest`, `sw.js`, `src/`, `assets/fonts/`, `assets/icons/` and `data/quran.json` go live; docs, scripts and checksum files do not.
 
 **About the fonts:** the published site serves its fonts, so anyone can download them. They are not ours to license: the page fonts, the banner font and the Bismillah font have no published license, and the banner and Bismillah fonts say "All rights reserved" (see Credits and `docs/DATA-SOURCES.md`). Hassan accepted using them with credit to KFGQPC and QUL (D24, D33, D34). This project gives no license for them.
 
 ## Folder layout
 
-| Folder               | Purpose                                    |
-| -------------------- | ------------------------------------------ |
-| `index.html`         | The page the site opens                    |
-| `src/`               | App code (JavaScript, CSS)                 |
-| `src/i18n/`          | Interface strings: `en.json` and `ar.json` |
-| `assets/fonts/`      | Self-hosted fonts                          |
-| `data/`              | Generated `quran.json` and its checks      |
-| `data/sources/`      | Tanzil text files, byte for byte           |
-| `scripts/`           | `build-data` and `validate` scripts        |
-| `scripts/lib/`       | Shared code for the scripts                |
-| `docs/`              | All documentation                          |
-| `.github/workflows/` | The check and deploy workflow              |
+| Folder                          | Purpose                                          |
+| ------------------------------- | ------------------------------------------------ |
+| `index.html`                    | The page the site opens                          |
+| `sw.js`, `manifest.webmanifest` | The offline app: service worker and app manifest |
+| `src/`                          | App code (JavaScript, CSS)                       |
+| `src/i18n/`                     | Interface strings: `en.json` and `ar.json`       |
+| `assets/fonts/`                 | Self-hosted fonts                                |
+| `assets/icons/`                 | App icons (an open book, no text)                |
+| `data/`                         | Generated `quran.json` and its checks            |
+| `data/sources/`                 | Tanzil text files, byte for byte                 |
+| `scripts/`                      | `build-data` and `validate` scripts              |
+| `scripts/lib/`                  | Shared code for the scripts                      |
+| `docs/`                         | All documentation                                |
+| `.github/workflows/`            | The check and deploy workflow                    |
 
 `assets/fonts/` holds the 604 QPC V2 page fonts (`qcf2/`), the surah banner font (`surah-header/`) and the Bismillah font (`bismillah/`). The full tree with one line per folder is in `docs/STRUCTURE.md`.
 

@@ -160,7 +160,7 @@ export function setupProgress(quran, app) {
         const r = document.createElement('div');
         r.className = 'ribbon';
         r.setAttribute('aria-hidden', 'true');
-        page.append(r);
+        (page.querySelector('.sheet') || page).append(r);
       } else if (!on && ribbon) ribbon.remove();
     }
   }

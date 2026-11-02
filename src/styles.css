@@ -37,8 +37,11 @@
   --warn: #b26a00; /* needs review */
   --peek: #1f5fbf; /* words shown by peek */
   --shadow: rgba(0, 0, 0, 0.18);
-  --page-w: 561px;
+  --sheet-w: 561px; /* the printed page */
+  --margin-w: 64px; /* the outer margin for juz, hizb and quarter markers (render.js MARGIN) */
+  --page-w: 561px; /* set by the reader: the sheet, plus the margin when it is shown */
   --page-h: 900px;
+  --medal: #e6f1e1;
 }
 :root[data-theme='dark'] {
   color-scheme: dark;
@@ -55,6 +58,7 @@
   --ok: #6fbf8c;
   --warn: #f0a947;
   --peek: #8ab4ff;
+  --medal: #1d3324;
   --shadow: rgba(0, 0, 0, 0.55);
 }
 :root[data-theme='sepia'] {
@@ -71,6 +75,7 @@
   --ok: #3f7a3a;
   --warn: #a35c00;
   --peek: #2a5aa8;
+  --medal: #efe2c2;
   --shadow: rgba(60, 40, 10, 0.22);
 }
 
@@ -316,6 +321,7 @@ input:focus-visible {
   gap: 8px;
 }
 .panel input[type='text'],
+.panel input[type='search'],
 .panel select {
   width: 100%;
   min-width: 0;
@@ -394,6 +400,32 @@ input:focus-visible {
   height: 22px;
   margin: 0;
   accent-color: var(--accent);
+}
+
+/* Go to panel: surah search results */
+.results {
+  display: grid;
+  gap: 4px;
+  max-height: 220px;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  list-style: none;
+}
+.results:empty {
+  display: none;
+}
+.result {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
 }
 
 /* Go to panel: pages on screen, bookmarks, memorization grid */
@@ -591,6 +623,58 @@ input:focus-visible {
   background: var(--paper);
   box-shadow: 0 1px 4px var(--shadow);
 }
+.sheet {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--sheet-w);
+  height: var(--page-h);
+}
+.page.margin-left .sheet {
+  left: var(--margin-w);
+}
+.margin {
+  position: absolute;
+  top: 0;
+  width: var(--margin-w);
+  height: var(--page-h);
+}
+.page.margin-right .margin {
+  left: var(--sheet-w);
+}
+.page.margin-left .margin {
+  left: 0;
+}
+/* Juz, hizb and quarter markers: an arched tablet for a quarter, an oval for a hizb or juz start */
+.medallion {
+  position: absolute;
+  left: 50%;
+  display: grid;
+  justify-items: center;
+  gap: 1px;
+  width: 50px;
+  padding: 10px 2px 8px;
+  border: 2px solid var(--frame);
+  border-radius: 25px 25px 6px 6px;
+  background: var(--medal);
+  color: var(--ink);
+  font:
+    700 12px/1.2 system-ui,
+    'Segoe UI',
+    'Noto Sans Arabic',
+    Tahoma,
+    sans-serif;
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+.medallion.start {
+  padding: 14px 2px;
+  border-radius: 25px / 40px;
+}
+.medallion .part {
+  font-size: 9px;
+  font-weight: 400;
+}
 .frame {
   position: absolute;
   top: 30px;
@@ -672,6 +756,69 @@ input:focus-visible {
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
+}
+
+/* Printing a booklet: only the prepared pages, one per A5 sheet, black ink on white paper */
+.print-area {
+  display: none;
+}
+.stack {
+  display: grid;
+  flex: 1;
+  gap: 4px;
+}
+@page {
+  size: A5 portrait;
+  margin: 0;
+}
+@media print {
+  html,
+  body {
+    height: auto;
+    background: #ffffff;
+  }
+  body {
+    display: block;
+  }
+  body > :not(.print-area) {
+    display: none !important;
+  }
+  .print-area {
+    display: block;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .print-sheet {
+    position: relative;
+    width: 148mm;
+    height: 210mm;
+    overflow: hidden;
+    break-after: page;
+  }
+  .print-sheet:last-child {
+    break-after: auto;
+  }
+  .print-place {
+    position: absolute;
+    overflow: hidden;
+  }
+  .print-sheet .page {
+    position: relative;
+    transform: none;
+    background: #ffffff;
+    box-shadow: none;
+  }
+  .print-sheet .block,
+  .print-sheet .page-number,
+  .print-sheet .medallion {
+    color: #000000;
+  }
+  .print-sheet .medallion {
+    background: #eef5ea;
+  }
+  .print-sheet .line.surah {
+    font-palette: normal;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

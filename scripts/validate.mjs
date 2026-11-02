@@ -391,6 +391,39 @@ check('the 604 page fonts match data/sources/qcf2.sha256 (none changed or replac
   return '604 of 604 match';
 });
 
+check(
+  'the offline app: manifest names match the strings, the service worker lists every app file',
+  (P) => {
+    const en = JSON.parse(readFileSync(join(ROOT, 'src', 'i18n', 'en.json'), 'utf8'));
+    const ar = JSON.parse(readFileSync(join(ROOT, 'src', 'i18n', 'ar.json'), 'utf8'));
+    const manifest = JSON.parse(readFileSync(join(ROOT, 'manifest.webmanifest'), 'utf8'));
+    if (manifest.name !== `${ar['app.title']} · ${en['app.title']}`)
+      P.push('manifest name differs from app.title');
+    if (manifest.short_name !== ar['app.title'])
+      P.push('manifest short_name differs from app.title (ar)');
+    for (const icon of manifest.icons || [])
+      if (!existsSync(join(ROOT, icon.src))) P.push(`manifest icon missing: ${icon.src}`);
+    const sw = readFileSync(join(ROOT, 'sw.js'), 'utf8');
+    const shell = [
+      ...(sw.match(/const SHELL = \[([\s\S]*?)\];/)?.[1] || '').matchAll(/'([^']+)'/g),
+    ].map((m) => m[1]);
+    for (const f of shell)
+      if (f !== './' && !existsSync(join(ROOT, f))) P.push(`sw.js lists a missing file: ${f}`);
+    const app = [
+      ...readdirSync(join(ROOT, 'src'))
+        .filter((f) => /\.(js|css)$/.test(f))
+        .map((f) => `src/${f}`),
+      ...readdirSync(join(ROOT, 'src', 'i18n')).map((f) => `src/i18n/${f}`),
+      'index.html',
+      'data/quran.json',
+    ];
+    for (const f of app) if (!shell.includes(f)) P.push(`sw.js does not save ${f} for offline use`);
+    if (!/const VERSION = 'dev';/.test(sw) || !/const FONTS_VERSION = 'dev';/.test(sw))
+      P.push('sw.js: the version words for build-site are missing');
+    return `${shell.length} files saved for offline use; manifest names match the strings`;
+  },
+);
+
 check('every surah has its own banner character', (P) => {
   const GLYPH_RANGE = new RegExp(`^[${cp(0xfb50)}-${cp(0xfdff)}]$`, 'u');
   const seen = new Set();

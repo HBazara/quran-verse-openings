@@ -65,6 +65,9 @@ export function applyStrings(root = document) {
     el.setAttribute('aria-label', label);
     if (el.tagName === 'BUTTON') el.title = label;
   });
+  root.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
+    el.placeholder = t(el.dataset.i18nPlaceholder);
+  });
   for (const code of LANGUAGES) {
     root.querySelectorAll(`[data-i18n-${code}]`).forEach((el) => {
       el.textContent = tIn(code, el.getAttribute(`data-i18n-${code}`));

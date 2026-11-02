@@ -147,3 +147,13 @@ Still open after phase 1:
 - **BUILDER:** Checked the live site after the first Actions run: only the site files are served (docs/, scripts/, data/sources/ and README.md return 404), it is the phase 6 version, and it works in desktop English dark and phone Arabic light with no console errors.
 - **Hassan (relayed by BUILDER):** peek starts switched off. A saved choice is kept. BUILDER changed the default in `src/app.js`; phase 7 tests 40 of 40.
 - **DOCU:** Updated D58, READER, USER-GUIDE (English and Arabic) and README for peek off by default, and the README Deploy note for the live check.
+- **ORG:** Phase 7 tidy: nothing moved or renamed; `docs/STRUCTURE.md` lists the 4 new files, the deploy rule and `tmp/phase7/`.
+- **AUD:** **Phase 7 PASS.** Minor findings P7-01 (peek on the blank stretch), P7-02 (keyboard peek) and P7-03 (grid square names) fixed by BUILDER; note P7-04 (peek on by default) closed by Hassan's choice of off.
+- **DOCU:** Recorded the PASS. Updated `docs/TEAM-START.md` part 2 and the first actions for phase 8, and the README status.
+
+### Phase 8: version 2, part B (extras)
+
+- **ORG:** Committed phase 7 as `c13eaa0` and pushed it; the Actions run (41475502760) passed check and deploy, so phase 7 is live. Archived the phase 7 handoff entries.
+- **DOCU:** Updated `docs/TEAM-START.md` part 2 and the README status for the phase 7 commit.
+- **BUILDER:** Built phase 8: juz, hizb and quarter markers in a widened outer margin, surah search, print a booklet (A5, one page per sheet), and the offline app (`manifest.webmanifest`, icons, `sw.js`, Offline use in Settings). New `src/search.js`, `src/print.js`, `src/offline.js`. `build-site` also publishes the app files and stamps `sw.js`. New validate check 15 (offline app), so 21 checks, 25 with `--full`. 78 strings in each file.
+- **DOCU:** Documented phase 8 after checking the code: `docs/READER.md` (files, Go to, Settings, new Extras section), `docs/USER-GUIDE.md` in English and Arabic, `docs/DATA-FORMAT.md` (new check order, build-site, last run: 21 plus 1 skip, `--full` 25, 634 files), README, D8, D67 to D71, `docs/TEAM-START.md`.

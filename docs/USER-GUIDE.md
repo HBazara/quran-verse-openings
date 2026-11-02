@@ -4,7 +4,7 @@
 
 The site shows the Quran page by page, like the printed Madinah mushaf. Each verse shows only its first words, in the same place as on the printed page. Read the opening, then recite the rest of the verse from memory.
 
-This guide covers what works now (phase 7).
+This guide covers what works now (phase 8).
 
 ### Choosing the language
 
@@ -27,6 +27,7 @@ When the site opens, it asks for the language of the buttons and menus: **Englis
 Press **Go to** (the list icon) at the top:
 
 - Type a page number from 1 to 604 and press **Go**. You can type 45 or ٤٥.
+- Or type in **Find a surah**: a name or a number. Spelling does not have to be exact: "baqara", "yaseen" or "البقره" work. Press Enter to open the first result.
 - Or pick a surah, or a juz, from the lists.
 
 The browser's Back button takes you back to where you were before the jump.
@@ -39,6 +40,7 @@ Press **Settings** (the sliders icon) at the top:
 - **Show verse-end markers:** the ﴿ ﴾ marker at the end of each verse. On by default.
 - **Peek:** tap a verse (or press P) to see all of it for a few seconds. Off by default. See below.
 - **Test mode:** hide the openings and show them one by one. See below.
+- **Show juz, hizb and quarter markers in the margin:** on by default. See below.
 - **Zoom:** 100% to 200%. The page grows as one piece. Move around by scrolling.
 - **Theme:** light, dark or sepia. At first it follows your device.
 
@@ -64,6 +66,18 @@ Open **Go to** and press **Bookmark** next to a page on screen. The page gets a 
 
 Your settings, the last page you read, your memorization marks and your bookmarks are saved in this browser. Next time, the site opens on that page. In a private window, or if the browser blocks saving, the site still works but forgets.
 
+### Juz, hizb and quarter markers
+
+Like the printed mushaf, a small medallion in the outer margin shows where a juz, a hizb or a quarter of a hizb starts, for example "ربع الحزب ١". The medallions are always in Arabic. They make the page a little smaller; you can switch them off in Settings.
+
+### Print a booklet
+
+In **Settings**, under **Print a booklet**, choose the first and last page (up to 40 pages at a time) and press **Print**. Each mushaf page is printed on its own A5 sheet, with extra room on the side where you bind it. The text prints in black on white (the surah banners keep their colors), with your current number of opening words and markers.
+
+### Use it offline
+
+After your first visit the site works without internet, and you can install it as an app from your browser's menu (for example "Install app" or "Add to Home Screen"). Each page is saved the first time you open it. To save all 604 pages at once, press **Download all pages (about 95 MB)** under **Offline use** in Settings. If you open a page offline that is not saved yet, the site tells you, and the page you were on stays.
+
 ### Share a page
 
 The address always shows the page, for example `…#page=50`. Copy it to share that page, or bookmark it.
@@ -72,7 +86,7 @@ The address always shows the page, for example `…#page=50`. Copy it to share t
 
 يعرض الموقع القرآن صفحةً صفحة مثل مصحف المدينة المطبوع. تظهر من كل آية كلماتها الأولى فقط، في المكان نفسه الذي تقع فيه على الصفحة المطبوعة. اقرأ بداية الآية، ثم أكمل باقيها من حفظك.
 
-يشرح هذا الدليل ما يعمل الآن (المرحلة السابعة).
+يشرح هذا الدليل ما يعمل الآن (المرحلة الثامنة).
 
 ### اختيار اللغة
 
@@ -95,6 +109,7 @@ The address always shows the page, for example `…#page=50`. Copy it to share t
 اضغط **انتقال** (أيقونة القائمة) في الأعلى:
 
 - اكتب رقم صفحة من ١ إلى ٦٠٤ ثم اضغط **اذهب**. يمكنك كتابة ٤٥ أو 45.
+- أو اكتب في **ابحث عن سورة** اسمًا أو رقمًا. لا يلزم أن يكون الإملاء دقيقًا: "البقره" أو "baqara" تكفي. اضغط Enter لفتح أول نتيجة.
 - أو اختر سورة أو جزءًا من القائمتين.
 
 زر الرجوع في المتصفح يعيدك إلى حيث كنت قبل الانتقال.
@@ -107,6 +122,7 @@ The address always shows the page, for example `…#page=50`. Copy it to share t
 - **إظهار علامات نهاية الآيات:** علامة ﴿ ﴾ في آخر كل آية. ظاهرة افتراضيًا.
 - **النظرة:** انقر على آية (أو اضغط P) لترى كلماتها كلها لثوانٍ. متوقفة افتراضيًا. انظر أدناه.
 - **وضع الاختبار:** إخفاء رؤوس الآيات وإظهارها واحدًا بعد الآخر. انظر أدناه.
+- **إظهار علامات الأجزاء والأحزاب والأرباع في الهامش:** ظاهرة افتراضيًا. انظر أدناه.
 - **التكبير:** من ١٠٠٪ إلى ٢٠٠٪. تكبر الصفحة كلها قطعةً واحدة، وتتنقل فيها بالتمرير.
 - **المظهر:** فاتح أو داكن أو ورقي. في البداية يتبع إعداد جهازك.
 
@@ -131,6 +147,18 @@ The address always shows the page, for example `…#page=50`. Copy it to share t
 ### ما يتذكره الموقع
 
 تُحفظ إعداداتك وآخر صفحة قرأتها وتحديدات الحفظ والعلامات المرجعية في هذا المتصفح، فيفتح الموقع عليها في المرة القادمة. في النافذة الخاصة، أو إذا منع المتصفح الحفظ، يعمل الموقع لكنه لا يتذكر.
+
+### علامات الأجزاء والأحزاب والأرباع
+
+كما في المصحف المطبوع، تظهر في الهامش الخارجي علامة صغيرة حيث يبدأ جزء أو حزب أو ربع حزب، مثل "ربع الحزب ١". تصغر الصفحة قليلًا بسببها، ويمكنك إخفاؤها من الإعدادات.
+
+### طباعة كتيّب
+
+في **الإعدادات**، تحت **طباعة كتيّب**، اختر الصفحة الأولى والأخيرة (حتى ٤٠ صفحة في المرة) ثم اضغط **اطبع**. تُطبع كل صفحة من المصحف على ورقة A5 مستقلة، مع هامش أوسع في جهة التجليد. يُطبع النص بالأسود على الأبيض (وتبقى ألوان عناوين السور)، بعدد كلمات رأس الآية والعلامات التي اخترتها.
+
+### الاستخدام دون اتصال
+
+بعد زيارتك الأولى يعمل الموقع دون إنترنت، ويمكنك تثبيته كتطبيق من قائمة المتصفح (مثل "تثبيت التطبيق" أو "الإضافة إلى الشاشة الرئيسية"). تُحفظ كل صفحة عند فتحها أول مرة. ولحفظ الصفحات الـ٦٠٤ كلها مرة واحدة اضغط **تنزيل كل الصفحات (نحو ٩٥ ميغابايت)** تحت **الاستخدام دون اتصال** في الإعدادات. إذا فتحت دون اتصال صفحة لم تُحفظ بعد، يخبرك الموقع بذلك وتبقى الصفحة التي كنت عليها.
 
 ### مشاركة صفحة
 

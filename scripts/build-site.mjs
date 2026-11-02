@@ -1,16 +1,28 @@
 #!/usr/bin/env node
-// Gather the files the site needs into one folder for GitHub Pages: index.html, src/, the fonts and
-// data/quran.json. docs/, scripts/ and the source files in data/sources/ are not published.
+// Gather the files the site needs into one folder for GitHub Pages: index.html, the app manifest and
+// service worker, src/, the fonts and icons, and data/quran.json. docs/, scripts/ and the source
+// files in data/sources/ are not published. The service worker gets two version stamps: a hash of
+// the app files (so each deploy refreshes the saved app) and a hash of the page fonts' checksums
+// (so the saved page fonts are kept until the fonts change).
 //
 // Usage: node scripts/build-site.mjs [folder]   (default: _site, inside the project)
 // The folder is replaced, but only if it is missing or was made by this script (marker file).
 
-import { cpSync, existsSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
-import { isAbsolute, join, relative, resolve } from 'node:path';
+import { createHash } from 'node:crypto';
+import { cpSync, existsSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { isAbsolute, join, relative, resolve, sep } from 'node:path';
 import { ROOT } from './lib/sources.mjs';
 
 const MARKER = '.built-by-build-site';
-const FILES = ['index.html', 'src', 'assets/fonts', 'data/quran.json'];
+const FILES = [
+  'index.html',
+  'manifest.webmanifest',
+  'sw.js',
+  'src',
+  'assets/fonts',
+  'assets/icons',
+  'data/quran.json',
+];
 const out = resolve(ROOT, process.argv[2] || '_site');
 const fail = (msg) => {
   console.error(`build-site: ${msg}`);
@@ -30,6 +42,28 @@ for (const rel of FILES) {
   if (!existsSync(from)) fail(`${rel} is missing`);
   cpSync(from, join(out, rel), { recursive: true });
 }
+// Version stamps for the service worker.
+const files = (dir) =>
+  readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
+    e.isDirectory() ? files(join(dir, e.name)) : [join(dir, e.name)],
+  );
+const app = createHash('sha256');
+for (const f of files(out).sort()) {
+  const rel = relative(out, f).split(sep).join('/');
+  if (rel.startsWith('assets/fonts/qcf2/') || rel === 'sw.js') continue;
+  app.update(rel).update(readFileSync(f));
+}
+app.update(readFileSync(join(out, 'sw.js')));
+const fonts = createHash('sha256').update(readFileSync(join(ROOT, 'data/sources/qcf2.sha256')));
+const sw = readFileSync(join(out, 'sw.js'), 'utf8');
+const stamped = sw
+  .replace("const VERSION = 'dev';", `const VERSION = '${app.digest('hex').slice(0, 12)}';`)
+  .replace(
+    "const FONTS_VERSION = 'dev';",
+    `const FONTS_VERSION = '${fonts.digest('hex').slice(0, 12)}';`,
+  );
+if (stamped === sw || stamped.includes("'dev'")) fail('sw.js: the version words were not found');
+writeFileSync(join(out, 'sw.js'), stamped);
 writeFileSync(join(out, '.nojekyll'), ''); // serve the files as they are
 writeFileSync(join(out, MARKER), '');
 

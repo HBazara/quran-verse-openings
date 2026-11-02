@@ -4,6 +4,7 @@
 
 import { formatNumber, formatPercent, t, toWesternDigits } from './i18n.js';
 import { juzAt, surahAt } from './places.js';
+import { findSurahs } from './search.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -29,9 +30,50 @@ export function setupControls(quran, app) {
   const words = $('words-choices');
   const markers = $('markers-toggle');
   const peek = $('peek-toggle');
+  const marginToggle = $('margin-toggle');
   const test = $('test-toggle');
   const zoom = $('zoom-select');
   const themes = $('theme-choices');
+  const search = $('surah-search');
+  const searchStatus = $('search-status');
+  const results = $('search-results');
+  const surahText = (s) =>
+    t('surah.option', { n: formatNumber(s.surah), latin: s.transliteration, arabic: s.name });
+
+  // Surah search: results as you type (at most 20 shown); Enter opens the first one.
+  function drawResults() {
+    const query = search.value;
+    const found = findSurahs(quran.surahs, query);
+    results.replaceChildren(
+      ...found.slice(0, 20).map((s) => {
+        const li = document.createElement('li');
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'result';
+        b.dataset.surah = String(s.surah);
+        b.textContent = surahText(s);
+        li.append(b);
+        return li;
+      }),
+    );
+    searchStatus.textContent = !query.trim()
+      ? ''
+      : found.length
+        ? t('search.count', { n: formatNumber(found.length) })
+        : t('search.none');
+  }
+  search.addEventListener('input', drawResults);
+  search.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    results.querySelector('button')?.click();
+  });
+  results.addEventListener('click', (e) => {
+    const b = e.target instanceof Element ? e.target.closest('button[data-surah]') : null;
+    if (!b) return;
+    surahSelect.value = b.dataset.surah;
+    app.goTo(quran.surahs[Number(b.dataset.surah) - 1].page);
+  });
 
   for (const s of quran.surahs) surahSelect.append(new Option('', String(s.surah)));
   for (const j of quran.juz) juzSelect.append(new Option('', String(j.juz)));
@@ -40,12 +82,9 @@ export function setupControls(quran, app) {
 
   function fillTexts() {
     quran.surahs.forEach((s, i) => {
-      surahSelect.options[i].text = t('surah.option', {
-        n: formatNumber(s.surah),
-        latin: s.transliteration,
-        arabic: s.name,
-      });
+      surahSelect.options[i].text = surahText(s);
     });
+    drawResults();
     quran.juz.forEach((j, i) => {
       juzSelect.options[i].text = t('juz.option', { n: formatNumber(j.juz) });
     });
@@ -81,6 +120,7 @@ export function setupControls(quran, app) {
   words.addEventListener('change', (e) => app.setWords(Number(e.target.value)));
   markers.addEventListener('change', () => app.setMarkers(markers.checked));
   peek.addEventListener('change', () => app.setPeek(peek.checked));
+  marginToggle.addEventListener('change', () => app.setMargin(marginToggle.checked));
   test.addEventListener('change', () => app.setTest(test.checked));
   zoom.addEventListener('change', () => app.setZoom(Number(zoom.value)));
   themes.addEventListener('change', (e) => app.setTheme(e.target.value));
@@ -100,6 +140,7 @@ export function setupControls(quran, app) {
     for (const r of words.querySelectorAll('input')) r.checked = Number(r.value) === view.words;
     markers.checked = view.markers;
     peek.checked = view.peek;
+    marginToggle.checked = view.margin;
     test.checked = view.test;
     zoom.value = String(view.zoom);
     for (const r of themes.querySelectorAll('input')) r.checked = r.value === view.theme;

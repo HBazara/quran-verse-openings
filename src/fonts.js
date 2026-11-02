@@ -15,10 +15,16 @@ export function loadPageFont(page) {
     });
     pageFonts.set(
       page,
-      face.load().then((loaded) => {
-        document.fonts.add(loaded);
-        return loaded;
-      }),
+      face.load().then(
+        (loaded) => {
+          document.fonts.add(loaded);
+          return loaded;
+        },
+        (error) => {
+          pageFonts.delete(page); // not saved for offline use, or no network: try again next time
+          throw error;
+        },
+      ),
     );
   }
   return pageFonts.get(page);

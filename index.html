@@ -4,7 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title></title>
-    <link rel="icon" href="data:," />
+    <link rel="icon" href="assets/icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="assets/icons/icon-192.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <meta name="theme-color" content="#2f6b46" />
     <link rel="stylesheet" href="src/styles.css" />
     <script type="module" src="src/app.js"></script>
   </head>
@@ -181,6 +184,20 @@
           <p id="page-error" class="error" aria-live="polite"></p>
         </form>
         <div class="field">
+          <label for="surah-search" data-i18n="search.label"></label>
+          <input
+            id="surah-search"
+            type="search"
+            autocomplete="off"
+            spellcheck="false"
+            enterkeyhint="go"
+            aria-describedby="search-status"
+            data-i18n-placeholder="search.placeholder"
+          />
+          <p id="search-status" class="muted" aria-live="polite"></p>
+          <ul id="search-results" class="results"></ul>
+        </div>
+        <div class="field">
           <label for="surah-select" data-i18n="goto.surah"></label>
           <select id="surah-select"></select>
         </div>
@@ -215,6 +232,10 @@
           <label for="markers-toggle" data-i18n="settings.markers"></label>
         </div>
         <div class="check">
+          <input id="margin-toggle" type="checkbox" />
+          <label for="margin-toggle" data-i18n="settings.margin"></label>
+        </div>
+        <div class="check">
           <input id="peek-toggle" type="checkbox" />
           <label for="peek-toggle" data-i18n="settings.peek"></label>
         </div>
@@ -243,6 +264,45 @@
             </label>
           </div>
         </fieldset>
+        <section id="offline" class="field" aria-labelledby="offline-title">
+          <h2 id="offline-title" class="panel-title" data-i18n="offline.title"></h2>
+          <p class="muted" data-i18n="offline.hint"></p>
+          <p id="offline-status" aria-live="polite"></p>
+          <button
+            id="offline-download"
+            class="go"
+            type="button"
+            data-i18n="offline.download"
+          ></button>
+        </section>
+        <form id="print-form" class="field" novalidate>
+          <h2 class="panel-title" data-i18n="print.title"></h2>
+          <div class="row">
+            <label class="stack">
+              <span data-i18n="print.from"></span>
+              <input
+                id="print-from"
+                type="text"
+                inputmode="numeric"
+                autocomplete="off"
+                aria-describedby="print-error"
+              />
+            </label>
+            <label class="stack">
+              <span data-i18n="print.to"></span>
+              <input
+                id="print-to"
+                type="text"
+                inputmode="numeric"
+                autocomplete="off"
+                aria-describedby="print-error"
+              />
+            </label>
+          </div>
+          <p class="muted" data-i18n="print.hint"></p>
+          <button class="go" type="submit" data-i18n="print.go"></button>
+          <p id="print-error" class="error" aria-live="polite"></p>
+        </form>
       </section>
     </div>
     <p id="status" class="status" role="status"></p>
@@ -255,5 +315,7 @@
       <button id="test-hide" class="pill" type="button" data-i18n="test.hide"></button>
       <button id="test-end" class="pill" type="button" data-i18n="test.end"></button>
     </div>
+    <!-- Pages for printing; shown only on paper. -->
+    <div id="print-area" class="print-area"></div>
   </body>
 </html>
