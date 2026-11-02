@@ -4,7 +4,8 @@
 // is placed on its own, and its words are spread (justified) or centred as the layout says.
 
 import { pageFontFamily } from './fonts.js';
-import { formatNumber, t, tIn } from './i18n.js';
+import { formatNumber, language, t, tIn } from './i18n.js';
+import { pageHeading } from './places.js';
 
 // Geometry in print pixels: the 1421H print scanned at 750 px page width. The page scales as one unit.
 export const PAGE = { width: 561, height: 900 };
@@ -138,6 +139,36 @@ function medallion(mark, top) {
   return { el, said };
 }
 
+// The heading above the frame, as in the print (not on pages 1 and 2): the juz on the right and the
+// surah names on the left, always in Arabic like the rest of the printed page. Screen readers hear it
+// in the interface language.
+function heading(quran, number, sheet, spoken) {
+  const { juz, surahs } = pageHeading(quran, number);
+  const head = document.createElement('div');
+  head.className = 'page-head';
+  head.setAttribute('aria-hidden', 'true');
+  const juzName = document.createElement('span');
+  juzName.textContent = tIn('ar', `heading.juz${juz}`);
+  const names = document.createElement('span');
+  names.className = 'surahs';
+  for (const s of surahs) {
+    const name = document.createElement('span');
+    name.textContent = tIn('ar', 'heading.surah', { name: quran.surahs[s - 1].name });
+    names.append(name);
+  }
+  head.append(juzName, names);
+  sheet.append(head);
+  for (const s of surahs) {
+    const { name, transliteration } = quran.surahs[s - 1];
+    const p = document.createElement('p');
+    p.textContent = t('heading.surah', { name: language() === 'ar' ? name : transliteration });
+    spoken.append(p);
+  }
+  const p = document.createElement('p');
+  p.textContent = t(`heading.juz${juz}`);
+  spoken.append(p);
+}
+
 // opts: { words: opening words per verse (Infinity shows every word), markers: show verse-end
 // markers, margin: show the juz, hizb and quarter markers in an outer margin, label: the page's
 // accessible name }
@@ -173,6 +204,7 @@ export function renderPage(quran, number, opts) {
 
   const opening = number <= 2;
   const marks = opening ? new Map() : marksFor(quran, number);
+  if (!opening) heading(quran, number, sheet, spoken);
   let k = 0; // position among the non-banner lines of pages 1 and 2
   page.lines.forEach((line, i) => {
     const row = document.createElement('div');

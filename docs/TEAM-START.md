@@ -20,22 +20,23 @@ If PowerShell blocks the script, run it once with `powershell -ExecutionPolicy B
 2. `PROJECT.md`: the full brief. It wins if anything is unclear.
 3. `docs/HANDOFF.md`: the shared log, newest entry at the top. Read at least the entries of the current phase.
 4. `docs/STRUCTURE.md`: the file tree.
-5. `docs/DECISIONS.md`: every decision so far (D1 to D71). Many of them change what the brief alone would suggest.
+5. `docs/DECISIONS.md`: every decision so far (D1 to D75). Many of them change what the brief alone would suggest.
 
 Use `docs/handoff-archive/phase-N.md` only when you need the history of an earlier phase. `docs/DEVLOG.md` has the full story in one place.
 
 ## 2. Where the project stands
 
-_Updated by DOCU at the end of every phase. Last update: 2026-11-02, after the phase 8 commit and push._
+_Updated by DOCU at the end of every phase. Last update: 2026-11-02, after the P8 fixes were pushed._
 
 - **Phase:** all 8 phases are built and audited. Phase 8 (version 2 part B: juz, hizb and quarter markers, print-ready booklet, installable offline app, surah search) got PASS on 2026-11-02. Peek starts switched off (Hassan, D58).
 - **Repo:** https://github.com/HBazara/quran-verse-openings is **public** (Hassan, 2026-11-02, D46).
-- **Last commit:** `44452fb` "Phase 8: search, margin markers, print booklet, offline app", pushed: `origin/main` is `44452fb`. Its Actions run (41511458126) passed check and deploy, so **version 2 is live**. DOCU's phase 8 closing edits (this part, README status, READER and DECISIONS open notes, DEVLOG) came after that commit and go into the next commit.
+- **Last commit:** `ff8141f` "Phase 8 fixes: search, peek, offline updates", on top of `44452fb` "Phase 8: search, margin markers, print booklet, offline app". Pushed: `origin/main` is `ff8141f`. Its Actions run (41515688740) passed check and deploy, so version 2 with the fixes is live. This hash update is a docs-only change for a later commit.
 - **The site is live** at https://hbazara.github.io/quran-verse-openings/. Pages source is "GitHub Actions": `deploy.yml` publishes on `main` only after the checks pass (D57). Every run so far passed, starting with the first (41474933287, P6-02). The fonts are now public without a published license (P6-04, `docs/DATA-SOURCES.md`).
 - **Offline:** the installable app is live (P6-03 done). AUD checks installing and offline use on the real https site.
 - **Checks:** `node scripts/validate.mjs` gives 21 PASS and 1 SKIP; `--full` gives 25 PASS (it needs the QUL databases in `tmp/downloads/qul/x/`).
-- **Open after phase 8:** BUILDER fixed P8-01 (search "aal imran"), P8-03 (deploy delay) and P8-04 (peek hides when switched off), plus a grid focus fix; documented by DOCU, verified by AUD. Not committed yet: ORG commits and pushes them with the doc edits (DOCU sent "docs final"). P8-02: Hassan keeps the margin markers on by default everywhere, phones included (D67); no code change.
-- **Next:** AUD checks the live app (install and offline). Then the open items above, as Hassan decides. No phase 9 is planned. Any fix follows the same path: BUILDER, ORG, DOCU, AUD, then ORG commits and pushes.
+- **After phase 8:** P8-01, P8-03 and P8-04 are fixed, verified by AUD and live; P8-02 is closed (Hassan keeps the margin markers on by default everywhere, D67). Still open for **Hassan**: P6-06, his email address is visible in every commit now that the repo is public; new commits could use a GitHub no-reply address, and old commits stay unless history is rewritten.
+- **Page heading:** the juz and surah names above each page, as in the print, asked for by Hassan, built by BUILDER, documented by DOCU (D72 to D75), **PASS by AUD**. DOCU sent "docs final"; ORG commits and pushes it. Open for **Hassan**: P9-01, 4 Arabic surah names in the data differ from the print by a hamza (surahs 14, 76, 82, 84; see `docs/READER.md`, Known limits); they stay unless he decides otherwise. Note P9-02: the heading is small on phones (7 to 9 px); the reader can zoom.
+- **Next:** AUD checks the live app (install and offline on https). Hassan decides P6-06. No phase 9 is planned; any new work follows the same path: BUILDER, ORG, DOCU, AUD, then ORG commits after DOCU's "docs final".
 
 ## 3. Standing rules from Hassan
 
@@ -59,7 +60,7 @@ _Updated by DOCU at the end of every phase. Last update: 2026-11-02, after the p
 
 1. Add a `docs/HANDOFF.md` entry: date and time, your role, the phase, "started after restart", and what you think your next step is.
 2. Then, by role, for the current state in part 2:
-   - **ORG:** after AUD's PASS on the P8 fixes and DOCU's "docs final", commit them with the uncommitted doc edits and push.
-   - **AUD:** check the live app (install and offline on https), and the run after the P8 fixes push.
+   - **ORG:** commit DOCU's docs-only hash update with the next change. Apply Hassan's answer on P6-06 if it changes the commit identity.
+   - **AUD:** check the live app (install and offline on https).
    - **BUILDER:** fix any AUD finding on the P8 fixes; Message ORG, DOCU and AUD after any change.
    - **DOCU:** record any fix or decision on P8-01 to P8-04. Keep part 2 of this file current.

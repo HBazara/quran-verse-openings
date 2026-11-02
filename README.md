@@ -6,7 +6,7 @@ It is a static site with plain HTML, CSS and JavaScript, with no backend and no 
 
 ## Status
 
-**All 8 phases are built, audited and live** (version 2, commit `44452fb`, 2026-11-02). The site is live at https://hbazara.github.io/quran-verse-openings/ (see Deploy).
+**All 8 phases are built, audited and live** (version 2, commits `44452fb` and `ff8141f`, 2026-11-02). The site is live at https://hbazara.github.io/quran-verse-openings/ (see Deploy).
 
 Done so far:
 
@@ -21,8 +21,9 @@ Done so far:
 - Memorization tools (BUILDER): peek (tap a verse, or press P, to see all of it for 4 seconds; off until switched on in Settings), test mode (hide the openings and show them one by one), a memorization tracker (mark pages memorized or needs review, a grid of all 604 pages by juz), and bookmarks.
 
 - Extras (BUILDER): juz, hizb and quarter markers in the page margin, surah search by name or number, printing a booklet on A5 sheets, and an installable app that works offline.
+- Page heading (BUILDER, after phase 8, at Hassan's request; passed the audit): the juz and the surah name above each page, as in the print.
 
-After phase 8 (see `docs/AUDIT.md`): BUILDER fixed P8-01 (the search spelling "aal imran"), P8-03 (a new deploy could take up to 10 minutes to show) and P8-04 (peek did not hide at once when switched off); AUD verified the fixes, and they go live with the next push. Hassan kept the margin markers on by default on phones too (P8-02).
+After phase 8 (see `docs/AUDIT.md`): BUILDER fixed P8-01 (the search spelling "aal imran"), P8-03 (a new deploy could take up to 10 minutes to show) and P8-04 (peek did not hide at once when switched off); AUD verified the fixes, and they are live (commit `ff8141f`). Hassan kept the margin markers on by default on phones too (P8-02).
 
 See `docs/DEVLOG.md` for the full history.
 

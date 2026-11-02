@@ -11,13 +11,13 @@ How the site draws a mushaf page, and how the reader moves around it. Built by B
 | `src/render.js`                         | Draws one page from `data/quran.json`. Gives each word its verse key (`data-verse`, used by peek and test mode, not by the layout). Holds the page geometry, and `fontPagesFor`, which says which page fonts a page needs (page 2 also needs page 1's). |
 | `src/fonts.js`                          | Loads the QCF2 page font for each page when it is needed, and waits for the banner and Bismillah fonts.                                                                                                                                                 |
 | `src/i18n.js`                           | Loads `src/i18n/en.json` or `src/i18n/ar.json`, fills every element marked `data-i18n` or `data-i18n-label`, formats numbers and percentages, and turns Arabic-Indic and Persian digits into Western ones.                                              |
-| `src/i18n/en.json`, `src/i18n/ar.json`  | All interface text. 78 keys, the same in both files.                                                                                                                                                                                                    |
+| `src/i18n/en.json`, `src/i18n/ar.json`  | All interface text. 109 keys, the same in both files.                                                                                                                                                                                                   |
 | `src/controls.js`                       | The contents of the Go to panel (page box, surah list, juz list) and the Settings panel (words, markers, peek, test mode, zoom, theme).                                                                                                                 |
 | `src/panels.js`                         | Opens and closes the two panels: one at a time; Escape or a click outside closes; Escape puts focus back on the button.                                                                                                                                 |
 | `src/input.js`                          | Keyboard arrows and swipe.                                                                                                                                                                                                                              |
 | `src/storage.js`                        | The only file that uses `localStorage`. Every read and write is in try/catch.                                                                                                                                                                           |
 | `src/language.js`                       | The language screen: shows it, highlights and focuses one choice, makes the reader behind it inert, and returns the choice.                                                                                                                             |
-| `src/places.js`                         | The surah and the juz at the top of a page, and the pages of each juz (for the memorization grid). Used by `controls.js` and `progress.js`.                                                                                                             |
+| `src/places.js`                         | The surah and the juz at the top of a page, the pages of each juz (for the memorization grid), and the page heading (`pageHeading`, the print's rule). Used by `controls.js`, `progress.js` and `render.js`.                                            |
 | `src/peek.js`                           | Peek: a tap on a verse shows its hidden words for 4 seconds.                                                                                                                                                                                            |
 | `src/test-mode.js`                      | Test mode: hides the openings on screen and shows them one at a time.                                                                                                                                                                                   |
 | `src/progress.js`                       | The memorization tracker and bookmarks in the Go to panel, and the bookmark ribbon on the page.                                                                                                                                                         |
@@ -38,7 +38,7 @@ There is no build step for local use. For the live site, `scripts/build-site.mjs
 4. Verse-end markers are shown by default. The reader can hide them in Settings.
 5. Surah banner lines are drawn with one glyph of the surah banner font (`surahs[].banner`, QUL 458), 481 print pixels wide like the print.
 6. Bismillah lines on pages 3 to 604 are drawn with one glyph of the Bismillah font: U+FC21 in `QCF2BSML`, about 273 print pixels wide. Page 2's Bismillah is drawn with page 1's QCF2 glyphs for verse 1:1 (without its verse-end marker), taken from the data, because the print repeats that same calligraphy. So page 2 also loads page 1's font (`fontPagesFor` in `src/render.js`, used by `src/app.js`).
-7. The page number is drawn at the bottom in Arabic-Indic digits.
+7. The page number is drawn at the bottom in Arabic-Indic digits. On pages 3 to 604, the page heading is drawn above the frame, as in the print (see Page heading).
 8. There is no fallback font for Quran text. Each page waits for its own font (`font-display: block`).
 
 The page is `dir="rtl"` and `lang="ar"`. The drawn glyphs are hidden from screen readers, because they are glyph codes. Instead, each page has hidden text for screen readers: the visible opening words (Unicode text from QUL 312), the surah names, and the Bismillah (the text of verse 1:1).
@@ -139,7 +139,7 @@ The test starts again, with all openings hidden, only when the pages on screen c
 - **Memorization:** a summary ("Memorized pages: 1. Needs review: 1.") and a grid of all 604 pages, one row per juz, with the juz number at the start of the row. A page belongs to the juz at its top (the same rule as the juz list). A memorized page is a filled green square, a page that needs review an amber ring, and the pages on screen are outlined. A tap on a square opens that page.
 - The grid is for mouse and touch only: its squares are not in the tab order and are hidden from screen readers, because the page box above does the same job from the keyboard. A click or tap on a square opens the page without moving the keyboard focus into the grid.
 
-**Bookmarks.** A page is bookmarked with the Bookmark button under Pages on screen. The **Bookmarks** list in the Go to panel shows each one as "Page 50, Ali 'Imran" ("صفحة ٥٠، آل عمران" in Arabic), using the surah at the top of the page, in page order. A tap opens the page, and the X button next to it removes the bookmark. A bookmarked page shows a small ribbon in its top margin, outside the text block.
+**Bookmarks.** A page is bookmarked with the Bookmark button under Pages on screen. The **Bookmarks** list in the Go to panel shows each one as "Page 50, Ali 'Imran" ("صفحة ٥٠، آل عمران" in Arabic), using the surah at the top of the page, in page order. A tap opens the page, and the X button next to it removes the bookmark. A bookmarked page shows a small ribbon at the page's top-right corner, outside the frame, so it never covers the page heading or a word.
 
 ## Keyboard and touch
 
@@ -169,6 +169,18 @@ The medallion text is always Arabic with Arabic-Indic digits, like the print. Sc
 - deletes old app caches when a new version installs.
 
 `scripts/build-site.mjs` stamps `sw.js` with a hash of the app files (`VERSION`) and a hash of `data/sources/qcf2.sha256` (`FONTS_VERSION`). In Settings, **Offline use** shows "Pages available offline: N of 604." and a button "Download all pages (about 95 MB)", which saves all 604 page fonts with progress. A page that is not saved, opened offline, shows "This page is not saved for offline use yet. Connect to the internet, or download all pages in Settings." and the page on screen stays. Offline needs https or localhost (GitHub Pages is https); without it, the Offline use section is hidden and the reader works online as before.
+
+## Page heading (after phase 8)
+
+Hassan asked for the surah name and the current juz at the top of each page. Pages 3 to 604 have the print's heading above the frame: the juz on the right, in words ("الجزء الثاني"), and the surah name or names on the left ("سورة البقرة"; on page 604 three names). Pages 1 and 2 have none, as in the print. The heading is always Arabic, like the print and the margin medallions, because it is part of the printed page. It uses the same system font as the medallions, at 16 px. Screen readers hear it in the interface language before the verses, for example "Surah Al-Baqarah" and "Juz 2". It is printed in booklets too.
+
+The rule, read by BUILDER from the PDF on all 85 pages where a surah or a juz changes, and checked on every page (`pageHeading` in `src/places.js`). The simple rule "the juz and surah at the top of the page" differs from the print on 38 pages (D74):
+
+1. The juz is the one that fills most of the page. Page 121 still shows juz 6 although juz 7 starts on line 9; page 502 already shows juz 26.
+2. The surah is the one with more than half of the page's verse lines. Page 385 keeps An-Naml, 7 lines to 6. When no surah has that, the heading names every surah that begins on the page (pages 596 to 604).
+3. A surah the first two steps leave out on every page is named on the page where its first verse is (the banner of some surahs sits at the bottom of the page before): Al-A'la on page 591, Al-Layl on page 595. So every surah from 2 to 114 is named on at least one page (Al-Fatiha is only on page 1, which has no heading).
+
+The surah names come from `data/quran.json` (Tanzil metadata, checked by `validate`). Four of them differ from the print by a hamza: ابراهيم (print إبراهيم), الانسان (print الإنسان), الإنفطار (print الانفطار) and الإنشقاق (print الانشقاق). They stay as they are unless Hassan decides otherwise (P9-01, see Known limits).
 
 ## What the browser remembers
 
@@ -205,5 +217,7 @@ Pages 1 and 2, after AUD asked for a check of the round-frame pages: all 14 line
 - The inner shape of the Bismillah from `QCF2BSML` differs from the print. Hassan kept this font (D44); the shape is carried to phase 6 (P3-03, D43).
 - The surah banner ornament differs from the print. To be polished in phase 6 (AUD finding P3-04).
 - The round frame of pages 1 and 2 and the printed frame ornaments are not drawn. The reader draws a simple double border instead.
+- Four surah names in the page heading (and wherever the Arabic surah name shows) are spelled differently from the print, because the names come from Tanzil's metadata: surah 14 (data ابراهيم, print إبراهيم), 76 (data الانسان, print الإنسان), 82 (data الإنفطار, print الانفطار) and 84 (data الإنشقاق, print الانشقاق). About 12 pages show the data's spelling. AUD confirmed all four on the print (open finding P9-01; Hassan decides whether to show the print's spelling).
+- On a phone the page heading is small: about 7 px on screen at 320 px wide and 9 px at 390 px, because the whole page scales as one unit. The reader can zoom (note P9-02).
 - The margin medallions are simplified shapes; their labels, side and line match the print (checked by AUD on pages 5, 22, 140 and 264).
 - With the margin markers on, the page is 64 px wider, so the Quran text on a phone is about 17 px instead of about 19 px Hassan kept the markers on by default on phones too (P8-02, D67); readers can switch them off for bigger text.

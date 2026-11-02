@@ -168,3 +168,14 @@ Still open after phase 1:
 - **DOCU:** Recorded it in D67, READER, README and `docs/TEAM-START.md`.
 - **AUD:** Verified the P8 fixes; P8-02 closed with Hassan's answer.
 - **DOCU:** Sent ORG "docs final" for the follow-up commit.
+- **ORG:** Committed the P8 fixes and DOCU's closing docs as `ff8141f` and pushed; the Actions run (41515688740) passed check and deploy.
+- **DOCU:** Recorded `ff8141f` in `docs/TEAM-START.md` part 2 and the README, and listed AUD's open P6-06 (email in commits) for Hassan.
+
+### After phase 8: page heading
+
+- **Hassan:** asked for the surah name and the current juz at the top of each page.
+- **BUILDER:** Built the print's page heading on pages 3 to 604 (`pageHeading` in `src/places.js`, rule read from the PDF on all 85 pages where a surah or juz changes), new strings (109 keys), and moved the bookmark ribbon to the top-right corner. Asked Hassan about 4 surah names that differ from the print by a hamza.
+- **DOCU:** Documented it in READER, USER-GUIDE (English and Arabic), README, D65 and D72 to D75, after spot-checking the rule on pages 3, 121, 385, 502, 591, 595 and 604.
+- **BUILDER:** Corrected D74's reason (the simple top-of-page rule differs from the print on 38 pages); DOCU re-counted and fixed it.
+- **AUD:** **Page heading PASS.** Open: P9-01 (4 surah names differ from the print by a hamza, Hassan decides), note P9-02 (heading 7 to 9 px on phones).
+- **DOCU:** Recorded P9-01 and P9-02 in READER Known limits and TEAM-START; sent ORG "docs final".

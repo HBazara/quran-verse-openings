@@ -16,6 +16,64 @@ Template:
 
 ---
 
+## 2026-11-02, DOCU, page heading closed
+
+- Did: Recorded AUD's PASS for the page heading. Added P9-01 (4 hamza spellings, as AUD confirmed on the print) and P9-02 (heading 7 to 9 px on phones) to READER Known limits; TEAM-START part 2 and README updated; DEVLOG. Sent ORG "docs final".
+- Files changed: `docs/READER.md`, `docs/TEAM-START.md`, `README.md`, `docs/DEVLOG.md`, `docs/HANDOFF.md`.
+- Messages sent: ORG ("docs final"), AUD (recorded).
+- Open items: Hassan decides P9-01 and P6-06. Record the commit hash after ORG's push.
+
+## 2026-11-02, AUD, Page heading
+
+- Did: Audited the page heading (Hassan's request after Phase 8): compared with the print on about 34 pages, fit, screen readers, themes, phone, print, overlay and hidden-word tests. PASS. P9-01 (four surah names spelled differently from the print) and P9-02 (small on phones) noted.
+- Files changed: docs/AUDIT.md, docs/HANDOFF.md.
+- Messages sent: BUILDER, ORG, DOCU (PASS; ORG commits and pushes).
+- Open items: Hassan: P9-01 hamza spellings, P6-06 email.
+
+## 2026-11-02 19:40, ORG, after Phase 8 (page heading)
+
+- Did: Tidy pass on BUILDER's page heading (Hassan's request after Phase 8). validate 21 pass + 1 skip, no em dashes, i18n 109 = 109 keys with none empty, no debug lines. The 30 `heading.juzN` strings are ordinal labels ("Juz 1", "الجزء الأول"), not Quran text, and the surah names come from `data/quran.json` (Rule 1 is kept). Ran Prettier on `docs/HANDOFF.md` (CRLF on disk only). The built site (634 files, `tmp/org9/`, removed afterwards) shows the right heading on page 50 (juz 3, Al-Baqarah and Al-Imran on the spread) and page 582 (juz 29 and 30), and none on page 1. No console errors or warnings, no failed requests. The server ran inside the test and stopped with it. No new, moved or renamed files, so no STRUCTURE change.
+- Files changed: `docs/HANDOFF.md`.
+- Messages sent: AUD, DOCU (tidy done), BUILDER (clean).
+- Open items: AUD's audit, then DOCU's "docs final", then one commit for the heading plus DOCU's docs-only update.
+
+## 2026-11-02, DOCU, page heading documented
+
+- Did: Documented BUILDER's page heading after reading the `render.js` diff and running `pageHeading` on pages 3, 121, 385, 502, 591, 595, 604 (all match BUILDER's description; surahs 2 to 114 are each named somewhere). READER (files, drawing step 7, Bookmarks ribbon, new "Page heading" section with the rule and the 4 hamza names), USER-GUIDE English and Arabic (new section, ribbon corner), README done list, D65 note, D72 to D75, TEAM-START (D1 to D75, new work and the hamza question for Hassan), DEVLOG.
+- Files changed: `docs/READER.md`, `docs/USER-GUIDE.md`, `README.md`, `docs/DECISIONS.md`, `docs/TEAM-START.md`, `docs/DEVLOG.md`, `docs/HANDOFF.md`.
+- Messages sent: AUD (ready to audit), BUILDER (recorded), ORG (wait for "docs final").
+- Open items: Hassan on the 4 hamza names. "docs final" after AUD's PASS.
+- Update: BUILDER corrected D74 (the top-of-page rule differs from the print on 38 pages, for example 62, 106, 502, 595 to 604; pages 121 and 385 tested other wrong rules) and step 3 (the page with verse 1). DOCU re-counted 38 with `src/places.js` and fixed D74 and READER. AUD told.
+
+## 2026-11-02 16:00, BUILDER, after phase 8 (page heading, asked by Hassan)
+
+- Did: Hassan asked for the surah name and the juz at the top of each page. Pages 3 to 604 now have the print's heading above the frame: the juz in words on the right ("الجزء الثاني"), the surah name or names on the left ("سورة البقرة"). Pages 1 and 2 have none, as in the print. Always Arabic like the print; screen readers hear it in the interface language before the verses. It prints in the booklet. The rule, read from the print on all 85 pages where a surah or a juz changes (`pageHeading` in `src/places.js`): the juz that fills most of the page; the surah with more than half of the page's verse lines, else every surah that begins on the page; a surah left out everywhere is named where it begins (Al-A'la on 591, Al-Layl on 595). The bookmark ribbon moved to the page's top corner so it never covers the juz name.
+- Tests: `tmp/tools/heading_checks.py` 17 of 17 (every page against the print table `tmp/header/print-truth.json` and the 517 one-surah pages, fit, screen readers in both languages, three themes, phone, ribbon, print). `tmp/tools/heading_vs_print.py` makes side-by-side images (`tmp/header/compare-*.png`, `rest-*.png`). Overlay identical to Phase 3 (markers off) and Phase 8 (markers on) on every line of 32 pages; movement 132 of 132; phase4 65, phase5 46, phase6 26, phase7 41, phase8 52 (its marker check now finds the marker line, since the heading lines come first); validate 21 + 1 skip, `--full` 25; 109 equal strings; Prettier clean; no em dashes.
+- Files changed: `src/places.js`, `src/render.js`, `src/styles.css`, `src/i18n/en.json`, `src/i18n/ar.json`. Not committed.
+- Messages sent: ORG, DOCU, AUD (handoff).
+- Open items: Hassan: 4 surah names in the data (Tanzil) differ from the print by a hamza (ابراهيم, الانسان, الإنفطار, الإنشقاق); kept as they are unless he decides otherwise. ORG tidy, DOCU docs, AUD audit.
+
+## 2026-11-02, DOCU, after phase 8 (fixes pushed)
+
+- Did: Checked `ff8141f` (pushed) and run 41515688740 (success). Updated TEAM-START part 2 (last commit, all P8 items closed, P6-06 open for Hassan, next steps) and first actions; README status; DEVLOG. CRLF: the working copies of all docs show CRLF because `core.autocrlf` is true; `.gitattributes` (`eol=lf`) stores them as LF, and Prettier passes, so nothing to change.
+- Files changed: `docs/TEAM-START.md`, `README.md`, `docs/DEVLOG.md`, `docs/HANDOFF.md` (docs-only, for a later commit).
+- Messages sent: ORG (hash recorded, CRLF explained).
+- Open items: Hassan decides P6-06.
+
+## 2026-11-02 15:06, BUILDER, after phase 8 (fixes live)
+
+- Did: Checked ORG's `ff8141f` on the live site: `sw.js` has the no-cache downloads (VERSION `48a58a85c073`, fonts version unchanged, so saved page fonts are kept), and the new `search.js`, `peek.js` and `progress.js` are served. In headless Chrome: the reader opens, the service worker is active, "aal imran" finds surah 3, no console errors or warnings.
+- Files changed: `docs/HANDOFF.md`.
+- Messages sent: none.
+- Open items: none for BUILDER.
+
+## 2026-11-02 19:00, ORG, Phase 8 fixes
+
+- Did: After AUD's re-check and DOCU's "docs final", committed BUILDER's P8-01, P8-03 and P8-04 fixes (`src/search.js`, `src/peek.js`, `src/app.js`, `src/progress.js`, `sw.js`), DOCU's Phase 8 closing docs, AUD's AUDIT.md and the Phase 7 and 8 archives as `ff8141f` "Phase 8 fixes: search, peek, offline updates". Prettier flagged CRLF line endings in `docs/HANDOFF.md`. I fixed it before the push (the stored file was already LF). Pre-push: no forbidden files, no em dashes, validate on a clean export 21 pass + 1 skip. Moved `refs/snapshots/phase-8` to this tree. Pushed `44452fb..ff8141f`. Actions run 41515688740: check success, deploy success. The live `sw.js` has the no-cache fix. New team rule agreed with DOCU: after a PASS, ORG commits only after DOCU says "docs final".
+- Files changed: git history (`ff8141f`), `docs/HANDOFF.md`.
+- Messages sent: AUD (run id), DOCU (hash), BUILDER (pushed).
+- Open items: DOCU's docs-only update with this hash goes into a later commit. `tmp/org-site/` stays until Hassan stops my old test server on port 8765. P6-06 (email public in commits) is Hassan's call.
+
 ## 2026-11-02 15:03, BUILDER, after phase 8 (fixes closed)
 
 - Did: AUD verified and closed P8-01, P8-03, P8-04 and the grid focus fix, and closed P8-02 with Hassan's answer. Nothing is open for BUILDER; all eight phases are built.

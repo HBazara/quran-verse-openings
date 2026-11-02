@@ -60,11 +60,15 @@ Open **Go to**. Under **Pages on screen**, mark each page as **Memorized** or **
 
 ### Bookmarks
 
-Open **Go to** and press **Bookmark** next to a page on screen. The page gets a small ribbon at its top. The **Bookmarks** list shows your bookmarks, for example "Page 50, Ali 'Imran". Tap one to open it, or the X next to it to remove it.
+Open **Go to** and press **Bookmark** next to a page on screen. The page gets a small ribbon at its top corner. The **Bookmarks** list shows your bookmarks, for example "Page 50, Ali 'Imran". Tap one to open it, or the X next to it to remove it.
 
 ### What the site remembers
 
 Your settings, the last page you read, your memorization marks and your bookmarks are saved in this browser. Next time, the site opens on that page. In a private window, or if the browser blocks saving, the site still works but forgets.
+
+### Page heading
+
+Above each page, as in the printed mushaf, the juz is shown on the right ("الجزء الثاني") and the surah name on the left ("سورة البقرة"). It is always in Arabic. Pages 1 and 2 have no heading, like the print.
 
 ### Juz, hizb and quarter markers
 
@@ -142,11 +146,15 @@ The address always shows the page, for example `…#page=50`. Copy it to share t
 
 ### العلامات المرجعية
 
-افتح **انتقال** واضغط **علامة مرجعية** بجانب صفحة معروضة، فيظهر شريط صغير أعلى الصفحة. تعرض قائمة **العلامات المرجعية** علاماتك، مثل "صفحة ٥٠، آل عمران". انقر على إحداها لفتحها، أو على علامة X بجانبها لإزالتها.
+افتح **انتقال** واضغط **علامة مرجعية** بجانب صفحة معروضة، فيظهر شريط صغير في الزاوية العليا للصفحة. تعرض قائمة **العلامات المرجعية** علاماتك، مثل "صفحة ٥٠، آل عمران". انقر على إحداها لفتحها، أو على علامة X بجانبها لإزالتها.
 
 ### ما يتذكره الموقع
 
 تُحفظ إعداداتك وآخر صفحة قرأتها وتحديدات الحفظ والعلامات المرجعية في هذا المتصفح، فيفتح الموقع عليها في المرة القادمة. في النافذة الخاصة، أو إذا منع المتصفح الحفظ، يعمل الموقع لكنه لا يتذكر.
+
+### رأس الصفحة
+
+فوق كل صفحة، كما في المصحف المطبوع، يظهر اسم الجزء على اليمين ("الجزء الثاني") واسم السورة على اليسار ("سورة البقرة"). الصفحتان الأولى والثانية بلا رأس، كما في المطبوع.
 
 ### علامات الأجزاء والأحزاب والأرباع
 

@@ -731,10 +731,33 @@ input:focus-visible {
 .line .veil {
   visibility: hidden; /* test mode: an opening not shown yet */
 }
+.page-head {
+  position: absolute; /* the heading above the frame, as in the print */
+  top: 5px;
+  left: 22px;
+  width: 517px;
+  height: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  color: var(--ink);
+  font:
+    400 16px/22px system-ui,
+    'Segoe UI',
+    'Noto Sans Arabic',
+    Tahoma,
+    sans-serif;
+  white-space: nowrap;
+}
+.page-head .surahs {
+  display: flex;
+  gap: 22px;
+}
 .ribbon {
-  position: absolute; /* bookmark, in the page's top margin, outside the text block */
+  position: absolute; /* bookmark, at the top corner of the page, outside the frame and heading */
   top: 0;
-  right: 48px;
+  right: 1px;
   width: 18px;
   height: 30px;
   background: var(--accent);
