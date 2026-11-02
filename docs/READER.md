@@ -1,22 +1,23 @@
 # The reader
 
-How the site draws a mushaf page, and how the reader moves around it. The page drawing was built in phase 3, navigation and settings in phase 4, both by BUILDER. The language picker comes in phase 5.
+How the site draws a mushaf page, and how the reader moves around it. Built by BUILDER: the page drawing in phase 3, navigation and settings in phase 4, the two interface languages in phase 5.
 
 ## Files
 
-| File                                   | What it does                                                                                                                                                                                                           |
-| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `index.html`                           | The page: top bar (Next, page indicator, Previous, view buttons, Go to, Settings), the Go to and Settings panels, status line, and the book area. No interface text in the HTML.                                       |
-| `src/app.js`                           | Loads the strings, `data/quran.json` and the fonts. Holds the state (page, view, words, markers, zoom, theme). Turns pages, switches views, reads and writes the address, saves settings, and scales the pages to fit. |
-| `src/render.js`                        | Draws one page from `data/quran.json`. Holds the page geometry, and `fontPagesFor`, which says which page fonts a page needs (page 2 also needs page 1's).                                                             |
-| `src/fonts.js`                         | Loads the QCF2 page font for each page when it is needed, and waits for the banner and Bismillah fonts.                                                                                                                |
-| `src/i18n.js`                          | Loads `src/i18n/en.json` or `src/i18n/ar.json`, fills every element marked `data-i18n` or `data-i18n-label`, formats numbers and percentages, and turns Arabic-Indic and Persian digits into Western ones.             |
-| `src/i18n/en.json`, `src/i18n/ar.json` | All interface text. 26 keys, the same in both files.                                                                                                                                                                   |
-| `src/controls.js`                      | The contents of the Go to panel (page box, surah list, juz list) and the Settings panel (words, markers, zoom, theme).                                                                                                 |
-| `src/panels.js`                        | Opens and closes the two panels: one at a time; Escape or a click outside closes; Escape puts focus back on the button.                                                                                                |
-| `src/input.js`                         | Keyboard arrows and swipe.                                                                                                                                                                                             |
-| `src/storage.js`                       | The only file that uses `localStorage`. Every read and write is in try/catch.                                                                                                                                          |
-| `src/styles.css`                       | Layout, the banner and Bismillah `@font-face` rules, and hiding words.                                                                                                                                                 |
+| File                                   | What it does                                                                                                                                                                                                               |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `index.html`                           | The page: the language screen, the top bar (Next, page indicator, Previous, view buttons, Go to, Settings, language switch), the Go to and Settings panels, status line, and the book area. No interface text in the HTML. |
+| `src/app.js`                           | Loads the strings, `data/quran.json` and the fonts. Holds the state (page, view, words, markers, zoom, theme). Turns pages, switches views, reads and writes the address, saves settings, and scales the pages to fit.     |
+| `src/render.js`                        | Draws one page from `data/quran.json`. Holds the page geometry, and `fontPagesFor`, which says which page fonts a page needs (page 2 also needs page 1's).                                                                 |
+| `src/fonts.js`                         | Loads the QCF2 page font for each page when it is needed, and waits for the banner and Bismillah fonts.                                                                                                                    |
+| `src/i18n.js`                          | Loads `src/i18n/en.json` or `src/i18n/ar.json`, fills every element marked `data-i18n` or `data-i18n-label`, formats numbers and percentages, and turns Arabic-Indic and Persian digits into Western ones.                 |
+| `src/i18n/en.json`, `src/i18n/ar.json` | All interface text. 29 keys, the same in both files.                                                                                                                                                                       |
+| `src/controls.js`                      | The contents of the Go to panel (page box, surah list, juz list) and the Settings panel (words, markers, zoom, theme).                                                                                                     |
+| `src/panels.js`                        | Opens and closes the two panels: one at a time; Escape or a click outside closes; Escape puts focus back on the button.                                                                                                    |
+| `src/input.js`                         | Keyboard arrows and swipe.                                                                                                                                                                                                 |
+| `src/storage.js`                       | The only file that uses `localStorage`. Every read and write is in try/catch.                                                                                                                                              |
+| `src/language.js`                      | The language screen: shows it, highlights and focuses one choice, makes the reader behind it inert, and returns the choice.                                                                                                |
+| `src/styles.css`                       | Layout, the banner and Bismillah `@font-face` rules, and hiding words.                                                                                                                                                     |
 
 There is no build step. All paths are relative, because GitHub Pages will serve the site under `/quran-verse-openings/`.
 
@@ -62,9 +63,27 @@ The whole page is scaled as one unit to fit the window, so it never reflows and 
 The Go to button (list icon) opens a small panel:
 
 - **Page number:** accepts Western (45), Arabic-Indic (٤٥) and Persian (۴۵) digits. It must be 1 to 604. Anything else shows "Enter a page number from 1 to 604." and nothing moves.
-- **Surah:** a list of the 114 surahs, shown as "18. Al-Kahf الكهف" in English and "١٨. الكهف" in Arabic. Picking one goes to the page where its verse 1 starts. For the 18 surahs whose banner is on the last line of the page before (see `headerPage` in `docs/DATA-FORMAT.md`), that is the page after the banner. Whether to open the banner's page instead is still open (AUD finding P4-01).
+- **Surah:** a list of the 114 surahs, shown as "18. Al-Kahf الكهف" in English and "١٨. الكهف" in Arabic. Picking one goes to the page where its verse 1 starts. For the 18 surahs whose banner is on the last line of the page before (see `headerPage` in `docs/DATA-FORMAT.md`), that is the page after the banner. This follows the print's own surah index (D50). The list keeps the surah you picked while its first page is on screen (for example An-Nas, which starts on page 604 with other surahs); otherwise it shows the surah at the top of the page.
 - **Juz:** a list "Juz 1" to "Juz 30". Picking one goes to the juz's first page.
 - Both lists show the surah and juz at the top of the page on screen.
+
+## Interface languages
+
+The interface is in English or Arabic. The Quran pages are always Arabic and never change.
+
+**Language screen.** Every time the site opens, a screen asks for the language before the mushaf shows. It has the title and a prompt in both languages, and two buttons, "English" and "العربية", each written in its own language. One button is highlighted and focused, so one tap or Enter continues:
+
+1. the language in the address (`lang`), if there is one;
+2. otherwise the last choice (saved as `qvo.lang`);
+3. otherwise the browser's language (an Arabic browser gets Arabic, any other gets English).
+
+While the screen is open, the reader behind it is inert, and the arrow keys and swipes do nothing (D51).
+
+**Header switch.** A button after Settings shows the other language's name ("العربية" in the English interface, "English" in the Arabic one). It changes the language at once, without reloading. The pages on screen are drawn again only to change their labels; no word moves.
+
+**Arabic interface.** The whole page is right to left (`dir="rtl"` on `html`), and the header order is mirrored, but Next and Previous keep their book order: Next is still on the left (D52). The panels open on the left. All labels are Arabic. Numbers use Arabic-Indic digits in the page counter, the page box, the error message, the surah and juz lists, the zoom list and the words choices. The page box still accepts Western, Arabic-Indic and Persian digits. Surahs are listed as "٢. البقرة".
+
+**English interface.** Left to right. Surahs are listed as "2. Al-Baqarah البقرة".
 
 ## Settings
 
@@ -95,7 +114,7 @@ Saved in `localStorage` under `qvo.settings` and `qvo.lastPage`: opening words, 
 | `page`  | 1 to 604                                                          | Always kept up to date.                                                        |
 | `view`  | `single` or `spread`                                              | Always kept up to date.                                                        |
 | `n`     | 1 to 5, or `all` (shows every word; used for AUD's overlay check) | Applies to that visit only. Removed when the reader changes the words setting. |
-| `lang`  | `en` or `ar`                                                      | Interface language, read when the page loads.                                  |
+| `lang`  | `en` or `ar`                                                      | Always kept up to date. Editing it changes the interface language at once.     |
 
 Jumps from the Go to panel add a browser history entry, so Back returns to where you were. Page turns do not (D48).
 

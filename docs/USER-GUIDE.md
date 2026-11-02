@@ -4,7 +4,11 @@
 
 The site shows the Quran page by page, like the printed Madinah mushaf. Each verse shows only its first words, in the same place as on the printed page. Read the opening, then recite the rest of the verse from memory.
 
-This guide covers what works now (phase 4). The language picker comes in phase 5. Until then, add `#lang=ar` to the address and reload to see the buttons in Arabic.
+This guide covers what works now (phase 5).
+
+### Choosing the language
+
+When the site opens, it asks for the language of the buttons and menus: **English** or **العربية**. The one you used last is already highlighted, so one tap or Enter continues. You can change it any time with the language button at the top (it shows "العربية" when the site is in English). The Quran pages are always in Arabic.
 
 ### Turning pages
 
@@ -50,7 +54,11 @@ The address always shows the page, for example `…#page=50`. Copy it to share t
 
 يعرض الموقع القرآن صفحةً صفحة مثل مصحف المدينة المطبوع. تظهر من كل آية كلماتها الأولى فقط، في المكان نفسه الذي تقع فيه على الصفحة المطبوعة. اقرأ بداية الآية، ثم أكمل باقيها من حفظك.
 
-يشرح هذا الدليل ما يعمل الآن (المرحلة الرابعة). اختيار اللغة يأتي في المرحلة الخامسة. حتى ذلك الحين، أضف `#lang=ar` إلى عنوان الصفحة ثم أعد تحميلها لتظهر الأزرار بالعربية.
+يشرح هذا الدليل ما يعمل الآن (المرحلة الخامسة).
+
+### اختيار اللغة
+
+عند فتح الموقع يسألك عن لغة الأزرار والقوائم: **English** أو **العربية**. تكون اللغة التي استخدمتها آخر مرة محددة مسبقًا، فتكفي لمسة واحدة أو مفتاح Enter للمتابعة. يمكنك تغييرها في أي وقت من زر اللغة في الأعلى (يظهر عليه "English" عندما يكون الموقع بالعربية). صفحات المصحف تبقى بالعربية دائمًا.
 
 ### تقليب الصفحات
 

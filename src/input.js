@@ -6,9 +6,10 @@
 const OWN_ARROWS = 'input, select, textarea, [contenteditable]';
 const SWIPE = { minX: 50, maxTime: 800 }; // px and ms; the swipe must also be mostly sideways
 
-export function setupKeys(turn) {
+// active(): false while something covers the reader (the language screen).
+export function setupKeys(turn, active = () => true) {
   document.addEventListener('keydown', (e) => {
-    if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || !active()) return;
     if (e.target instanceof Element && e.target.closest(OWN_ARROWS)) return;
     if (e.key === 'ArrowLeft') {
       e.preventDefault();

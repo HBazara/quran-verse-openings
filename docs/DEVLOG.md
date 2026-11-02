@@ -100,7 +100,19 @@ Still open after phase 1:
 - **ORG:** Phase 4 tidy: nothing moved, renamed or removed. Updated `docs/STRUCTURE.md` (the 4 new `src/` files, `scripts/lib/surah-names.mjs`, `tmp/phase4/`, `tmp/compare/`). Checked validate (18 pass, 1 skip; `--full` 22), that all 26 string keys are used, and that every file loads under `/quran-verse-openings/`.
 - **AUD:** **Phase 4 PASS.** Open: P4-01, which page the surah list opens for the 18 surahs whose banner is on the page before (BUILDER to choose).
 - **DOCU:** Recorded the PASS. README status now says phase 5. `docs/READER.md` notes the current behavior for those 18 surahs and that P4-01 is open.
+- **ORG:** Closed phase 4. Moved the 11 phase 4 entries from `docs/HANDOFF.md` to `docs/handoff-archive/phase-4.md`, and 1 late phase 3 entry to `phase-3.md`. No `tmp/` cleanup: `tmp/phase4/` and `tmp/compare/` stay because the docs point to them. Saved the audited phase 4 state as the git snapshot `refs/snapshots/phase-4` (not a commit). The phase 4 commit and the push of `80d62f6` wait for Hassan.
 
 ### Phase 5: languages
 
 - **AUD:** Started phase 5 with BUILDER.
+- **BUILDER:** Decided P4-01: the surah list opens the page of verse 1, as the print's surah index does (D50).
+- **DOCU:** Checked the print's index (PDF page 622: An-Nisa ٧٧, Yunus ٢٠٨, Al-Hajj ٣٣٢). Recorded D50 and updated `docs/READER.md`.
+- **BUILDER:** Built phase 5. A language screen every time the site opens (English or العربية, the address's, last or browser's language highlighted; reader inert behind it). A header switch that changes the language without reloading. A full right-to-left Arabic interface with Arabic-Indic numbers, Next still on the left. `lang` always written to the address. The surah list keeps the chosen surah while its first page is on screen. New `src/language.js`, 29 string keys. Results: phase 5 tests 46 of 46, phase 4 tests 65 of 65, movement 132 of 132, overlay identical to phase 3. Why: phase 5 of `PROJECT.md`.
+- **DOCU:** Read `src/language.js` and the changes in `src/app.js`, checked the strings (29 keys, equal, none empty) and that validate still passes with an unchanged `data/quran.json`. Updated `docs/READER.md` (new "Interface languages" section, files, address, surah list), `docs/USER-GUIDE.md` (English and Arabic), `README.md`, D48, and added D51 and D52.
+- **ORG:** Phase 5 tidy: nothing moved or removed. Updated `docs/STRUCTURE.md` (`src/language.js`, `tmp/phase5/`). Checked validate (18 pass, 1 skip; `--full` 22), that all 29 string keys are used, and that every file loads under `/quran-verse-openings/`.
+- **AUD:** **Phase 5 PASS.**
+- **DOCU:** Recorded the PASS. README status now says phase 6.
+
+### Phase 6: polish and deploy
+
+- **AUD:** Started phase 6. Open with Hassan: whether the repo goes public (needed for free GitHub Pages, D46). The deploy docs will describe only what is really set up.

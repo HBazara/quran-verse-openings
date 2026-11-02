@@ -1,18 +1,27 @@
-// The reader: loads the data and fonts, shows one page or a two-page spread, and handles page
-// turns, jumps, the address, settings, the keyboard and swipes. The language picker comes in
-// Phase 5.
+// The reader: asks for the interface language, loads the data and fonts, shows one page or a
+// two-page spread, and handles page turns, jumps, the address, settings, the keyboard and swipes.
 //
-// Address: #page=1..604 and view=single|spread always follow the reader, so links and reloads keep
-// the place. When present, n=1..5 or all sets the opening words for this visit only ("all" shows
-// every word, for the overlay check), and lang=en|ar picks the interface language (read on load).
+// Address: #page=1..604, view=single|spread and lang=en|ar always follow the reader, so links and
+// reloads keep the place. When present, n=1..5 or all sets the opening words for this visit only
+// ("all" shows every word, for the overlay check).
 
-import { applyStrings, formatNumber, loadStrings, t } from './i18n.js';
+import {
+  LANGUAGES,
+  applyStrings,
+  formatNumber,
+  language,
+  loadAllStrings,
+  setLanguage,
+  t,
+  tIn,
+} from './i18n.js';
 import { loadFrameFonts, loadPageFont } from './fonts.js';
 import { BISMILLAH_GLYPH, PAGE, fontPagesFor, renderPage } from './render.js';
 import { load, save } from './storage.js';
 import { setupPanels } from './panels.js';
 import { setupKeys, setupSwipe } from './input.js';
 import { setupControls } from './controls.js';
+import { askLanguage, languageScreenOpen } from './language.js';
 
 const LAST_PAGE = 604;
 const NARROW = 900; // below this window width, one page is the default view
@@ -27,6 +36,7 @@ const status = $('status');
 const indicator = $('indicator');
 const nextBtn = $('next');
 const prevBtn = $('prev');
+const langSwitch = $('lang-switch');
 const viewBtns = { single: $('view-single'), spread: $('view-spread') };
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const darkDevice = window.matchMedia('(prefers-color-scheme: dark)');
@@ -64,6 +74,13 @@ function applyTheme() {
   document.documentElement.dataset.theme = theme();
 }
 
+// The status line keeps its string key, so it can change language too.
+function setStatus(key) {
+  status.dataset.key = key || '';
+  status.textContent = key ? t(key) : '';
+}
+
+// Returns the language named in the address, if any.
 function readHash() {
   const h = new URLSearchParams(location.hash.slice(1));
   const page = Number.parseInt(h.get('page'), 10);
@@ -75,15 +92,17 @@ function readHash() {
   const view = h.get('view');
   if (VIEWS.includes(view)) state.view = view;
   else state.view = saved.view || (window.innerWidth < NARROW ? 'single' : 'spread');
-  return h.get('lang') === 'ar' ? 'ar' : 'en';
+  const lang = h.get('lang');
+  return LANGUAGES.includes(lang) ? lang : null;
 }
 
 // A jump (page number, surah, juz) gets its own history entry, so Back returns to the page before.
-// Page turns only replace the address.
+// Page turns and setting changes only replace the address.
 function writeHash(push) {
   const h = new URLSearchParams(location.hash.slice(1));
   h.set('page', String(state.page));
   h.set('view', state.view);
+  h.set('lang', language());
   if (!state.wordsFromAddress) h.delete('n');
   const hash = `#${h.toString()}`;
   if (hash === location.hash) return;
@@ -113,7 +132,7 @@ function fit() {
 function syncControls() {
   controls?.sync({
     page: state.page,
-    top: state.shown[0] || state.page,
+    pages: state.shown.length ? state.shown : [state.page],
     words: state.words,
     markers: saved.markers,
     zoom: saved.zoom,
@@ -221,11 +240,31 @@ function setTheme(name) {
   applyTheme();
 }
 
+// Change the interface language in place, without reloading. The Quran pages do not change; they
+// are drawn again only for their labels (page names for screen readers) and the page counter.
+function switchLanguage(code) {
+  setLanguage(code);
+  applyStrings();
+  const other = code === 'ar' ? 'en' : 'ar';
+  langSwitch.textContent = tIn(other, 'lang.name');
+  langSwitch.lang = other;
+  langSwitch.dir = other === 'ar' ? 'rtl' : 'ltr';
+  langSwitch.title = t('lang.switch');
+  // The page counter sits in the left-to-right arrow group, but reads in the interface direction.
+  indicator.dir = code === 'ar' ? 'rtl' : 'ltr';
+  if (status.dataset.key) setStatus(status.dataset.key);
+  controls?.fillTexts();
+  if (state.quran && state.shown.length) show(0);
+}
+
 // Back, Forward or an edited address.
 function onAddress() {
   const before = [state.page, state.view, state.words].join();
-  readHash();
-  if ([state.page, state.view, state.words].join() !== before) show(0);
+  const lang = readHash();
+  if (lang && lang !== language()) {
+    save('lang', lang);
+    switchLanguage(lang);
+  } else if ([state.page, state.view, state.words].join() !== before) show(0);
 }
 
 async function start() {
@@ -235,10 +274,22 @@ async function start() {
     applyTheme();
     syncControls();
   });
-  const lang = readHash();
-  await loadStrings(lang);
-  applyStrings();
-  status.textContent = t('status.loading');
+  const fromAddress = readHash();
+  await loadAllStrings();
+  // The language screen highlights the address's language, else the last one used, else the
+  // browser's. The reader is prepared behind it in that language.
+  const lastLang = load('lang', null);
+  const highlight =
+    fromAddress ||
+    (LANGUAGES.includes(lastLang) && lastLang) ||
+    (navigator.language?.toLowerCase().startsWith('ar') ? 'ar' : 'en');
+  switchLanguage(highlight);
+  askLanguage(highlight).then((code) => {
+    save('lang', code);
+    if (code !== language()) switchLanguage(code);
+    else writeHash(false);
+  });
+  setStatus('status.loading');
   panels = setupPanels([
     { button: $('goto-toggle'), panel: $('goto-panel') },
     { button: $('settings-toggle'), panel: $('settings-panel') },
@@ -266,16 +317,22 @@ async function start() {
     controls.fillTexts();
     await loadFrameFonts(state.quran.surahs[0].banner, BISMILLAH_GLYPH);
     await show(0);
-    status.textContent = '';
+    setStatus(null);
   } catch (err) {
-    status.textContent = t('status.error');
+    setStatus('status.error');
     throw err;
   }
   nextBtn.addEventListener('click', () => turn(1));
   prevBtn.addEventListener('click', () => turn(-1));
   viewBtns.single.addEventListener('click', () => setView('single'));
   viewBtns.spread.addEventListener('click', () => setView('spread'));
-  setupKeys(turn);
+  langSwitch.addEventListener('click', () => {
+    const next = language() === 'ar' ? 'en' : 'ar';
+    save('lang', next);
+    switchLanguage(next);
+  });
+  // Arrow keys do not turn pages while the language screen is open.
+  setupKeys(turn, () => !languageScreenOpen());
   // No swipe page turns while a zoomed page can be moved sideways.
   setupSwipe(book, turn, () => book.scrollWidth <= book.clientWidth + 1);
   // Re-fit whenever the space for the book changes (window size, the status line appearing or going).

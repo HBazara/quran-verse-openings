@@ -6,7 +6,7 @@ It will be a static site with plain HTML, CSS and JavaScript. It has no backend 
 
 ## Status
 
-**Phase 5 of 8: languages.** Phases 1 (setup and data check), 2 (data pipeline), 3 (core reader) and 4 (navigation and settings) passed the audit.
+**Phase 6 of 8: polish and deploy.** Phases 1 (setup and data check), 2 (data pipeline), 3 (core reader), 4 (navigation and settings) and 5 (languages) passed the audit.
 
 Done so far:
 
@@ -16,8 +16,9 @@ Done so far:
 - Data pipeline (BUILDER): `scripts/build-data.mjs` builds `data/quran.json` (604 pages, 9,046 lines, 114 surahs, 6,236 verses, 83,668 words). `scripts/validate.mjs` runs 18 checks, or 22 with `--full`. All pass.
 - Core reader (BUILDER): whole pages in the printed layout, with only the first words of each verse visible, surah banners, Bismillah lines, one page or two-page view, Next and Previous. See `docs/READER.md`.
 - Navigation and settings (BUILDER): go to a page, surah or juz; settings for opening words, verse-end markers, zoom and theme, saved in the browser; keyboard arrows and swipe; the last page is remembered.
+- Languages (BUILDER): a language screen every time the site opens (English or العربية), a language switch in the header, and a full right-to-left Arabic interface with Arabic-Indic numbers.
 
-Not done yet: language picker (phase 5), polish and deploy (phase 6), version 2 features (phases 7 and 8).
+Not done yet: polish and deploy (phase 6), version 2 features (phases 7 and 8).
 
 See `docs/DEVLOG.md` for the full history.
 

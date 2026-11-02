@@ -9,6 +9,41 @@
     <script type="module" src="src/app.js"></script>
   </head>
   <body>
+    <!-- Opens every time the site opens: each choice is written in its own language. -->
+    <div
+      id="language-screen"
+      class="language"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="language-title"
+    >
+      <div class="language-box">
+        <h1 id="language-title" class="language-title">
+          <span lang="ar" dir="rtl" data-i18n-ar="app.title"></span>
+          <span lang="en" dir="ltr" data-i18n-en="app.title"></span>
+        </h1>
+        <p class="language-prompt">
+          <span lang="en" dir="ltr" data-i18n-en="lang.choose"></span>
+          <span lang="ar" dir="rtl" data-i18n-ar="lang.choose"></span>
+        </p>
+        <div class="language-choices">
+          <button
+            type="button"
+            data-lang="en"
+            lang="en"
+            dir="ltr"
+            data-i18n-en="lang.name"
+          ></button>
+          <button
+            type="button"
+            data-lang="ar"
+            lang="ar"
+            dir="rtl"
+            data-i18n-ar="lang.name"
+          ></button>
+        </div>
+      </div>
+    </div>
     <div class="top">
       <header class="bar">
         <!-- Physical order on purpose: Next is on the left, as in an Arabic book. -->
@@ -81,6 +116,8 @@
               <circle cx="9" cy="17" r="2.6" fill="none" stroke="currentColor" stroke-width="2.2" />
             </svg>
           </button>
+          <!-- Shows the other language's name in that language; switches without reloading. -->
+          <button id="lang-switch" class="pill" type="button"></button>
           <div class="views" role="group" data-i18n-label="view.label">
             <button
               id="view-single"

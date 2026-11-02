@@ -1,23 +1,37 @@
 // Interface strings. All interface text lives in src/i18n/en.json and src/i18n/ar.json (same keys).
-// The Quran pages are always Arabic; only the interface changes language.
+// The Quran pages are always Arabic; only the interface changes language. Both files are loaded at
+// the start, so the language can change at any time without reloading.
 
-let strings = {};
+export const LANGUAGES = ['en', 'ar'];
+const strings = {};
 let lang = 'en';
 
-export async function loadStrings(code) {
-  const res = await fetch(`src/i18n/${code}.json`);
-  if (!res.ok) throw new Error(`strings ${code}: HTTP ${res.status}`);
-  strings = await res.json();
+export async function loadAllStrings() {
+  await Promise.all(
+    LANGUAGES.map(async (code) => {
+      const res = await fetch(`src/i18n/${code}.json`);
+      if (!res.ok) throw new Error(`strings ${code}: HTTP ${res.status}`);
+      strings[code] = await res.json();
+    }),
+  );
+}
+
+// The whole interface follows the language: Arabic turns the layout right to left.
+export function setLanguage(code) {
   lang = code;
   document.documentElement.lang = code;
   document.documentElement.dir = code === 'ar' ? 'rtl' : 'ltr';
 }
 
-export function t(key, vars = {}) {
-  const s = strings[key];
+export const language = () => lang;
+
+export function tIn(code, key, vars = {}) {
+  const s = strings[code]?.[key];
   if (s === undefined) return key;
   return s.replace(/\{(\w+)\}/g, (_, k) => (k in vars ? String(vars[k]) : `{${k}}`));
 }
+
+export const t = (key, vars) => tIn(lang, key, vars);
 
 // Numbers in the interface: Arabic-Indic digits in Arabic, Western digits in English.
 const locale = () => (lang === 'ar' ? 'ar-EG' : 'en-US');
@@ -40,7 +54,8 @@ export function toWesternDigits(text) {
   return text.replace(ARABIC_DIGIT, (d) => String(d.codePointAt(0) & 0xf));
 }
 
-// Fill every element that names a string key.
+// Fill every element that names a string key. data-i18n and data-i18n-label follow the interface
+// language; data-i18n-en and data-i18n-ar always use that one language (the language screen).
 export function applyStrings(root = document) {
   root.querySelectorAll('[data-i18n]').forEach((el) => {
     el.textContent = t(el.dataset.i18n);
@@ -50,5 +65,10 @@ export function applyStrings(root = document) {
     el.setAttribute('aria-label', label);
     if (el.tagName === 'BUTTON') el.title = label;
   });
+  for (const code of LANGUAGES) {
+    root.querySelectorAll(`[data-i18n-${code}]`).forEach((el) => {
+      el.textContent = tIn(code, el.getAttribute(`data-i18n-${code}`));
+    });
+  }
   document.title = t('app.title');
 }

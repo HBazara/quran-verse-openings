@@ -76,6 +76,65 @@ body {
     sans-serif;
 }
 
+/* Language screen: covers the reader until a language is chosen */
+.language {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  overflow: auto;
+  background: var(--bg);
+}
+.language[hidden] {
+  display: none;
+}
+.language-box {
+  display: grid;
+  gap: 20px;
+  width: min(28rem, 100%);
+  padding: 32px 24px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--paper);
+  box-shadow: 0 8px 28px var(--shadow);
+  text-align: center;
+}
+.language-title {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  font-size: 1.5rem;
+}
+.language-prompt {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  color: var(--muted);
+}
+.language-choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.language-choices button {
+  min-height: 64px;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  font-size: 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.language-choices button.last {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
 /* Top bar and its panels */
 .top {
   position: relative;
@@ -120,6 +179,18 @@ body {
 .icon svg {
   width: 22px;
   height: 22px;
+}
+.pill {
+  flex: none;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  white-space: nowrap;
+  cursor: pointer;
 }
 .indicator {
   min-width: 8.5em;

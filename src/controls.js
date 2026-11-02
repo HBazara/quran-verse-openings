@@ -96,14 +96,18 @@ export function setupControls(quran, app) {
     return juz;
   }
 
-  // view: { page, top (first page on screen), words, markers, zoom, theme }
+  // view: { page, pages (on screen), words, markers, zoom, theme }
   function sync(view) {
     if (document.activeElement !== pageInput) {
       pageInput.value = formatNumber(view.page);
       setError(false);
     }
-    surahSelect.value = String(surahAt(view.top));
-    juzSelect.value = String(juzAt(view.top));
+    // A surah chosen from the list stays chosen while its first page is on screen (several surahs
+    // can start on one page, as on page 604); otherwise the list shows the surah at the top.
+    const chosen = quran.surahs[Number(surahSelect.value) - 1];
+    if (!chosen || !view.pages.includes(chosen.page))
+      surahSelect.value = String(surahAt(view.pages[0]));
+    juzSelect.value = String(juzAt(view.pages[0]));
     for (const r of words.querySelectorAll('input')) r.checked = Number(r.value) === view.words;
     markers.checked = view.markers;
     zoom.value = String(view.zoom);
