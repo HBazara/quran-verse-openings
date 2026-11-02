@@ -1,0 +1,71 @@
+# Checks the Quran data and the fonts on every push and pull request, then (only when started by
+# hand) publishes the site to GitHub Pages. A failed check stops everything after it, so a broken
+# site is never published.
+#
+# Publishing is manual for now: Actions > "Check and deploy" > Run workflow (on main). It also
+# needs Settings > Pages > Source: "GitHub Actions". Free GitHub Pages needs a public repository;
+# Hassan decides that first (docs/DECISIONS.md).
+
+name: Check and deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# bash with -e and pipefail: any failing command, also inside a pipe, stops the job.
+defaults:
+  run:
+    shell: bash
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Checksums of the sources, the data and the fonts
+        run: |
+          (cd data/sources && sha256sum -c --ignore-missing SHA256SUMS)
+          (cd data && sha256sum -c quran.json.sha256)
+          (cd assets/fonts/qcf2 && sha256sum -c --quiet ../../../data/sources/qcf2.sha256)
+          (cd assets/fonts/surah-header && grep ' QCF_SurahHeader_COLOR-Regular.woff2$' ../../../data/sources/SHA256SUMS | sha256sum -c -)
+          (cd assets/fonts/bismillah && grep ' QCF2BSML.ttf$' ../../../data/sources/SHA256SUMS | sha256sum -c -)
+
+      - name: Validate the Quran data
+        run: node scripts/validate.mjs
+
+      - name: Build the site folder
+        run: node scripts/build-site.mjs _site
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: check
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/configure-pages@v5
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

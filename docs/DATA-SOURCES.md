@@ -78,7 +78,7 @@ The site self-hosts these fonts from `assets/fonts/`. They are committed to git.
 
 ### QPC V2 page fonts: `assets/fonts/qcf2/`
 
-`p1.woff2` to `p604.woff2`, one per page, copied by ORG from the official QUL download (QUL font 249, export 2024-10-15, see above). DOCU checked all 604 files against `docs/checksums/qul-fonts-v2.sha256` on 2026-10-31: all match. License: none published. Hassan accepted using them with credit to KFGQPC and QUL (D24).
+`p1.woff2` to `p604.woff2`, one per page, copied by ORG from the official QUL download (QUL font 249, export 2024-10-15, see above). Since phase 6 their checksums are also committed in `data/sources/qcf2.sha256`, checked by `validate` and by the GitHub workflow. DOCU checked all 604 files against `docs/checksums/qul-fonts-v2.sha256` on 2026-10-31: all match. License: none published. Hassan accepted using them with credit to KFGQPC and QUL (D24).
 
 ### Surah banner font: `assets/fonts/surah-header/`
 

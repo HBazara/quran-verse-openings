@@ -11,6 +11,9 @@
 tmp/
 .cache/
 
+# Built site folder (scripts/build-site.mjs default output; CI builds it fresh)
+_site/
+
 # Node
 node_modules/
 npm-debug.log*

@@ -98,6 +98,12 @@ The Settings button (sliders icon) opens a small panel:
 
 Only one panel is open at a time. Escape or a click outside closes it, and Escape puts focus back on its button.
 
+## Themes and screen sizes (phase 6)
+
+- **Banner colors:** the surah banner font has its own color palettes. The light theme uses palette 0, the dark theme palette 1 (dark teal band, black panel, white name), and the sepia theme palette 2 (cream, white panel, deep red name).
+- **Phones:** below 640 px wide, the One page and Two pages buttons show icons only; their names stay for screen readers. The top bar takes 2 rows on phones (320 to 414 px) and 1 row from about 1000 px.
+- **Interface text:** the font list is system-ui, Segoe UI, Noto Sans, Noto Sans Arabic, Tahoma. Arabic interface text is 17 px with a line height of 1.6. This is only the interface; the Quran pages use their own fonts.
+
 ## Keyboard and touch
 
 - Left arrow: next page. Right arrow: previous page. Not while typing in the page box or using a list.
@@ -133,8 +139,6 @@ Pages 1 and 2, after AUD asked for a check of the round-frame pages: all 14 line
 
 ## Known limits
 
-- On 320 px wide phones the top bar takes three rows (phase 6).
-- The surah banner color font stays bright in the dark theme (phase 6).
 - The print's own line spacing is uneven on some pages (up to 14 px on page 187). The reader uses one measured grid for all pages.
 - Some whole pages of the print sit 4 to 5 px higher or lower than others, from the print and the scan. The reader uses one layout for all pages, which meets the pass rule (D41).
 - The inner shape of the Bismillah from `QCF2BSML` differs from the print. Hassan kept this font (D44); the shape is carried to phase 6 (P3-03, D43).

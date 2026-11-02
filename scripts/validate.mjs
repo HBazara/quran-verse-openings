@@ -8,11 +8,14 @@
 //   node scripts/validate.mjs --write-tanzil-differences
 //                                        write data/tanzil-differences.json from the current data
 //                                        (only after a reviewed source change; see docs/TEXT-CROSSCHECK.md)
+//   node scripts/validate.mjs --write-font-sums
+//                                        write data/sources/qcf2.sha256 from the 604 page fonts
+//                                        (only after a reviewed font change)
 //
 // Every check prints PASS, FAIL or SKIP (with the reason). Exit code 1 if any check fails.
 
 import { createHash } from 'node:crypto';
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import {
   ROOT,
@@ -30,15 +33,27 @@ import {
   readQul,
   readTanzilMeta,
   readTanzilWords,
+  sha256,
   DEFAULT_QUL_DIR,
 } from './lib/sources.mjs';
 import { SURAH_NAMES_EN } from './lib/surah-names.mjs';
+import { readCmap } from './lib/fontcheck.mjs';
 
 const DATA = join(ROOT, 'data', 'quran.json');
 const DATA_SUM = join(ROOT, 'data', 'quran.json.sha256');
 const DIFFS = join(ROOT, 'data', 'tanzil-differences.json');
 const FULL = process.argv.includes('--full');
 const WRITE_DIFFS = process.argv.includes('--write-tanzil-differences');
+const WRITE_FONT_SUMS = process.argv.includes('--write-font-sums');
+const PAGE_FONTS = join(ROOT, 'assets', 'fonts', 'qcf2');
+const FONT_SUMS = join(ROOT, 'data', 'sources', 'qcf2.sha256'); // "hash  pN.woff2", sha256sum format
+if (WRITE_FONT_SUMS) {
+  const lines = [];
+  for (let p = 1; p <= 604; p++)
+    lines.push(`${sha256(join(PAGE_FONTS, `p${p}.woff2`))}  p${p}.woff2`);
+  writeFileSync(FONT_SUMS, `${lines.join('\n')}\n`);
+  console.log(`wrote ${FONT_SUMS} (604 page fonts)`);
+}
 const qulArg = process.argv.includes('--qul')
   ? process.argv[process.argv.indexOf('--qul') + 1]
   : null;
@@ -329,6 +344,51 @@ check('committed banner and Bismillah fonts match data/sources/SHA256SUMS', (P) 
   if (!bism) P.push(`assets/fonts/bismillah/${BISMILLAH.font} is missing`);
   if (banner && bism) P.push(...checkSums([banner, bism]));
   return 'both match';
+});
+
+check('every glyph the site draws exists in its font (nothing shows as a box)', (P) => {
+  let glyphs = 0;
+  d.pages.forEach((page, i) => {
+    const font = join(ROOT, 'assets', 'fonts', 'qcf2', `p${i + 1}.woff2`);
+    if (!existsSync(font)) return P.push(`assets/fonts/qcf2/p${i + 1}.woff2 is missing`);
+    const has = readCmap(font);
+    for (const line of page.lines)
+      for (const w of line.words || [])
+        for (const ch of w[1]) {
+          glyphs++;
+          if (!has.has(ch.codePointAt(0)))
+            P.push(
+              `page ${i + 1}, word ${w[0]}: U+${ch.codePointAt(0).toString(16)} not in its font`,
+            );
+        }
+  });
+  const banner = findFile(BANNER_FONT_DIR, BANNER.font);
+  const bism = findFile(BISMILLAH_FONT_DIR, BISMILLAH.font);
+  if (banner) {
+    const has = readCmap(banner);
+    for (const s of d.surahs)
+      if (!has.has(s.banner.codePointAt(0))) P.push(`surah ${s.surah}: banner not in its font`);
+  }
+  if (bism && !readCmap(bism).has(BISMILLAH.glyph))
+    P.push('the Bismillah glyph is not in its font');
+  return `${glyphs} word glyphs in 604 page fonts, 114 banners and the Bismillah`;
+});
+
+check('the 604 page fonts match data/sources/qcf2.sha256 (none changed or replaced)', (P) => {
+  if (!existsSync(FONT_SUMS)) throw new Error('data/sources/qcf2.sha256 is missing');
+  const listed = readFileSync(FONT_SUMS, 'utf8')
+    .split('\n')
+    .filter(Boolean)
+    .map((l) => l.split(/\s+/));
+  if (listed.length !== 604) P.push(`${listed.length} fonts listed, expected 604`);
+  for (const [hash, name] of listed) {
+    const path = join(PAGE_FONTS, name);
+    if (!existsSync(path)) P.push(`${name} is missing`);
+    else if (sha256(path) !== hash) P.push(`${name}: SHA-256 differs`);
+  }
+  const extra = readdirSync(PAGE_FONTS).filter((f) => !listed.some(([, name]) => name === f));
+  if (extra.length) P.push(`not listed: ${extra.join(', ')}`);
+  return '604 of 604 match';
 });
 
 check('every surah has its own banner character', (P) => {

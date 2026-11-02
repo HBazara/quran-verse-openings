@@ -13,9 +13,9 @@ The project file tree, one line per folder. ORG keeps this current after every p
 │     ├─ surah-header/     KFGQPC surah banner colour font (QUL 458): QCF_SurahHeader_COLOR-Regular.woff2
 │     └─ bismillah/        KFGQPC Bismillah font (D34): QCF2BSML.ttf
 ├─ data/                   generated data: quran.json (minified) and quran.json.sha256 from scripts/build-data.mjs, tanzil-differences.json (reviewed list, no text). Never hand-edit or reformat
-│  └─ sources/             Tanzil quran-uthmani.txt and quran-data.js (byte-exact) plus SHA256SUMS for every source build-data reads (Tanzil files, QUL databases, banner font, ligatures.json, Bismillah font). QUL files stay in tmp/downloads/qul/
-├─ scripts/                build-data.mjs and validate.mjs (plain Node, no dependencies; validate --full adds the QUL checks)
-│  └─ lib/                 shared code for both scripts: sources.mjs (find, checksum and read the sources), surah-names.mjs (English surah names)
+│  └─ sources/             Tanzil quran-uthmani.txt and quran-data.js (byte-exact) plus SHA256SUMS for every source build-data reads (Tanzil files, QUL databases, banner font, ligatures.json, Bismillah font) and qcf2.sha256 (the 604 page fonts). QUL files stay in tmp/downloads/qul/
+├─ scripts/                build-data.mjs, validate.mjs (--full adds the QUL checks) and build-site.mjs (copies the published files into a site folder). Plain Node, no dependencies
+│  └─ lib/                 shared code for the scripts: sources.mjs (find, checksum and read the sources), surah-names.mjs (English surah names), fontcheck.mjs (font checks for validate)
 ├─ docs/                   all documentation (owned by DOCU, except the files below)
 │  ├─ AUDIT.md             AUD's findings table
 │  ├─ HANDOFF.md           shared log, every agent writes to it
@@ -23,13 +23,16 @@ The project file tree, one line per folder. ORG keeps this current after every p
 │  ├─ checksums/           SHA-256 lists for the source files in tmp/ (DOCU), check with `sha256sum -c` from the root
 │  └─ handoff-archive/     HANDOFF entries moved here per phase after PASS (ORG)
 ├─ .github/
-│  └─ workflows/           deploy.yml: validate, then deploy to GitHub Pages
-├─ tmp/                    ignored by git: downloads/ (all sources), renders/pdf/, phase1/ to phase5/, compare/ (font comparison), tools/ (check and overlay scripts)
+│  └─ workflows/           deploy.yml: checksums and validate on every push, deploy to GitHub Pages only when started by hand on main. Publishes index.html, src/, assets/fonts/, data/quran.json
+├─ tmp/                    ignored by git: downloads/ (all sources), renders/pdf/, phase1/ to phase6/, compare/ (font comparison), tools/ (check and overlay scripts)
 ├─ AGENTS.md               roles and rules for every agent (ORG)
+├─ start-quran-verse-openings.ps1  opens the 4 agent sessions as Windows Terminal tabs; fresh sessions read docs/TEAM-START.md (ORG)
 ├─ PROJECT.md              the full project brief
 └─ README.md               what the site is, run, deploy, credits (DOCU)
 ```
 
 Root config files: `.gitignore`, `.gitattributes`, `.editorconfig`, `.prettierrc.json`, `.prettierignore`.
+
+Built site folders (`_site/`) are ignored by git; CI builds the site fresh.
 
 The reference PDF `standard1-quran.pdf` sits in the root and is ignored by git. It is never committed.

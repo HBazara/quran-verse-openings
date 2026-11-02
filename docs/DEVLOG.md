@@ -112,7 +112,19 @@ Still open after phase 1:
 - **ORG:** Phase 5 tidy: nothing moved or removed. Updated `docs/STRUCTURE.md` (`src/language.js`, `tmp/phase5/`). Checked validate (18 pass, 1 skip; `--full` 22), that all 29 string keys are used, and that every file loads under `/quran-verse-openings/`.
 - **AUD:** **Phase 5 PASS.**
 - **DOCU:** Recorded the PASS. README status now says phase 6.
+- **ORG:** Closed phase 5. Moved the 6 phase 5 entries to `docs/handoff-archive/phase-5.md`, and 1 late phase 4 entry to `phase-4.md`. No `tmp/` cleanup. Saved the audited phase 5 state as the git snapshot `refs/snapshots/phase-5` (not a commit). The phase 4 and 5 commits and the push wait for Hassan.
 
 ### Phase 6: polish and deploy
 
 - **AUD:** Started phase 6. Open with Hassan: whether the repo goes public (needed for free GitHub Pages, D46). The deploy docs will describe only what is really set up.
+- **BUILDER:** Built the phase 6 work that does not publish. `.github/workflows/deploy.yml` checks the checksums and runs validate on every push and pull request, and publishes only when started by hand. New `scripts/build-site.mjs` (622 files into `_site`). New `data/sources/qcf2.sha256` and `validate --write-font-sums`. Two new checks: every drawn glyph exists in its font (88,186 word glyphs, 114 banners, the Bismillah), and the 604 page fonts match their sums (now 20 checks by default, 24 with `--full`). Banner palettes per theme (P4-03), icon-only view buttons and a 2-row header on phones (P4-02), interface typography. Why: phase 6 of `PROJECT.md`, without deploying, because the repo stays private until Hassan decides.
+- **DOCU:** Read the workflow and `scripts/build-site.mjs`, ran validate (20 pass, 1 skip) and `--full` (24 pass), checked the 604 font sums. Updated `README.md` (Deploy now says what is set up and that nothing is published), `docs/DATA-FORMAT.md` (files, commands, checks 1 to 24, last run), `docs/READER.md` (themes and screen sizes, limits), `docs/DATA-SOURCES.md`, `docs/TEXT-CROSSCHECK.md` (checks 19 and 20), and added D53 to D55.
+- **ORG:** Phase 6 tidy: added `_site/` to `.gitignore` and removed `.github/workflows/.gitkeep`. Updated `docs/STRUCTURE.md` (`scripts/build-site.mjs`, `scripts/lib/fontcheck.mjs`, `data/sources/qcf2.sha256`, the workflow, `tmp/phase6/`).
+- **ORG (with Hassan's approval):** Committed phases 4 and 5 as `48c0d15` "Phase 4: navigation and settings" and `f8d2876` "Phase 5: English and Arabic interface", one commit per phase from the audited snapshots, and pushed them with `99a16e3` and `80d62f6` to the private repo. Hassan: commit by phase from now on; the repo stays private for now. Phase 6 will be committed and pushed after its PASS (D56).
+- **DOCU:** Checked that `origin/main` is at `f8d2876` (4 commits). Recorded D56, updated D35 and the README clone note.
+- **ORG:** Started a launcher, `start-team.ps1`, so Hassan can restart the team in one click: 4 Windows Terminal tabs, one Claude Code session per role, each told to read `docs/TEAM-START.md`.
+- **DOCU:** Wrote `docs/TEAM-START.md` at ORG's request: read order, where the project stands, Hassan's standing rules, how to message, and the first action for each role. DOCU keeps the "where the project stands" part current at the end of every phase.
+- **ORG:** Finished `start-team.ps1` and tested it in a dry run (4 tabs named ORG, BUILDER, DOCU, AUD; options `-Resume` and `-DryRun`).
+- **DOCU:** Added how to run the launcher to `docs/TEAM-START.md`.
+- **ORG:** Renamed the launcher to `start-quran-verse-openings.ps1` at Hassan's request; its Windows Terminal window is now named "quran-verse-openings". The first message to each session is unchanged. ORG also saved the launcher plus `docs/TEAM-START.md` setup to Hassan's global Claude instructions (outside the repo), for future projects.
+- **DOCU:** Updated `docs/TEAM-START.md` to the new launcher name.

@@ -10,6 +10,15 @@
   src: url('../assets/fonts/bismillah/QCF2BSML.ttf') format('truetype');
   font-display: block;
 }
+/* The banner font has its own colour palettes: 1 is made for dark backgrounds, 2 is warm. */
+@font-palette-values --banner-dark {
+  font-family: 'surah-header';
+  base-palette: 1;
+}
+@font-palette-values --banner-sepia {
+  font-family: 'surah-header';
+  base-palette: 2;
+}
 
 /* Themes: light (default), dark and sepia. Every colour comes from these tokens. */
 :root {
@@ -73,7 +82,15 @@ body {
     16px/1.4 system-ui,
     -apple-system,
     'Segoe UI',
+    'Noto Sans',
+    'Noto Sans Arabic',
+    Tahoma,
     sans-serif;
+}
+/* Arabic interface text reads better a little larger and more open. */
+:root[lang='ar'] body {
+  font-size: 17px;
+  line-height: 1.6;
 }
 
 /* Language screen: covers the reader until a language is chosen */
@@ -205,6 +222,11 @@ body {
   border-radius: 22px;
 }
 .views button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 44px;
   min-height: 44px;
   padding: 0 12px;
   border: 0;
@@ -213,6 +235,25 @@ body {
   font: inherit;
   white-space: nowrap;
   cursor: pointer;
+}
+.views svg {
+  flex: none;
+  width: 20px;
+  height: 20px;
+}
+/* Narrow screens: the view switch shows its icons only (the words stay for screen readers). */
+@media (max-width: 640px) {
+  .views button {
+    padding: 0 11px;
+  }
+  .views .label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
 }
 .views button[aria-pressed='true'] {
   background: var(--accent);
@@ -426,6 +467,12 @@ input:focus-visible {
 }
 .line.surah {
   font-family: 'surah-header';
+}
+:root[data-theme='dark'] .line.surah {
+  font-palette: --banner-dark;
+}
+:root[data-theme='sepia'] .line.surah {
+  font-palette: --banner-sepia;
 }
 .line.basmala {
   font-family: 'bismillah';
