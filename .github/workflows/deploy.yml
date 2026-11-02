@@ -1,10 +1,9 @@
-# Checks the Quran data and the fonts on every push and pull request, then (only when started by
-# hand) publishes the site to GitHub Pages. A failed check stops everything after it, so a broken
-# site is never published.
+# Checks the Quran data and the fonts on every push and pull request. On main (every push, or a run
+# started by hand) it then publishes the site to GitHub Pages. A failed check stops everything after
+# it, so a broken site is never published. Pull requests are only checked, never published.
 #
-# Publishing is manual for now: Actions > "Check and deploy" > Run workflow (on main). It also
-# needs Settings > Pages > Source: "GitHub Actions". Free GitHub Pages needs a public repository;
-# Hassan decides that first (docs/DECISIONS.md).
+# Hassan's decision (2026-11-02): public repository, Settings > Pages > Source: "GitHub Actions",
+# so only the checked site files (index.html, src/, fonts, data/quran.json) go live.
 
 name: Check and deploy
 
@@ -56,7 +55,7 @@ jobs:
 
   deploy:
     needs: check
-    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       pages: write
