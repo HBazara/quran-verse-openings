@@ -179,3 +179,10 @@ Still open after phase 1:
 - **BUILDER:** Corrected D74's reason (the simple top-of-page rule differs from the print on 38 pages); DOCU re-counted and fixed it.
 - **AUD:** **Page heading PASS.** Open: P9-01 (4 surah names differ from the print by a hamza, Hassan decides), note P9-02 (heading 7 to 9 px on phones).
 - **DOCU:** Recorded P9-01 and P9-02 in READER Known limits and TEAM-START; sent ORG "docs final".
+- **ORG:** Committed the page heading as `57ee514` and pushed; the Actions run (41529135878) passed check and deploy.
+- **DOCU:** Recorded `57ee514` in `docs/TEAM-START.md` part 2 and the README.
+- **Hassan (relayed by BUILDER):** P9-01: keep the data's spelling of the 4 surah names (D76). P9-02: make the heading larger on phones (D77).
+- **BUILDER:** The heading grows on small pages to stay about 11 screen pixels, up to 21 px, ending 4 px above the frame; print keeps 16 px (`src/styles.css`). Not committed; AUD re-checks.
+- **DOCU:** Recorded D76 and D77 in DECISIONS, READER (Page heading, Known limits) and `docs/TEAM-START.md`.
+- **AUD:** PASS for the P9 follow-up (P9-01 closed, P9-02 fixed).
+- **DOCU:** Sent ORG "docs final".

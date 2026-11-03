@@ -172,7 +172,7 @@ The medallion text is always Arabic with Arabic-Indic digits, like the print. Sc
 
 ## Page heading (after phase 8)
 
-Hassan asked for the surah name and the current juz at the top of each page. Pages 3 to 604 have the print's heading above the frame: the juz on the right, in words ("الجزء الثاني"), and the surah name or names on the left ("سورة البقرة"; on page 604 three names). Pages 1 and 2 have none, as in the print. The heading is always Arabic, like the print and the margin medallions, because it is part of the printed page. It uses the same system font as the medallions, at 16 px. Screen readers hear it in the interface language before the verses, for example "Surah Al-Baqarah" and "Juz 2". It is printed in booklets too.
+Hassan asked for the surah name and the current juz at the top of each page. Pages 3 to 604 have the print's heading above the frame: the juz on the right, in words ("الجزء الثاني"), and the surah name or names on the left ("سورة البقرة"; on page 604 three names). Pages 1 and 2 have none, as in the print. The heading is always Arabic, like the print and the margin medallions, because it is part of the printed page. It uses the same system font as the medallions. It is 16 px, like the print, when the page is drawn near full size (computers). When the page is drawn small, it grows so it stays about 11 screen pixels: 11 px on 390 and 360 px phones, and 9.7 px on 320 px phones, where 21 px is the most that fits above the frame. It always ends 4 px above the frame and grows upward, so nothing on the page moves. Printed booklets keep 16 px (D77). Screen readers hear it in the interface language before the verses, for example "Surah Al-Baqarah" and "Juz 2". It is printed in booklets too.
 
 The rule, read by BUILDER from the PDF on all 85 pages where a surah or a juz changes, and checked on every page (`pageHeading` in `src/places.js`). The simple rule "the juz and surah at the top of the page" differs from the print on 38 pages (D74):
 
@@ -180,7 +180,7 @@ The rule, read by BUILDER from the PDF on all 85 pages where a surah or a juz ch
 2. The surah is the one with more than half of the page's verse lines. Page 385 keeps An-Naml, 7 lines to 6. When no surah has that, the heading names every surah that begins on the page (pages 596 to 604).
 3. A surah the first two steps leave out on every page is named on the page where its first verse is (the banner of some surahs sits at the bottom of the page before): Al-A'la on page 591, Al-Layl on page 595. So every surah from 2 to 114 is named on at least one page (Al-Fatiha is only on page 1, which has no heading).
 
-The surah names come from `data/quran.json` (Tanzil metadata, checked by `validate`). Four of them differ from the print by a hamza: ابراهيم (print إبراهيم), الانسان (print الإنسان), الإنفطار (print الانفطار) and الإنشقاق (print الانشقاق). They stay as they are unless Hassan decides otherwise (P9-01, see Known limits).
+The surah names come from `data/quran.json` (Tanzil metadata, checked by `validate`). Four of them differ from the print by a hamza: ابراهيم (print إبراهيم), الانسان (print الإنسان), الإنفطار (print الانفطار) and الإنشقاق (print الانشقاق). Hassan decided to keep the data's spelling (P9-01, D76), so the names match the Tanzil list everywhere on the site, with no exception to the rule against hand-editing Arabic text.
 
 ## What the browser remembers
 
@@ -217,7 +217,6 @@ Pages 1 and 2, after AUD asked for a check of the round-frame pages: all 14 line
 - The inner shape of the Bismillah from `QCF2BSML` differs from the print. Hassan kept this font (D44); the shape is carried to phase 6 (P3-03, D43).
 - The surah banner ornament differs from the print. To be polished in phase 6 (AUD finding P3-04).
 - The round frame of pages 1 and 2 and the printed frame ornaments are not drawn. The reader draws a simple double border instead.
-- Four surah names in the page heading (and wherever the Arabic surah name shows) are spelled differently from the print, because the names come from Tanzil's metadata: surah 14 (data ابراهيم, print إبراهيم), 76 (data الانسان, print الإنسان), 82 (data الإنفطار, print الانفطار) and 84 (data الإنشقاق, print الانشقاق). About 12 pages show the data's spelling. AUD confirmed all four on the print (open finding P9-01; Hassan decides whether to show the print's spelling).
-- On a phone the page heading is small: about 7 px on screen at 320 px wide and 9 px at 390 px, because the whole page scales as one unit. The reader can zoom (note P9-02).
+- Four surah names (in the page heading and wherever the Arabic surah name shows) are spelled differently from the print, because the names come from Tanzil's metadata: surah 14 (data ابراهيم, print إبراهيم), 76 (data الانسان, print الإنسان), 82 (data الإنفطار, print الانفطار) and 84 (data الإنشقاق, print الانشقاق), on about 12 pages. Hassan kept the data's spelling (P9-01, D76).
 - The margin medallions are simplified shapes; their labels, side and line match the print (checked by AUD on pages 5, 22, 140 and 264).
 - With the margin markers on, the page is 64 px wider, so the Quran text on a phone is about 17 px instead of about 19 px Hassan kept the markers on by default on phones too (P8-02, D67); readers can switch them off for bigger text.

@@ -16,6 +16,36 @@ Template:
 
 ---
 
+## 2026-11-03, DOCU, P9-01 and P9-02 decided
+
+- Did: Recorded Hassan's answers (relayed by BUILDER): P9-01 keep the data's spelling (D76; removed from the open lists), P9-02 larger heading on phones (D77). Checked BUILDER's `src/styles.css` diff (`clamp(16px, 11px / scale, 21px)`, line ends 4 px above the frame). READER Page heading and Known limits, TEAM-START (D1 to D77, page heading line), DEVLOG.
+- Files changed: `docs/READER.md`, `docs/DECISIONS.md`, `docs/TEAM-START.md`, `docs/DEVLOG.md`, `docs/HANDOFF.md`.
+- Messages sent: AUD (docs ready for the P9-02 re-check).
+- Open items: "docs final" to ORG after AUD's PASS. P6-06 still with Hassan. AUD's install and offline check.
+- Update: AUD gave PASS; TEAM-START and DEVLOG updated; sent ORG "docs final".
+
+## 2026-11-03 10:39, BUILDER, after phase 8 (P9-01 and P9-02 answered; heading larger on phones)
+
+- Did: Hassan's answers: P9-01, keep the data's spelling of the 4 names (no change); P9-02, make the heading larger on phones. In `src/styles.css` the heading's size now follows the page scale: 16 px (the print's size) when the page is drawn near full size, growing when the page is drawn small so it stays about 11 screen pixels (390 and 360 px phones: 11.0; 320 px phones: 9.7, capped at 21 px by the room above the frame; phones held sideways: 7.2). Its line now ends 4 px above the frame at every size, so the letters grow upward into the free space. Printing has no `--scale` and keeps 16 px.
+- Tests: `tmp/tools/heading_checks.py` 23 of 23 (new: the largest size fits on every page, smallest gap 40 px on page 603; screen size and room for the letters at 1400, 390, 360 and 320 px and sideways; print at 16 px). phase4 65, phase5 46, phase6 26, phase7 41, phase8 52, movement 132 of 132, overlay identical to Phase 3 (markers off) and Phase 8 (markers on), validate 21 + 1 skip, `--full` 25, Prettier clean, no em dashes.
+- Files changed: `src/styles.css`. Not committed.
+- Messages sent: AUD (the new auditor: where things stand, re-check), DOCU and ORG (Hassan's answers, the change).
+- Open items: AUD re-check, DOCU docs, ORG follow-up commit.
+
+## 2026-11-02, DOCU, page heading pushed
+
+- Did: Checked `57ee514` (pushed) and run 41529135878 (success). Updated TEAM-START part 2 (last commit, heading live) and the README; DEVLOG.
+- Files changed: `docs/TEAM-START.md`, `README.md`, `docs/DEVLOG.md`, `docs/HANDOFF.md` (docs-only, for a later commit).
+- Messages sent: ORG (recorded).
+- Open items: Hassan decides P9-01 (4 hamza spellings) and P6-06 (email in commits).
+
+## 2026-11-02 20:10, ORG, after Phase 8 (page heading committed)
+
+- Did: After AUD's PASS and DOCU's "docs final", committed the page heading (`src/places.js`, `src/render.js`, `src/styles.css`, both i18n files) with DOCU's docs and AUD's AUDIT.md as `57ee514` "Page heading: juz and surah names above the frame". Pre-push: no forbidden files, no em dashes, Prettier clean, validate on a clean export 21 pass + 1 skip. Pushed `ff8141f..57ee514`. Actions run 41529135878: check success, deploy success. The live `src/places.js` has `pageHeading`.
+- Files changed: git history (`57ee514`), `docs/HANDOFF.md`.
+- Messages sent: AUD (run id), DOCU (hash), BUILDER (live).
+- Open items: this entry goes into the next commit. `tmp/org-site/` stays until Hassan stops my old test server on port 8765. P6-06 is Hassan's call.
+
 ## 2026-11-02, DOCU, page heading closed
 
 - Did: Recorded AUD's PASS for the page heading. Added P9-01 (4 hamza spellings, as AUD confirmed on the print) and P9-02 (heading 7 to 9 px on phones) to READER Known limits; TEAM-START part 2 and README updated; DEVLOG. Sent ORG "docs final".
