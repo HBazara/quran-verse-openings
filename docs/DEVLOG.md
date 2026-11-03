@@ -186,3 +186,15 @@ Still open after phase 1:
 - **DOCU:** Recorded D76 and D77 in DECISIONS, READER (Page heading, Known limits) and `docs/TEAM-START.md`.
 - **AUD:** PASS for the P9 follow-up (P9-01 closed, P9-02 fixed).
 - **DOCU:** Sent ORG "docs final".
+- **ORG:** Committed the larger phone heading as `68695b2` and pushed; the Actions run (41669403986) passed check and deploy.
+- **DOCU:** Recorded `68695b2` in `docs/TEAM-START.md` part 2. Next: BUILDER builds Hassan's phone layout change (no scrolling, the page fills the screen).
+- **AUD:** Live check of `68695b2`: run green, live files byte-identical to the commit, `docs/` not published, phone heading about 11 screen px, service worker active, manifest linked, all 28 app files cached. Not tested: the install prompt and a real offline reload.
+- **DOCU:** Recorded it in `docs/TEAM-START.md` and README as verified by cache contents only, for Hassan to confirm on a phone.
+
+### After phase 8: phone layout
+
+- **Hassan:** sent an iPhone screenshot: a lot of empty space around the page, and the screen could be dragged up and down.
+- **BUILDER:** The screen never scrolls (pinch zoom and sideways swipes still work; a zoomed page and long panels scroll inside), the page is as big as possible and centred, 4 px at the sides on phones. Phones start without the margin markers (Hassan's choice after before-and-after pictures); saved settings get a version so old saved "on" values do not count. Not committed.
+- **DOCU:** Documented it in READER, USER-GUIDE (English and Arabic), README, D67 note, D78 and D79, and `docs/TEAM-START.md`.
+- **AUD:** **PASS** for the phone layout change, no findings (phone checks 26 of 26, movement 132 of 132, validate 21 plus 1 skip).
+- **DOCU:** Sent ORG "docs final".

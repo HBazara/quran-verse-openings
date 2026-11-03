@@ -10,6 +10,10 @@ This guide covers what works now (phase 8).
 
 When the site opens, it asks for the language of the buttons and menus: **English** or **العربية**. The one you used last is already highlighted, so one tap or Enter continues. You can change it any time with the language button at the top (it shows "العربية" when the site is in English). The Quran pages are always in Arabic.
 
+### The screen
+
+The page fills as much of the screen as it can, and the screen stays still: it does not scroll or bounce. If you zoom in, you can move around inside the page.
+
 ### Turning pages
 
 - **Next page** is the arrow button on the **left**, because an Arabic book opens from the right. **Previous page** is the arrow button on the right.
@@ -40,7 +44,7 @@ Press **Settings** (the sliders icon) at the top:
 - **Show verse-end markers:** the ﴿ ﴾ marker at the end of each verse. On by default.
 - **Peek:** tap a verse (or press P) to see all of it for a few seconds. Off by default. See below.
 - **Test mode:** hide the openings and show them one by one. See below.
-- **Show juz, hizb and quarter markers in the margin:** on by default. See below.
+- **Show juz, hizb and quarter markers in the margin:** off at first on phones, on at first on larger screens. See below.
 - **Zoom:** 100% to 200%. The page grows as one piece. Move around by scrolling.
 - **Theme:** light, dark or sepia. At first it follows your device.
 
@@ -72,7 +76,7 @@ Above each page, as in the printed mushaf, the juz is shown on the right ("ال�
 
 ### Juz, hizb and quarter markers
 
-Like the printed mushaf, a small medallion in the outer margin shows where a juz, a hizb or a quarter of a hizb starts, for example "ربع الحزب ١". The medallions are always in Arabic. They make the page a little smaller; you can switch them off in Settings.
+Like the printed mushaf, a small medallion in the outer margin shows where a juz, a hizb or a quarter of a hizb starts, for example "ربع الحزب ١". The medallions are always in Arabic. They make the page a little smaller, so phones start without them; you can switch them on or off in Settings.
 
 ### Print a booklet
 
@@ -95,6 +99,10 @@ The address always shows the page, for example `…#page=50`. Copy it to share t
 ### اختيار اللغة
 
 عند فتح الموقع يسألك عن لغة الأزرار والقوائم: **English** أو **العربية**. تكون اللغة التي استخدمتها آخر مرة محددة مسبقًا، فتكفي لمسة واحدة أو مفتاح Enter للمتابعة. يمكنك تغييرها في أي وقت من زر اللغة في الأعلى (يظهر عليه "English" عندما يكون الموقع بالعربية). صفحات المصحف تبقى بالعربية دائمًا.
+
+### الشاشة
+
+تملأ الصفحة أكبر قدر ممكن من الشاشة، وتبقى الشاشة ثابتة لا تتحرك ولا ترتد. إذا كبّرت الصفحة يمكنك التنقل داخلها.
 
 ### تقليب الصفحات
 
@@ -126,7 +134,7 @@ The address always shows the page, for example `…#page=50`. Copy it to share t
 - **إظهار علامات نهاية الآيات:** علامة ﴿ ﴾ في آخر كل آية. ظاهرة افتراضيًا.
 - **النظرة:** انقر على آية (أو اضغط P) لترى كلماتها كلها لثوانٍ. متوقفة افتراضيًا. انظر أدناه.
 - **وضع الاختبار:** إخفاء رؤوس الآيات وإظهارها واحدًا بعد الآخر. انظر أدناه.
-- **إظهار علامات الأجزاء والأحزاب والأرباع في الهامش:** ظاهرة افتراضيًا. انظر أدناه.
+- **إظهار علامات الأجزاء والأحزاب والأرباع في الهامش:** مخفية في البداية على الهاتف، وظاهرة على الشاشات الأكبر. انظر أدناه.
 - **التكبير:** من ١٠٠٪ إلى ٢٠٠٪. تكبر الصفحة كلها قطعةً واحدة، وتتنقل فيها بالتمرير.
 - **المظهر:** فاتح أو داكن أو ورقي. في البداية يتبع إعداد جهازك.
 
@@ -158,7 +166,7 @@ The address always shows the page, for example `…#page=50`. Copy it to share t
 
 ### علامات الأجزاء والأحزاب والأرباع
 
-كما في المصحف المطبوع، تظهر في الهامش الخارجي علامة صغيرة حيث يبدأ جزء أو حزب أو ربع حزب، مثل "ربع الحزب ١". تصغر الصفحة قليلًا بسببها، ويمكنك إخفاؤها من الإعدادات.
+كما في المصحف المطبوع، تظهر في الهامش الخارجي علامة صغيرة حيث يبدأ جزء أو حزب أو ربع حزب، مثل "ربع الحزب ١". تصغر الصفحة قليلًا بسببها، لذلك يبدأ الهاتف بدونها، ويمكنك إظهارها أو إخفاؤها من الإعدادات.
 
 ### طباعة كتيّب
 

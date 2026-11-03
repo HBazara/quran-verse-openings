@@ -16,6 +16,54 @@ Template:
 
 ---
 
+## 2026-11-03, ORG, after Phase 8 (phone layout tidy)
+
+- Did: Tidy pass on BUILDER's phone layout change (`src/app.js`, `src/styles.css`; Hassan's request). validate 21 pass + 1 skip, no em dashes, no debug lines, no new or moved files, so no STRUCTURE change. Ran Prettier on `docs/HANDOFF.md` (CRLF on disk only). In the built site (`tmp/org10/`, removed afterwards), at 390x844 and 360x740 the page does not scroll in either direction and the margin markers are off; at 1280x800 there is no scroll and the markers are on. No console errors or warnings, no failed requests. Flagged: phones now start without the markers, which changes D67 ("on by default everywhere, phones included").
+- Files changed: `docs/HANDOFF.md`.
+- Messages sent: AUD (tidy done, D67 change), DOCU (D67 needs updating), BUILDER (clean).
+- Open items: AUD's PASS, then DOCU's "docs final", then the commit.
+
+## 2026-11-03, DOCU, phone layout documented
+
+- Did: Documented BUILDER's phone layout change after reading the `src/app.js` and `src/styles.css` diffs (settings `v: 2`, `margin()` default by the short side of the screen, `overflow: hidden`, `overscroll-behavior`, `touch-action: pinch-zoom`, 4 px phone padding, panel max height). READER (geometry, no-scroll paragraph, markers default, storage version, Known limits line, which also had a missing full stop), USER-GUIDE English and Arabic (new "The screen" section, markers default), README, D67 note, new D78 and D79, TEAM-START (D1 to D79, in-progress line, Hassan's iPhone check), DEVLOG.
+- Files changed: `docs/READER.md`, `docs/USER-GUIDE.md`, `README.md`, `docs/DECISIONS.md`, `docs/TEAM-START.md`, `docs/DEVLOG.md`, `docs/HANDOFF.md`.
+- Messages sent: AUD (ready to audit), BUILDER (recorded), ORG (docs written; "docs final" after AUD's PASS).
+- Open items: "docs final" after AUD's PASS. Hassan checks the iPhone after the deploy. P6-06.
+- Update: BUILDER confirmed D76 to D79; D78 and READER now say the 4 px gap goes by window width (640 px or less). AUD gave PASS, no findings. TEAM-START and DEVLOG updated; sent ORG "docs final".
+
+## 2026-11-03 11:19, BUILDER, after phase 8 (phone layout, asked by Hassan)
+
+- Did: Hassan's iPhone screenshot showed a lot of empty space around the page, and the screen could be dragged up and down. Changes:
+  - The screen never scrolls: html and body are locked to the visible screen (`overflow: hidden`, `overscroll-behavior: none`, body `100dvh`). The book takes no up-and-down drags (`touch-action: pinch-zoom`), and sideways swipes still turn pages. A zoomed page still scrolls inside the book. Panels end on the screen (`--panel-max`, set in `fit()`) and scroll inside.
+  - The page is as big as the screen allows, and centred: 4 px at the sides on phones (was 16), and centred top to bottom in the space below the buttons (it was pinned to the top).
+  - Phones start without the margin markers (Hassan's choice): when the screen's short side is 640 px or less the default is off, and on larger screens on. A reader's own choice is kept. Settings saved before this stored "on" for everyone (the old default), so for those only a stored "off" counts as a choice; settings now carry `v: 2`.
+  - On his phone (402 x 812): the page is 394 x 632 (it was 370 x 533), with 33 px above and below (there were 161 px below).
+- Tests: new `tmp/tools/phone_layout_checks.py` 26 of 26 (no scrolling at 5 phone sizes; page size and centring; markers default with no settings, Hassan's old settings, old "off", new "on", remembered after a reload; computers unchanged; panels end on the screen and their last control can be reached; zoom scrolls inside; a sideways touch swipe turns the page and an up-down drag moves nothing). phase8's phone markers test now turns the markers on first. phase4 65, phase5 46, phase6 26, phase7 41, phase8 52, heading 23, movement 132 of 132, overlay identical to Phase 3 (markers off) and Phase 8 (markers on), validate 21 + 1 skip, `--full` 25, Prettier clean, no em dashes.
+- Files changed: `src/app.js`, `src/styles.css`. Not committed.
+- Messages sent: ORG, DOCU, AUD (handoff).
+- Open items: AUD audit, DOCU docs, ORG commit. Hassan checks on his iPhone after the deploy (the iPhone bounce cannot be tested in Chrome).
+
+## 2026-11-03, DOCU, live app check recorded
+
+- Did: Recorded AUD's live check of `68695b2` as AUD asked: install and offline verified by cache contents only (service worker active, manifest linked, 28 app files cached); the install prompt and a real offline reload not tested; Hassan can confirm on a phone. TEAM-START part 2 and AUD's first action, README Deploy, DEVLOG.
+- Files changed: `docs/TEAM-START.md`, `README.md`, `docs/DEVLOG.md`, `docs/HANDOFF.md`.
+- Messages sent: AUD (recorded).
+- Open items: phone layout docs when BUILDER hands over. P6-06 with Hassan.
+
+## 2026-11-03, DOCU, phone heading pushed
+
+- Did: Checked `68695b2` (pushed) and run 41669403986 (success). Updated TEAM-START part 2 (last commit, heading line, BUILDER's phone layout work in progress) and DEVLOG.
+- Files changed: `docs/TEAM-START.md`, `docs/DEVLOG.md`, `docs/HANDOFF.md` (docs-only, for a later commit).
+- Messages sent: none.
+- Open items: document the phone layout change when BUILDER hands it over. AUD's install and offline check. P6-06 with Hassan.
+
+## 2026-11-03, ORG, after Phase 8 (P9 follow-up committed)
+
+- Did: After AUD's PASS and DOCU's "docs final", committed P9-02 (`src/styles.css`, heading larger on phones, the same 6 in and 3 out lines AUD passed) and DOCU's docs (D76, D77, the 57ee514 record) as `68695b2` "Page heading: larger on phones". AUD had already fixed the Prettier warning in `docs/AUDIT.md`; the whole repo was Prettier clean. Pre-push: no forbidden files, no em dashes, validate on a clean export 21 pass + 1 skip. Pushed `57ee514..68695b2`. Actions run 41669403986: check success, deploy success. The live `styles.css` has the new size rule. BUILDER's warning about the new phone layout work arrived during the commit; the commit has no part of that work.
+- Files changed: git history (`68695b2`), `docs/HANDOFF.md`.
+- Messages sent: AUD (run id), DOCU (hash), BUILDER (committed; go ahead).
+- Open items: BUILDER's phone layout change (no scrolling, page fills the screen), which Hassan asked for. I commit it after AUD's PASS and DOCU's "docs final". `tmp/org-site/` and P6-06 wait on Hassan.
+
 ## 2026-11-03, DOCU, P9-01 and P9-02 decided
 
 - Did: Recorded Hassan's answers (relayed by BUILDER): P9-01 keep the data's spelling (D76; removed from the open lists), P9-02 larger heading on phones (D77). Checked BUILDER's `src/styles.css` diff (`clamp(16px, 11px / scale, 21px)`, line ends 4 px above the frame). READER Page heading and Known limits, TEAM-START (D1 to D77, page heading line), DEVLOG.

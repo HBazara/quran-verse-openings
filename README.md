@@ -23,7 +23,7 @@ Done so far:
 - Extras (BUILDER): juz, hizb and quarter markers in the page margin, surah search by name or number, printing a booklet on A5 sheets, and an installable app that works offline.
 - Page heading (BUILDER, after phase 8, at Hassan's request; audited and live, `57ee514`): the juz and the surah name above each page, as in the print.
 
-After phase 8 (see `docs/AUDIT.md`): BUILDER fixed P8-01 (the search spelling "aal imran"), P8-03 (a new deploy could take up to 10 minutes to show) and P8-04 (peek did not hide at once when switched off); AUD verified the fixes, and they are live (commit `ff8141f`). Hassan kept the margin markers on by default on phones too (P8-02).
+After phase 8 (see `docs/AUDIT.md`): BUILDER fixed P8-01 (the search spelling "aal imran"), P8-03 (a new deploy could take up to 10 minutes to show) and P8-04 (peek did not hide at once when switched off); AUD verified the fixes, and they are live (commit `ff8141f`). Hassan first kept the margin markers on for phones too (P8-02), then chose to start phones without them so the page fills the screen (D79, not live yet).
 
 See `docs/DEVLOG.md` for the full history.
 
@@ -60,7 +60,7 @@ node scripts/build-data.mjs        # rebuild data/quran.json (local only)
 
 ## Deploy
 
-**The site is live at https://hbazara.github.io/quran-verse-openings/.** Hassan made the repo public and set Settings > Pages > Source to "GitHub Actions" (2026-11-02, D46, D57). The first run of the workflow on GitHub (2026-11-02, after commit `03a8fc4`) passed: the checks and the deploy both succeeded (AUD finding P6-02). The live site serves only the site files: `docs/`, `scripts/`, `data/sources/` and `README.md` are not on it.
+**The site is live at https://hbazara.github.io/quran-verse-openings/.** Hassan made the repo public and set Settings > Pages > Source to "GitHub Actions" (2026-11-02, D46, D57). The first run of the workflow on GitHub (2026-11-02, after commit `03a8fc4`) passed: the checks and the deploy both succeeded (AUD finding P6-02). AUD's live check (2026-11-03, commit `68695b2`) found the service worker active and all 28 app files saved for offline use; the browser's install prompt and a real offline reload were not tested, so Hassan can confirm them on a phone. The live site serves only the site files: `docs/`, `scripts/`, `data/sources/` and `README.md` are not on it.
 
 `.github/workflows/deploy.yml` ("Check and deploy") runs on every push to `main`, every pull request, and when started by hand (Actions > Check and deploy > Run workflow):
 

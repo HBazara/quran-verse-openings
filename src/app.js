@@ -46,22 +46,37 @@ const viewBtns = { single: $('view-single'), spread: $('view-spread') };
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const darkDevice = window.matchMedia('(prefers-color-scheme: dark)');
 
-// Saved settings. view and theme stay null until the reader picks one; until then the screen
-// width (view) and the device (theme) decide.
+// Saved settings. view, theme and margin stay null until the reader picks one; until then the
+// screen width (view, margin) and the device (theme) decide.
 function readSaved() {
   const raw = load('settings', {});
   const s = raw && typeof raw === 'object' ? raw : {};
+  // Settings saved before version 2 stored the old margin default (on) for everyone, so there only
+  // a stored "off" is a choice.
+  const margin =
+    s.v === 2
+      ? typeof s.margin === 'boolean'
+        ? s.margin
+        : null
+      : s.margin === false
+        ? false
+        : null;
   return {
+    v: 2,
     words: Number.isInteger(s.words) && s.words >= 1 && s.words <= 5 ? s.words : 2,
     markers: typeof s.markers === 'boolean' ? s.markers : true,
     peek: typeof s.peek === 'boolean' ? s.peek : false, // off until the reader turns it on (Hassan)
-    margin: typeof s.margin === 'boolean' ? s.margin : true, // juz, hizb and quarter markers
+    margin, // juz, hizb and quarter markers in the margin
     zoom: ZOOMS.includes(s.zoom) ? s.zoom : 100,
     theme: THEMES.includes(s.theme) ? s.theme : null,
     view: VIEWS.includes(s.view) ? s.view : null,
   };
 }
 const saved = readSaved();
+// Phones start without the margin markers so the page fills the screen (Hassan); larger screens
+// start with them. The short side decides, so turning the phone does not change it.
+const phone = Math.min(window.screen.width, window.screen.height) <= 640;
+const margin = () => saved.margin ?? !phone;
 const store = () => save('settings', saved);
 const last = load('lastPage', 1);
 
@@ -131,11 +146,17 @@ function pagesFor(page, view) {
 // Scale the fixed-size pages as one unit to fit the space (never reflowed), times the zoom. Above
 // 100% the book scrolls instead of the page changing shape.
 function fit() {
+  // The screen never scrolls, so a panel (below the header) must end on the screen and scroll inside.
+  const below = window.innerHeight - document.querySelector('.top').getBoundingClientRect().bottom;
+  document.documentElement.style.setProperty(
+    '--panel-max',
+    `${Math.max(160, Math.floor(below - 12))}px`,
+  );
   const count = state.shown.length || 1;
   const cs = getComputedStyle(book);
   const w = book.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
   const h = book.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
-  const pageWidth = PAGE.width + (saved.margin ? MARGIN : 0);
+  const pageWidth = PAGE.width + (margin() ? MARGIN : 0);
   book.style.setProperty('--page-w', `${pageWidth}px`);
   const whole = Math.min((w - GAP * (count - 1)) / (pageWidth * count), h / PAGE.height);
   book.style.setProperty('--scale', String(Math.max(0.1, whole) * (saved.zoom / 100)));
@@ -149,7 +170,7 @@ function syncControls() {
     words: state.words,
     markers: saved.markers,
     peek: saved.peek,
-    margin: saved.margin,
+    margin: margin(),
     test: test?.isActive() || false,
     zoom: saved.zoom,
     theme: theme(),
@@ -175,7 +196,7 @@ async function show(direction = 0, push = false) {
     const slot = document.createElement('div');
     slot.className = 'slot';
     const label = t('page.label', { n: formatNumber(n) });
-    const opts = { words: state.words, markers: saved.markers, margin: saved.margin, label };
+    const opts = { words: state.words, markers: saved.markers, margin: margin(), label };
     slot.append(renderPage(state.quran, n, opts));
     spread.append(slot);
   }
@@ -371,7 +392,7 @@ async function start() {
     progress = setupProgress(state.quran, { lastPage: LAST_PAGE, goTo });
     printer = setupPrint(state.quran, {
       lastPage: LAST_PAGE,
-      opts: () => ({ words: state.words, markers: saved.markers, margin: saved.margin }),
+      opts: () => ({ words: state.words, markers: saved.markers, margin: margin() }),
     });
     setupPeek(book, () => saved.peek && !test.isActive() && !languageScreenOpen());
     await loadFrameFonts(state.quran.surahs[0].banner, BISMILLAH_GLYPH);

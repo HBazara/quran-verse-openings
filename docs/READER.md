@@ -57,7 +57,9 @@ Measured on the print, in print pixels (the scan is 750 px wide):
 | Bismillah                             | About 273 wide. Measured on 111 Bismillah lines: 6 px above the grid on the first line, 1 px below it elsewhere.                                                                                                                                                                                                                                      |
 | Pages 1 and 2                         | Their own measured layout inside the round frame: a banner 440 wide, then 7 lines with the script at 26.6 px. Line tops 252.6, 295.6, 337.6, 380.6, 423.6, 466.6, 509.6. Each line is spread between the left and right ink ends measured on the print, because the print fits each line to the round frame (`OPENING_PAGES.ends`, 7 pairs per page). |
 
-The whole page is scaled as one unit to fit the window, so it never reflows and there is no horizontal scroll.
+The whole page is scaled as one unit to fit the window, so it never reflows. It is as big as the screen allows, and centred in the space below the buttons. In any window 640 px wide or narrower (phones, or a narrow desktop window) there are 4 px at the sides; on short phones the page fills the height instead. Computers look the same as before (D78).
+
+**The screen never scrolls.** It stays still: no dragging up and down, no bounce, no pull-to-refresh. Sideways swipes still turn pages, and pinching still zooms. With zoom above 100%, the page scrolls inside its own area. The Go to and Settings panels always end on the screen and scroll inside when they are long.
 
 ## Views and page turns
 
@@ -149,7 +151,7 @@ The test starts again, with all openings hidden, only when the pages on screen c
 
 ## Extras (phase 8)
 
-**Juz, hizb and quarter markers.** A setting, "Show juz, hizb and quarter markers in the margin", on by default. When it is on, each page gets a 64 px outer margin: on the right of odd pages and on the left of even pages, like a book. So the pages are drawn a little smaller; inside the page no word moves. A medallion sits in that margin at the line where the juz, hizb or quarter starts, taken from the data's `juz`, `hizb` and `quarters` lists:
+**Juz, hizb and quarter markers.** A setting, "Show juz, hizb and quarter markers in the margin". Phones start with it off, larger screens with it on (D79). A phone is a screen whose short side is 640 px or less, so turning it sideways does not change it. The reader's own choice is remembered. When it is on, each page gets a 64 px outer margin: on the right of odd pages and on the left of even pages, like a book. So the pages are drawn a little smaller; inside the page no word moves. A medallion sits in that margin at the line where the juz, hizb or quarter starts, taken from the data's `juz`, `hizb` and `quarters` lists:
 
 - a quarter: an arched tablet, "ربع الحزب N", "نصف الحزب N" or "ثلاثة أرباع الحزب N";
 - a hizb start: an oval, "الحزب N";
@@ -184,7 +186,7 @@ The surah names come from `data/quran.json` (Tanzil metadata, checked by `valida
 
 ## What the browser remembers
 
-Saved in `localStorage` under `qvo.settings` and `qvo.lastPage`: opening words, verse-end markers, margin markers, peek, zoom, theme, the view the reader picked with the view buttons, and the last page. The memorization marks are saved under `qvo.marks` (page number to `memorized` or `review`) and the bookmarks under `qvo.bookmarks` (a list of page numbers). Test mode is not saved. Opening the site with no page in the address goes to the last page. If storage is blocked, the reader works the same and just forgets (D47).
+Saved in `localStorage` under `qvo.settings` and `qvo.lastPage`: opening words, verse-end markers, margin markers, peek, zoom, theme, the view the reader picked with the view buttons, and the last page. The memorization marks are saved under `qvo.marks` (page number to `memorized` or `review`) and the bookmarks under `qvo.bookmarks` (a list of page numbers). Test mode is not saved. Opening the site with no page in the address goes to the last page. If storage is blocked, the reader works the same and just forgets (D47). Saved settings carry a version (`v: 2`). Settings saved before it stored the old margin default (on) for everyone, so for those only a stored "off" counts as the reader's choice; everyone else gets the new default.
 
 ## The address
 
@@ -219,4 +221,4 @@ Pages 1 and 2, after AUD asked for a check of the round-frame pages: all 14 line
 - The round frame of pages 1 and 2 and the printed frame ornaments are not drawn. The reader draws a simple double border instead.
 - Four surah names (in the page heading and wherever the Arabic surah name shows) are spelled differently from the print, because the names come from Tanzil's metadata: surah 14 (data ابراهيم, print إبراهيم), 76 (data الانسان, print الإنسان), 82 (data الإنفطار, print الانفطار) and 84 (data الإنشقاق, print الانشقاق), on about 12 pages. Hassan kept the data's spelling (P9-01, D76).
 - The margin medallions are simplified shapes; their labels, side and line match the print (checked by AUD on pages 5, 22, 140 and 264).
-- With the margin markers on, the page is 64 px wider, so the Quran text on a phone is about 17 px instead of about 19 px Hassan kept the markers on by default on phones too (P8-02, D67); readers can switch them off for bigger text.
+- With the margin markers on, the page is 64 px wider, so the Quran text on a phone is smaller. That is why phones start with the markers off (D79, replacing the phone part of D67).

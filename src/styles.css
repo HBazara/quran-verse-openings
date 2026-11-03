@@ -86,6 +86,13 @@ html,
 body {
   margin: 0;
   height: 100%;
+  overflow: hidden; /* the reader fills the screen and never scrolls; panels and a zoomed page scroll inside */
+  overscroll-behavior: none; /* no bounce or pull-to-refresh when the screen is dragged (phones) */
+}
+@supports (height: 100dvh) {
+  body {
+    height: 100dvh; /* exactly the visible screen, also while a phone browser shows its toolbar */
+  }
 }
 body {
   display: flex;
@@ -287,8 +294,9 @@ input:focus-visible {
   display: grid;
   gap: 16px;
   width: min(22rem, calc(100vw - 32px));
-  max-height: calc(100vh - 96px);
+  max-height: var(--panel-max, calc(100vh - 96px)); /* ends on the screen (set in app.js) */
   overflow: auto;
+  overscroll-behavior: contain;
   padding: 16px;
   border: 1px solid var(--line);
   border-radius: 12px;
@@ -594,18 +602,24 @@ input:focus-visible {
   align-items: flex-start;
   padding: 4px 16px 16px;
   overflow: hidden;
-  touch-action: pan-y pinch-zoom; /* sideways swipes are page turns */
+  touch-action: pinch-zoom; /* no scrolling: sideways swipes turn pages (input.js), pinching zooms */
 }
 .book.zoomed {
   overflow: auto;
+  overscroll-behavior: contain;
   touch-action: auto;
+}
+@media (max-width: 640px) {
+  .book {
+    padding: 4px; /* phones: the page as wide as the screen */
+  }
 }
 .spread {
   display: flex;
   flex-direction: row;
   direction: rtl; /* first page (odd) on the right */
   gap: 16px;
-  margin-inline: auto; /* centred, and still fully scrollable when zoomed */
+  margin: auto; /* centred both ways, and still fully scrollable when zoomed */
 }
 .slot {
   position: relative;

@@ -20,23 +20,24 @@ If PowerShell blocks the script, run it once with `powershell -ExecutionPolicy B
 2. `PROJECT.md`: the full brief. It wins if anything is unclear.
 3. `docs/HANDOFF.md`: the shared log, newest entry at the top. Read at least the entries of the current phase.
 4. `docs/STRUCTURE.md`: the file tree.
-5. `docs/DECISIONS.md`: every decision so far (D1 to D77). Many of them change what the brief alone would suggest.
+5. `docs/DECISIONS.md`: every decision so far (D1 to D79). Many of them change what the brief alone would suggest.
 
 Use `docs/handoff-archive/phase-N.md` only when you need the history of an earlier phase. `docs/DEVLOG.md` has the full story in one place.
 
 ## 2. Where the project stands
 
-_Updated by DOCU at the end of every phase. Last update: 2026-11-02, after the page heading was pushed._
+_Updated by DOCU at the end of every phase. Last update: 2026-11-03, after the larger phone heading was pushed._
 
 - **Phase:** all 8 phases are built and audited. Phase 8 (version 2 part B: juz, hizb and quarter markers, print-ready booklet, installable offline app, surah search) got PASS on 2026-11-02. Peek starts switched off (Hassan, D58).
 - **Repo:** https://github.com/HBazara/quran-verse-openings is **public** (Hassan, 2026-11-02, D46).
-- **Last commit:** `57ee514` "Page heading: juz and surah names above the frame", pushed: `origin/main` is `57ee514`. Its Actions run (41529135878) passed check and deploy, so the page heading is live. This hash update is a docs-only change for a later commit.
+- **Last commit:** `68695b2` "Page heading: larger on phones", pushed: `origin/main` is `68695b2`. Its Actions run (41669403986) passed check and deploy, so it is live. This hash update is a docs-only change for a later commit.
 - **The site is live** at https://hbazara.github.io/quran-verse-openings/. Pages source is "GitHub Actions": `deploy.yml` publishes on `main` only after the checks pass (D57). Every run so far passed, starting with the first (41474933287, P6-02). The fonts are now public without a published license (P6-04, `docs/DATA-SOURCES.md`).
-- **Offline:** the installable app is live (P6-03 done). AUD checks installing and offline use on the real https site.
+- **Offline:** the installable app is live (P6-03 done). AUD's live check of `68695b2` (2026-11-03): the service worker is active, the manifest is linked and the app cache holds all 28 app files. **Not tested:** the browser's install prompt and a real offline reload (AUD's tools cannot switch the network off). So install and offline are verified by cache contents only; **Hassan can confirm on a phone**.
 - **Checks:** `node scripts/validate.mjs` gives 21 PASS and 1 SKIP; `--full` gives 25 PASS (it needs the QUL databases in `tmp/downloads/qul/x/`).
-- **After phase 8:** P8-01, P8-03 and P8-04 are fixed, verified by AUD and live; P8-02 is closed (Hassan keeps the margin markers on by default everywhere, D67). Still open for **Hassan**: P6-06, his email address is visible in every commit now that the repo is public; new commits could use a GitHub no-reply address, and old commits stay unless history is rewritten.
-- **Page heading:** the juz and surah names above each page, as in the print, asked for by Hassan, built by BUILDER, documented by DOCU (D72 to D75), passed AUD's audit and is live (`57ee514`). P9-01 closed: Hassan keeps the data's spelling of the 4 surah names that differ from the print by a hamza (D76). P9-02: Hassan asked for a larger heading on phones; built by BUILDER, documented by DOCU (D77), PASS by AUD; DOCU sent "docs final", ORG commits and pushes it.
-- **Next:** AUD checks the live app (install and offline on https). Hassan decides P6-06. No phase 9 is planned; any new work follows the same path: BUILDER, ORG, DOCU, AUD, then ORG commits after DOCU's "docs final".
+- **After phase 8:** P8-01, P8-03 and P8-04 are fixed, verified by AUD and live; P8-02 is closed (Hassan first kept the margin markers on everywhere, D67; on 2026-11-03 he chose to start phones without them, D79). Still open for **Hassan**: P6-06, his email address is visible in every commit now that the repo is public; new commits could use a GitHub no-reply address, and old commits stay unless history is rewritten.
+- **Page heading:** the juz and surah names above each page, as in the print, asked for by Hassan, built by BUILDER, documented by DOCU (D72 to D75), passed AUD's audit and is live (`57ee514`). P9-01 closed: Hassan keeps the data's spelling of the 4 surah names that differ from the print by a hamza (D76). P9-02: Hassan asked for a larger heading on phones; built by BUILDER, documented by DOCU (D77), PASS by AUD, live (`68695b2`).
+- **In progress:** the phone layout change Hassan asked for (D78: the screen never scrolls, the page fills it; D79: phones start without the margin markers). Built by BUILDER, tidied by ORG, documented by DOCU, PASS by AUD (no findings). DOCU sent "docs final"; ORG commits and pushes it. After the deploy, **Hassan checks it on his iPhone** (Chrome cannot copy the iPhone's bounce).
+- **Next:** Hassan confirms install and offline on a phone if he wants. Hassan decides P6-06. No phase 9 is planned; any new work follows the same path: BUILDER, ORG, DOCU, AUD, then ORG commits after DOCU's "docs final".
 
 ## 3. Standing rules from Hassan
 
@@ -61,6 +62,6 @@ _Updated by DOCU at the end of every phase. Last update: 2026-11-02, after the p
 1. Add a `docs/HANDOFF.md` entry: date and time, your role, the phase, "started after restart", and what you think your next step is.
 2. Then, by role, for the current state in part 2:
    - **ORG:** commit DOCU's docs-only hash update with the next change. Apply Hassan's answer on P6-06 if it changes the commit identity.
-   - **AUD:** check the live app (install and offline on https).
+   - **AUD:** audit BUILDER's phone layout change after DOCU's docs.
    - **BUILDER:** fix any AUD finding on the P8 fixes; Message ORG, DOCU and AUD after any change.
    - **DOCU:** record any fix or decision on P8-01 to P8-04. Keep part 2 of this file current.
